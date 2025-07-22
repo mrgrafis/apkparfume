@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Pemesanan Parfum</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font modern */
+            background: linear-gradient(135deg, #f0f2f0, #e0e5e0); /* Gradien lembut background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px; /* Tambah padding body */
+            color: #333; /* Warna teks default */
+        }
+        .app-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px; /* Sudut lebih rounded */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Shadow lebih terasa */
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        .nav-menu {
+            display: flex;
+            justify-content: space-around; /* Distribusi tombol lebih baik */
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+        }
+        .nav-menu button {
+            background-color: #fff; /* Warna tombol default jadi putih */
+            color: #495057;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 17px;
+            margin: 0; /* Hapus margin default antar tombol */
+            border-radius: 8px 8px 0 0; /* Rounded di atas saja */
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Efek transisi */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05); /* Shadow tipis di atas */
+        }
+        .nav-menu button.active {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Shadow aktif */
+            font-weight: bold; /* Teks lebih tebal saat aktif */
+        }
+        .nav-menu button:hover:not(.active) {
+            background-color: #f0f0f0;
+            color: #333;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section {
+            display: none;
+            padding-top: 20px; /* Tambah jarak dari menu ke konten */
+        }
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out; /* Efek fade in saat berganti section */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #37474f; /* Warna teks lebih lembut */
+            margin-bottom: 30px;
+            text-transform: uppercase; /* Judul jadi uppercase */
+            letter-spacing: 0.5px; /* Sedikit spasi antar huruf */
+            position: relative;
+        }
+        h2::after { /* Garis bawah pada judul */
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #007bff;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #546e7a; /* Warna label */
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: calc(100% - 24px); /* Lebar dikurangi padding */
+            padding: 12px;
+            border: 1px solid #cfd8dc; /* Border lebih terang */
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Efek fokus */
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            background-color: #faffe7; /* Warna latar saat fokus */
+        }
+        .radio-group-horizontal label {
+            display: inline-block;
+            margin-right: 25px;
+            font-weight: normal;
+            color: #546e7a;
+        }
+        input[type="radio"] {
+            margin-right: 8px;
+            transform: scale(1.1); /* Perbesar radio button */
+            cursor: pointer;
+        }
+        
+        /* Gaya dasar untuk semua tombol aksi */
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; /* Tambah transform */
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        }
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+            transform: translateY(-2px); /* Efek naik saat hover */
+        }
+        button:active {
+            transform: translateY(0); /* Kembali saat diklik */
+            box-shadow: 0 1px 3px rgba(0, 86, 179, 0.4);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .action-buttons button {
+            flex: 1 1 calc(50% - 10px);
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow lebih kecil */
+        }
+        .action-buttons.wide button {
+             flex: 1 1 100%;
+        }
+
+        #hargaInfo, #totalKeseluruhanInfo {
+            font-weight: bold;
+            color: #1e88e5; /* Warna info harga */
+            margin-top: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            background-color: #e3f2fd; /* Latar belakang info harga */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #90caf9;
+        }
+        #brandParfumGroup {
+            display: none;
+        }
+
+        /* Gaya untuk daftar pesanan dan riwayat */
+        #daftarPesanan, #riwayatPesanan {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #daftarPesanan li, #riwayatPesanan li {
+            background-color: #f8f9fa; /* Warna latar belakang list item */
+            border: 1px solid #e0e0e0;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Efek hover pada list item */
+        }
+        #daftarPesanan li:hover, #riwayatPesanan li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+        #daftarPesanan li strong, #riwayatPesanan li strong {
+            color: #37474f;
+            font-size: 1.1em;
+        }
+        .item-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .item-actions button {
+            width: auto;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-top: 0;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-hapus { background-color: #e53935; color: white; }
+        .btn-hapus:hover { background-color: #b71c1c; box-shadow: 0 2px 5px rgba(183, 28, 28, 0.3); }
+        .btn-arsip { background-color: #6c757d; color: white; } /* Ganti warna arsip */
+        .btn-arsip:hover { background-color: #495057; box-shadow: 0 2px 5px rgba(73, 80, 87, 0.3); }
+        .btn-cetak-item { background-color: #29b6f6; color: white; }
+        .btn-cetak-item:hover { background-color: #0288d1; box-shadow: 0 2px 5px rgba(2, 136, 209, 0.3); }
+
+
+        .no-pesanan {
+            text-align: center;
+            color: #78909c;
+            font-style: italic;
+            padding: 20px;
+            background-color: #f0f4f7;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body > *:not(.print-area) {
+                display: none !important;
+            }
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+            .print-area {
+                display: block !important;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                width: auto;
+                max-width: none;
+                margin: 0;
+            }
+
+            /* Styles for Consumer Receipt (Struk) */
+            .receipt-konsumen {
+                width: 80mm; /* Standard thermal printer width */
+                margin: 0 auto;
+                padding: 5mm;
+                font-family: 'Consolas', 'Courier New', monospace;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .receipt-konsumen .header, .receipt-konsumen .footer {
+                text-align: center;
+                margin-bottom: 5mm;
+            }
+            .receipt-konsumen .header h3 {
+                margin: 0;
+                font-size: 1.2em;
+            }
+            .receipt-konsumen hr {
+                border: none;
+                border-top: 1px dashed #000;
+                margin: 8px 0;
+            }
+            .receipt-konsumen .item-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .receipt-konsumen .item {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 3px;
+            }
+            .receipt-konsumen .item-details {
+                width: 70%;
+            }
+            .receipt-konsumen .item-price {
+                width: 30%;
+                text-align: right;
+            }
+            .receipt-konsumen .total {
+                border-top: 1px dashed #000;
+                padding-top: 5px;
+                margin-top: 5px;
+                display: flex;
+                justify-content: space-between;
+                font-weight: bold;
+            }
+
+            /* Styles for My Print (Detail) */
+            .receipt-saya {
+                padding: 20px;
+                width: 210mm; /* A4 width */
+                margin: 0 auto;
+            }
+            .receipt-saya h3, .receipt-saya h4 {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            .receipt-saya .order-item {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+            }
+            .receipt-saya .order-item strong {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 1.1em;
+            }
+            .receipt-saya .order-details p {
+                margin: 2px 0;
+            }
+            .receipt-saya .total-overall {
+                text-align: right;
+                font-size: 1.3em;
+                font-weight: bold;
+                margin-top: 20px;
+                border-top: 1px solid #000;
+                padding-top: 10px;
+            }
+
+            /* Styles for Current Order Print / Single Item Print */
+            .receipt-current {
+                padding: 20px;
+                width: 210mm; /* A4 width */
+                margin: 0 auto;
+            }
+            .receipt-current h3 {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            .receipt-current .order-detail-box {
+                border: 1px solid #007bff;
+                padding: 15px;
+                border-radius: 8px;
+                background-color: #e7f0ff;
+                margin-bottom: 20px;
+            }
+            .receipt-current .order-detail-box p {
+                margin: 5px 0;
+                font-size: 1.1em;
+            }
+            .receipt-current .order-detail-box strong {
+                color: #0056b3;
+            }
+            .receipt-current .order-detail-box .total {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin-top: 10px;
+                text-align: right;
+                border-top: 1px dashed #007bff;
+                padding-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="nav-menu print-hide">
+            <button class="nav-button active" data-target="pemesanan">Form Pemesanan</button>
+            <button class="nav-button" data-target="daftar">Daftar Pesanan</button>
+            <button class="nav-button" data-target="riwayat">Riwayat Pesanan</button>
+        </div>
+
+        <div id="pemesanan" class="content-section active">
+            <h2>Form Pemesanan Parfum</h2>
+            <form id="parfumForm">
+                <div class="form-group">
+                    <label for="nama">Nama Pemesan:</label>
+                    <input type="text" id="nama" name="nama" required>
+                </div>
+
+                <div class="form-group" id="kategoriParfumGroup">
+                    <label>Pilih Kategori Parfum:</label>
+                    <div class="radio-group-horizontal">
+                        <input type="radio" id="kategoriPria" name="kategori" value="pria" onchange="showBrandOptions()" required>
+                        <label for="kategoriPria">Pria</label>
+                        <input type="radio" id="kategoriWanita" name="kategori" value="wanita" onchange="showBrandOptions()">
+                        <label for="kategoriWanita">Wanita</label>
+                        <input type="radio" id="kategoriUnisex" name="kategori" value="unisex" onchange="showBrandOptions()">
+                        <label for="kategoriUnisex">Unisex</label>
+                        <input type="radio" id="kategoriPasangan" name="kategori" value="pasangan" onchange="showBrandOptions()">
+                        <label for="kategoriPasangan">Pasangan</label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="brandParfumGroup">
+                    <label for="brandParfum">Pilih Brand Parfum:</label>
+                    <select id="brandParfum" name="brandParfum">
+                        <option value="">-- Pilih Brand Parfum --</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="keharumanLain">Atau tulis keharuman/brand lain (opsional):</label>
+                    <input type="text" id="keharumanLain" name="keharumanLain" placeholder="Contoh: Kopi, Vanilla Musk, Brand ABC">
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis Parfum (Ukuran 30ml):</label>
+                    <div class="radio-group-horizontal">
+                        <input type="radio" id="premium" name="jenisParfum" value="Premium" data-harga="100000" required onchange="updateHarga()">
+                        <label for="premium">Premium (Rp 100.000)</label>
+                        <input type="radio" id="superPremium" name="jenisParfum" value="Super Premium" data-harga="125000" onchange="updateHarga()">
+                        <label for="superPremium">Super Premium (Rp 125.000)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="jumlah">Jumlah:</label>
+                    <input type="number" id="jumlah" name="jumlah" min="1" value="1" required onchange="updateHarga()">
+                </div>
+
+                <div id="hargaInfo">Total Harga Item: Rp 0</div>
+
+                <button type="submit" id="btnSimpanPesanan">Simpan Pesanan</button>
+                <button type="button" id="btnCetakPesananSaatIni" onclick="cetakPesananSaatIni()">Cetak Pesanan Saat Ini</button>
+            </form>
+        </div>
+
+        <div id="daftar" class="content-section">
+            <h2>Daftar Pesanan Tersimpan</h2>
+            <ul id="daftarPesanan">
+                <p class="no-pesanan">Belum ada pesanan tersimpan.</p>
+            </ul>
+            <div id="totalKeseluruhanInfo">Total Keseluruhan: Rp 0</div>
+            
+            <div class="action-buttons wide">
+                <button type="button" id="btnCetakKonsumen" onclick="cetakStrukKonsumen()" style="background-color: #28a745;">Cetak Struk Konsumen (Semua Pesanan)</button>
+                <button type="button" id="btnCetakSaya" onclick="cetakDetailSaya()" style="background-color: #17a2b8;">Cetak Detail Laporan (Semua Pesanan)</button>
+            </div>
+            <div class="action-buttons">
+                <button type="button" id="btnResetPesanan" onclick="resetPesanan()" class="btn-hapus">Hapus Semua Pesanan</button>
+                <button type="button" id="btnArsipSemua" onclick="arsipSemuaPesanan()" class="btn-arsip">Arsipkan Semua Pesanan</button>
+            </div>
+        </div>
+
+        <div id="riwayat" class="content-section">
+            <h2>Riwayat Pemesanan</h2>
+            <ul id="riwayatPesanan">
+                <p class="no-pesanan">Belum ada riwayat pesanan.</p>
+            </ul>
+            <div class="action-buttons wide">
+                <button type="button" id="btnCetakRiwayat" onclick="cetakRiwayat()" style="background-color: #6f42c1;">Cetak Riwayat Lengkap</button>
+                <button type="button" id="btnHapusRiwayat" onclick="hapusRiwayat()" class="btn-hapus">Hapus Semua Riwayat</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-area receipt-konsumen" id="receiptKonsumen">
+        <div class="header">
+            <h3>by.ENERGIA AURA</h3>
+            <p>Komp. Taman Cikawao Persada, Blok G1 No 21</p>
+            <p>Telp: 085156427136</p>
+            <p>Tanggal: <span id="receiptKonsumenDate"></span></p>
+        </div>
+        <hr>
+        <ul class="item-list" id="receiptKonsumenItems">
+            </ul>
+        <hr>
+        <div class="total">
+            <span>TOTAL:</span>
+            <span id="receiptKonsumenTotalAmount">Rp 0</span>
+        </div>
+        <div class="footer">
+            <p>Terima Kasih Atas Pembelian Anda!</p>
+            <p>Kunjungi Kami Kembali!</p>
+        </div>
+    </div>
+
+    <div class="print-area receipt-saya" id="receiptSaya">
+        <h3>Laporan Pesanan Parfum</h3>
+        <h4>by.ENERGIA AURA</h4>
+        <p style="text-align: center;">Tanggal Cetak: <span id="receiptSayaDate"></span></p>
+        <hr>
+        <div id="receiptSayaItems">
+            </div>
+        <div class="total-overall">
+            Total Keseluruhan Pesanan: <span id="receiptSayaTotalAmount">Rp 0</span>
+        </div>
+        <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+            Laporan ini mencakup semua pesanan yang tersimpan hingga saat ini.
+        </p>
+    </div>
+
+    <div class="print-area receipt-current" id="receiptCurrent">
+        <h3>Detail Pesanan Saat Ini</h3>
+        <p style="text-align: center;">Tanggal: <span id="receiptCurrentDate"></span></p>
+        <hr>
+        <div class="order-detail-box" id="currentOrderItem">
+            </div>
+        <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+            Detail pesanan ini berdasarkan input formulir saat Anda mencetak.
+        </p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const parfumForm = document.getElementById('parfumForm');
+        const daftarPesananUL = document.getElementById('daftarPesanan');
+        const riwayatPesananUL = document.getElementById('riwayatPesanan');
+        const hargaInfo = document.getElementById('hargaInfo');
+        const totalKeseluruhanInfo = document.getElementById('totalKeseluruhanInfo');
+        const brandParfumSelect = document.getElementById('brandParfum');
+        const brandParfumGroup = document.getElementById('brandParfumGroup');
+        const navButtons = document.querySelectorAll('.nav-button');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        let pesananList = []; // Untuk pesanan yang sedang diproses/tersimpan
+        let historyList = []; // Untuk pesanan yang sudah diarsipkan
+
+        // Data Brand Parfum (sekitar 100+ per kategori) - Ditempelkan dari jawaban sebelumnya
+        const brandParfumData = {
+            pria: [ "Acqua di Parma", "Armani Code", "Bleu de Chanel", "Boss Bottled", "Bvlgari Man", "Carolina Herrera Bad Boy", "Chanel Allure Homme Sport", "Christian Dior Sauvage", "Creed Aventus", "Davidoff Cool Water", "Dior Homme", "Dolce & Gabbana The One For Men", "Dunhill Icon", "Giorgio Armani Acqua di Gio", "Givenchy Gentleman", "Gucci Guilty Pour Homme", "Hermès Terre d'Hermès", "Invictus Paco Rabanne", "Jean Paul Gaultier Le Male", "Jo Malone Wood Sage & Sea Salt (Men)", "John Varvatos Artisan", "Lacoste L.12.12", "Montblanc Explorer", "Nautica Voyage", "Paco Rabanne 1 Million", "Polo Ralph Lauren Blue", "Prada L'Homme", "Tom Ford Oud Wood", "Versace Dylan Blue", "Viktor & Rolf Spicebomb", "YSL Y", "Azzaro Wanted", "Bentley For Men Intense", "Burberry Brit For Men", "Calvin Klein Eternity for Men", "Coach For Men", "Dolce & Gabbana K", "DSQUARED2 Wood Pour Homme", "Ermenegildo Zegna Uomo", "Ferrari Black", "Gucci Guilty Absolute", "Issey Miyake L'Eau d'Issey Pour Homme", "Jimmy Choo Man", "Kenzo Pour Homme", "Loewe 7", "Maison Margiela Replica Jazz Club", "Mugler A*Men", "Narciso Rodriguez For Him", "Paco Rabanne Phantom", "Penhaligon's Halfeti", "Ralph Lauren Polo Green", "Roja Dove Elysium", "Salvatore Ferragamo F by Ferragamo", "Thierry Mugler Alien Man", "Tommy Hilfiger Tommy", "Trussardi My Land", "Valentino Uomo Born In Roma", "Van Cleef & Arpels Pour Homme", "Versace Eros", "Victorinox Swiss Army Classic", "Yves Saint Laurent La Nuit de L'Homme", "Zegna Essenze Collection", "Adnan B. Royal Touch", "Alfred Dunhill Desire Blue", "Antonio Banderas Blue Seduction", "Bottega Veneta Pour Homme", "Brioni Eau de Parfum", "Cartier Pasha de Cartier", "Coach Platinum", "Creed Green Irish Tweed", "Diesel Only The Brave", "Ermenegildo Zegna Z Zegna", "Ferrari Scuderia Black", "Givenchy Pi", "Gucci Pour Homme II", "Guess Seductive Homme Blue", "Hugo Boss The Scent", "Jaguar Classic Black", "Joop! Homme", "Karl Lagerfeld Pour Homme", "Lalique Encre Noire", "Mancera Cedrat Boise", "Mercedes-Benz Man", "Michael Kors for Men", "Montblanc Legend", "Mugler Cologne", "Paco Rabanne Pure XS", "Penhaligon's Blenheim Bouquet", "Porsche Design 180", "Ralph Lauren Polo Black", "Roja Dove Scandal Pour Homme", "Sergio Tacchini O-Zone Man", "Ted Lapidus Pour Homme", "Tom Ford Beau De Jour", "Truefitt & Hill Trafalgar", "Uomo Salvatore Ferragamo", "Van Gils Between Sheets", "Versace Pour Homme", "Yves Saint Laurent Kouros", "Zadig & Voltaire This Is Him!", "Zara Man Gold", "Ajmal Evoke Gold Edition For Him" ],
+            wanita: [ "Ariana Grande Cloud", "Black Opium YSL", "Britney Spears Fantasy", "Bvlgari Omnia Crystalline", "Calvin Klein Euphoria", "Carolina Herrera Good Girl", "Chanel Chance Eau Tendre", "Chanel Coco Mademoiselle", "Chloe Eau de Parfum", "Christian Dior J'adore", "Dior Miss Dior", "Dolce & Gabbana Light Blue", "Elizabeth Arden 5th Avenue", "Estee Lauder Beautiful", "Givenchy L'Interdit", "Giorgio Armani My Way", "Gucci Bloom", "Guerlain Mon Guerlain", "Jean Paul Gaultier La Belle", "Jo Malone Peony & Blush Suede", "Jimmy Choo Blossom", "Lancôme La Vie Est Belle", "Marc Jacobs Daisy", "Mugler Alien", "Narciso Rodriguez For Her", "Paco Rabanne Lady Million", "Prada Candy", "Thierry Mugler Angel", "Tom Ford Black Orchid", "Versace Bright Crystal", "Viktor & Rolf Flowerbomb", "Yves Saint Laurent Libre", "Burberry Her", "Byredo Mojave Ghost", "Carolina Herrera 212 NYC", "Chanel No. 5", "Clean Reserve Warm Cotton", "Dior Poison Girl", "Donna Karan DKNY Be Delicious", "Elizabeth Taylor White Diamonds", "Escada Miami Blossom", "Estee Lauder Pleasures", "Giorgio Armani Si", "Givenchy Irresistible", "Gucci Flora Gorgeous Gardenia", "Guerlain Shalimar", "Hugo Boss Woman", "Issey Miyake L'Eau d'Issey", "Jean Paul Gaultier Classique", "Juliette Has A Gun Not a Perfume", "Kenzo Flower", "Kilian Love, Don't Be Shy", "Lacoste Pour Femme", "Lanvin Eclat d'Arpège", "Loewe Aura", "Maison Margiela Replica Beach Walk", "Michael Kors Glam Jasmine", "Moschino Toy 2", "Nina Ricci L'Air du Temps", "Paco Rabanne Fame", "Penhaligon's Luna", "Philosophy Amazing Grace", "Ralph Lauren Romance", "Roja Dove Enigma Pour Femme", "Salvatore Ferragamo Signorina", "Shiseido Ever Bloom", "Stella McCartney Stella", "The Body Shop White Musk", "Tiffany & Co. Eau de Parfum", "Tom Ford Orchid Soleil", "Tous Tous Tous Bear", "Trussardi Donna", "Valentino Donna Born In Roma", "Van Cleef & Arpels Feerie", "Vera Wang Princess", "Victoria's Secret Bombshell", "Zara Orchid", "Elizabeth Arden Green Tea", "Escada Cherry in Japan", "Clinique Happy", "DKNY Stories", "Elie Saab Le Parfum", "Gucci Rush", "Guess Seductive", "Hollister Wave For Her", "Jesus Del Pozo Halloween", "Juicy Couture Viva La Juicy", "Kate Spade New York", "Kylie Minogue Darling", "Maison Francis Kurkdjian Baccarat Rouge 540 (Women)", "Moschino I Love Love", "Narciso Rodriguez Pure Musc", "Oscar de la Renta Oscar", "Rihanna Reb'l Fleur", "Tommy Hilfiger Tommy Girl", "Versace Crystal Noir", "Victoria's Secret Tease", "YSL Mon Paris", "Zoella Beauty Splash" ],
+            unisex: [ "Byredo Gypsy Water", "Byredo Bal d'Afrique", "Calvin Klein CK One", "Clean Reserve Rain", "D.S. & Durga Debaser", "Diptyque Philosykos", "Escentric Molecules Molecule 01", "Ex Nihilo Fleur Narcotique", "Frederic Malle Portrait of a Lady", "Glossier You", "Initio Parfums Prives Oud for Greatness", "Jo Malone Lime Basil & Mandarin", "Kilian Back to Black", "Le Labo Santal 33", "Maison Francis Kurkdjian Baccarat Rouge 540", "Maison Margiela Replica By the Fireplace", "Memo Paris Irish Leather", "Montale Intense Cafe", "Nishane Hacivat", "Ormonde Jayne Ormonde Man", "Parfums de Marly Layton", "Penhaligon's The Tragedy of Lord George", "Roja Dove Aoud", "Serge Lutens Chergui", "Tiziana Terenzi Kirke", "Tom Ford Tobacco Vanille", "Xerjoff Naxos", "Amouage Interlude Man", "Atelier Cologne Orange Sanguine", "Bond No. 9 Wall Street", "Creed Royal Oud", "DSQUARED2 Wood Sage", "Eight & Bob Original", "Floris No. 89", "Givenchy Hot Couture", "Gucci Mémoire d'une Odeur", "Heeley Sel Marin", "Imaginary Authors A City on Fire", "Jovoy Paris Psychedelique", "Kismet Angel by Maison Alhambra", "Lalique White", "Louis Vuitton Ombre Nomade", "Maison Crivelli Papyrus Moléculaire", "Memo Paris African Leather", "Montale Black Aoud", "Nasomatto Black Afgano", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.1", "Amouage Reflection Man", "Atelier Cologne Vanille Insensée", "Bond No. 9 New York Oud", "Creed Virgin Island Water", "Demeter Fragrance Library", "Eight & Bob Annicke Goutal", "Floris Santal", "Givenchy Insense", "Gucci The Alchemist's Garden", "Heeley Menthe Fraiche", "Imaginary Authors Memoirs of a Trespasser", "Jovoy Paris Remember Me", "Kayali Vanilla | 28", "L'Artisan Parfumeur Mûre et Musc", "Louis Vuitton L'Immensité", "Maison Crivelli Rose Saltifolia", "Memo Paris Marfa", "Montale Rose Musk", "Nasomatto Duro", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.2", "Afnan Supremacy Not Only Intense" ],
+            pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)", "Issey Miyake L'Eau d'Issey Pour Homme & L'Eau d'Issey (Pairing)", "Jimmy Choo Man & Blossom (Pairing)", "Joop! Homme & Femme (Pairing)", "Kenzo Pour Homme & Flower (Pairing)", "Maison Francis Kurkdjian Aqua Vitae Forte & Grand Soir (Pairing)", "Michael Kors for Men & Glam Jasmine (Pairing)", "Moschino Toy Boy & Toy 2 (Pairing)", "Narciso Rodriguez For Him & Her (Pairing)", "Oscar de la Renta Oscar & Bella Blanca (Pairing)", "Ralph Lauren Polo Blue & Romance (Pairing)", "Salvatore Ferragamo F by Ferragamo & Signorina (Pairing)", "Thierry Mugler A*Men & Angel (Pairing)", "Tommy Hilfiger Tommy & Tommy Girl (Pairing)", "Trussardi My Land & Donna (Pairing)", "Valentino Uomo Born In Roma & Donna Born In Roma (Pairing)", "Van Cleef & Arpels Pour Homme & Feerie (Pairing)", "Vera Wang for Men & Princess (Pairing)", "Victoria's Secret Tease & Very Sexy (Pairing)", "Zara Man Gold & Orchid (Pairing)", "Adnan B. Royal Touch & Adnan B. Classy (Pairing)", "Alfred Dunhill Desire Blue & Desire (Pairing)", "Antonio Banderas Blue Seduction Men & Women (Pairing)", "Brioni Eau de Parfum & Eau de Parfum Intense (Pairing)", "Cartier Declaration & Baiser Vole (Pairing)", "Clean Reserve Warm Cotton & Rain (Pairing)", "Creed Green Irish Tweed & Silver Mountain Water (Often paired by users)", "Demeter Fragrance Library (Many for pairing)", "Eight & Bob Original & Annicke Goutal (Pairing)", "Floris No. 89 & White Rose (Pairing)", "Gucci Guilty Absolute & Bloom (Pairing)", "Heeley Sel Marin & Iris de Nuit (Pairing)", "Imaginary Authors A City on Fire & Saint Julep (Pairing for contrast)", "Jovoy Paris Psychedelique & Remember Me (Pairing)", "Karl Lagerfeld Pour Homme & Eau de Parfum for Her (Pairing)", "Kilian Love, Don't Be Shy & Straight to Heaven (Pairing)", "L'Artisan Parfumeur Mûre et Musc & Premier Figuier (Pairing)", "Lalique Encre Noire & Amethyst (Pairing)", "Louis Vuitton L'Immensité & Rose des Vents (Pairing)", "Maison Crivelli Papyrus Moléculaire & Rose Saltifolia (Pairing)", "Memo Paris African Leather & Marfa (Pairing)", "Montale Black Aoud & Roses Musk (Pairing)", "Nasomatto Black Afgano & Narcotic Venus (Pairing)", "Ormonde Jayne Black Gold & Ta'if (Pairing)", "Paco Rabanne Phantom & Fame (Pairing)", "Penhaligon's Blenheim Bouquet & Elisabethan Rose (Pairing)", "Philosophy Amazing Grace & Pure Grace (Pairing)", "Roja Dove Elysium & Elixir (Pairing)", "Serge Lutens Ambre Sultan & Feminite du Bois (Pairing)", "The House of Oud Dates Delight & Breath Of The Infinite (Pairing)", "Tom Ford Soleil Blanc & Oud Wood (Pairing)", "Tiziana Terenzi Laudano Nero & Andromeda (Pairing)", "Uomo Salvatore Ferragamo & Signorina Misteriosa (Pairing)", "Versace Pour Homme & Versense (Pairing)", "Victorinox Swiss Army Classic & For Her (Pairing)", "Yves Saint Laurent Kouros & Opium (Pairing)", "Zadig & Voltaire This Is Him! & This Is Her! (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.3 (Pairing)", "Kilian Angels' Share & Roses on Ice (Pairing)" ]
+        };
+
+        // --- Navigasi Menu ---
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+
+                // Remove active class from all buttons and sections
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+
+                // Add active class to clicked button and target section
+                button.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+
+                // Re-render lists if navigating to them
+                if (targetId === 'daftar') {
+                    renderPesanan();
+                } else if (targetId === 'riwayat') {
+                    renderHistory();
+                }
+            });
+        });
+
+        // --- Fungsi Form Pemesanan ---
+        function updateHarga() {
+            const premiumRadio = document.getElementById('premium');
+            const superPremiumRadio = document.getElementById('superPremium');
+            const jumlahInput = document.getElementById('jumlah');
+            
+            let hargaPerBotol = 0;
+            if (premiumRadio.checked) {
+                hargaPerBotol = parseFloat(premiumRadio.getAttribute('data-harga'));
+            } else if (superPremiumRadio.checked) {
+                hargaPerBotol = parseFloat(superPremiumRadio.getAttribute('data-harga'));
+            }
+
+            const jumlah = parseInt(jumlahInput.value) || 0;
+            const totalHargaItem = hargaPerBotol * jumlah;
+
+            hargaInfo.innerText = `Total Harga Item: Rp ${totalHargaItem.toLocaleString('id-ID')}`;
+        }
+
+        function showBrandOptions() {
+            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
+            
+            if (!selectedCategory) {
+                brandParfumGroup.style.display = 'none';
+                brandParfumSelect.innerHTML = '<option value="">-- Pilih Brand Parfum --</option>';
+                return;
+            }
+
+            const categoryValue = selectedCategory.value;
+            const brands = brandParfumData[categoryValue];
+
+            brandParfumSelect.innerHTML = '<option value="">-- Pilih Brand Parfum --</option>';
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandParfumSelect.appendChild(option);
+            });
+
+            brandParfumGroup.style.display = 'block';
+            brandParfumSelect.focus();
+        }
+
+        parfumForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('nama').value;
+            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
+            const brandParfumPilihan = document.getElementById('brandParfum').value;
+            const keharumanLain = document.getElementById('keharumanLain').value;
+            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+
+            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
+                alert('Mohon lengkapi semua data pemesanan (nama, kategori, brand/keharuman, jenis, dan jumlah).');
+                return;
+            }
+
+            const jenisParfum = jenisParfumRadio.value;
+            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
+            const totalHargaItem = hargaPerBotol * jumlah;
+
+            const newPesanan = {
+                id: Date.now(), // Unique ID for each order
+                nama,
+                kategori: selectedCategory.value,
+                brandParfumPilihan: brandParfumPilihan,
+                keharumanLain: keharumanLain,
+                jenisParfum,
+                hargaPerBotol,
+                jumlah,
+                totalHargaItem,
+                timestamp: new Date().toISOString()
+            };
+
+            pesananList.push(newPesanan);
+            savePesanan(); // Save to current orders
+            renderPesanan(); // Update display for current orders
+
+            // Reset form after saving
+            parfumForm.reset();
+            updateHarga();
+            brandParfumGroup.style.display = 'none';
+            document.querySelectorAll('input[name="kategori"]').forEach(radio => radio.checked = false);
+            document.getElementById('nama').focus();
+        });
+
+        // --- Fungsi Penyimpanan & Render Data ---
+        function loadPesanan() {
+            const storedPesanan = localStorage.getItem('daftarParfumPesanan');
+            if (storedPesanan) {
+                pesananList = JSON.parse(storedPesanan);
+            } else {
+                pesananList = [];
+            }
+            renderPesanan();
+        }
+
+        function savePesanan() {
+            localStorage.setItem('daftarParfumPesanan', JSON.stringify(pesananList));
+        }
+
+        function loadHistory() {
+            const storedHistory = localStorage.getItem('riwayatParfumPesanan');
+            if (storedHistory) {
+                historyList = JSON.parse(storedHistory);
+            } else {
+                historyList = [];
+            }
+            renderHistory();
+        }
+
+        function saveHistory() {
+            localStorage.setItem('riwayatParfumPesanan', JSON.stringify(historyList));
+        }
+
+        function renderPesanan() {
+            daftarPesananUL.innerHTML = '';
+            let totalKeseluruhan = 0;
+
+            if (pesananList.length === 0) {
+                daftarPesananUL.innerHTML = '<p class="no-pesanan">Belum ada pesanan tersimpan.</p>';
+            } else {
+                pesananList.forEach((pesanan) => {
+                    const listItem = createOrderItemElement(pesanan, true); // true for actions
+                    daftarPesananUL.appendChild(listItem);
+                    totalKeseluruhan += pesanan.totalHargaItem;
+                });
+            }
+            totalKeseluruhanInfo.innerText = `Total Keseluruhan: Rp ${totalKeseluruhan.toLocaleString('id-ID')}`;
+        }
+
+        function renderHistory() {
+            riwayatPesananUL.innerHTML = '';
+            if (historyList.length === 0) {
+                riwayatPesananUL.innerHTML = '<p class="no-pesanan">Belum ada riwayat pesanan.</p>';
+            } else {
+                historyList.forEach((pesanan) => {
+                    const listItem = createOrderItemElement(pesanan, false); // false for no actions
+                    riwayatPesananUL.appendChild(listItem);
+                });
+            }
+        }
+
+        function createOrderItemElement(pesanan, showActions) {
+            const listItem = document.createElement('li');
+            let brandDisplay = pesanan.brandParfumPilihan;
+            if (pesanan.keharumanLain) {
+                brandDisplay = `${brandDisplay || 'Kustom'}: ${pesanan.keharumanLain}`;
+            }
+
+            listItem.innerHTML = `
+                <strong>${pesanan.nama}</strong><br>
+                Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}<br>
+                Parfum: ${brandDisplay}<br>
+                Jenis: ${pesanan.jenisParfum} (${pesanan.jumlah}x Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')})<br>
+                Total: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}<br>
+                Waktu: ${new Date(pesanan.timestamp).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}
+            `;
+            
+            if (showActions) {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.classList.add('item-actions');
+                
+                const arsipButton = document.createElement('button');
+                arsipButton.textContent = 'Arsipkan';
+                arsipButton.classList.add('btn-arsip');
+                arsipButton.onclick = () => arsipPesanan(pesanan.id);
+
+                const cetakItemButton = document.createElement('button');
+                cetakItemButton.textContent = 'Cetak Item';
+                cetakItemButton.classList.add('btn-cetak-item');
+                cetakItemButton.onclick = () => cetakSingleItem(pesanan.id);
+
+                const hapusButton = document.createElement('button');
+                hapusButton.textContent = 'Hapus';
+                hapusButton.classList.add('btn-hapus');
+                hapusButton.onclick = () => hapusPesanan(pesanan.id);
+
+                actionsDiv.appendChild(arsipButton);
+                actionsDiv.appendChild(cetakItemButton);
+                actionsDiv.appendChild(hapusButton);
+                listItem.appendChild(actionsDiv);
+            }
+            return listItem;
+        }
+
+        // --- Aksi pada Daftar Pesanan ---
+        function arsipPesanan(idToArsip) {
+            const index = pesananList.findIndex(p => p.id === idToArsip);
+            if (index > -1) {
+                const [pesananToArchive] = pesananList.splice(index, 1);
+                historyList.unshift(pesananToArchive); // Add to history, newest first
+                savePesanan();
+                saveHistory();
+                renderPesanan();
+                renderHistory(); // Ensure history is updated if user navigates there
+                alert('Pesanan berhasil diarsipkan.');
+            }
+        }
+
+        function hapusPesanan(idToHapus) {
+            if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
+                pesananList = pesananList.filter(p => p.id !== idToHapus);
+                savePesanan();
+                renderPesanan();
+            }
+        }
+
+        function resetPesanan() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA pesanan aktif? Tindakan ini tidak bisa dibatalkan.')) {
+                localStorage.removeItem('daftarParfumPesanan');
+                pesananList = [];
+                renderPesanan();
+                alert('Semua pesanan aktif telah dihapus.');
+            }
+        }
+
+        function arsipSemuaPesanan() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan aktif untuk diarsipkan.');
+                return;
+            }
+            if (confirm('Apakah Anda yakin ingin mengarsipkan SEMUA pesanan aktif?')) {
+                historyList = [...pesananList, ...historyList]; // Add current list to history
+                pesananList = [];
+                savePesanan();
+                saveHistory();
+                renderPesanan();
+                renderHistory();
+                alert('Semua pesanan aktif telah diarsipkan.');
+            }
+        }
+
+        // --- Aksi pada Riwayat Pemesanan ---
+        function hapusRiwayat() {
+            if (historyList.length === 0) {
+                alert('Tidak ada riwayat untuk dihapus.');
+                return;
+            }
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA riwayat pesanan? Tindakan ini tidak bisa dibatalkan.')) {
+                localStorage.removeItem('riwayatParfumPesanan');
+                historyList = [];
+                renderHistory();
+                alert('Semua riwayat pesanan telah dihapus.');
+            }
+        }
+
+        // --- Fungsi Cetak Berbeda ---
+        function preparePrintArea(areaId) {
+            // Sembunyikan semua area cetak terlebih dahulu
+            document.querySelectorAll('.print-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            // Tampilkan hanya area yang diinginkan
+            document.getElementById(areaId).style.display = 'block';
+        }
+
+        // Fungsi untuk mencetak Struk Konsumen (ringkas, cocok untuk printer roll)
+        function cetakStrukKonsumen() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan aktif untuk dicetak.');
+                return;
+            }
+
+            preparePrintArea('receiptKonsumen');
+            
+            const receiptKonsumenItems = document.getElementById('receiptKonsumenItems');
+            const receiptKonsumenTotalAmount = document.getElementById('receiptKonsumenTotalAmount');
+            const receiptKonsumenDate = document.getElementById('receiptKonsumenDate');
+
+            receiptKonsumenItems.innerHTML = '';
+            let totalKonsumen = 0;
+            const currentDate = new Date();
+            receiptKonsumenDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+
+            pesananList.forEach(pesanan => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                let brandText = pesanan.brandParfumPilihan;
+                if (pesanan.keharumanLain) {
+                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
+                }
+
+                li.innerHTML = `
+                    <div class="item-details">
+                        <span>${pesanan.nama.substring(0, 15)}${pesanan.nama.length > 15 ? '...' : ''}</span> 
+                        <span>${brandText} (${pesanan.jenisParfum})</span>
+                        <span>${pesanan.jumlah} x Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</span>
+                    </div>
+                    <div class="item-price">
+                        Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}
+                    </div>
+                `;
+                receiptKonsumenItems.appendChild(li);
+                totalKonsumen += pesanan.totalHargaItem;
+            });
+            receiptKonsumenTotalAmount.textContent = `Rp ${totalKonsumen.toLocaleString('id-ID')}`;
+
+            window.print();
+        }
+
+        // Fungsi untuk mencetak Detail Saya (lebih detail, cocok untuk laporan)
+        function cetakDetailSaya() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan aktif untuk dicetak sebagai laporan.');
+                return;
+            }
+
+            preparePrintArea('receiptSaya');
+
+            const receiptSayaItems = document.getElementById('receiptSayaItems');
+            const receiptSayaTotalAmount = document.getElementById('receiptSayaTotalAmount');
+            const receiptSayaDate = document.getElementById('receiptSayaDate');
+
+            receiptSayaItems.innerHTML = '';
+            let totalSaya = 0;
+            const currentDate = new Date();
+            receiptSayaDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+
+            pesananList.forEach(pesanan => {
+                const div = document.createElement('div');
+                div.classList.add('order-item');
+                let brandText = pesanan.brandParfumPilihan;
+                if (pesanan.keharumanLain) {
+                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
+                }
+
+                div.innerHTML = `
+                    <strong>Nama Pemesan: ${pesanan.nama}</strong>
+                    <div class="order-details">
+                        <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                        <p>Parfum: ${brandText}</p>
+                        <p>Jenis: ${pesanan.jenisParfum}</p>
+                        <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
+                        <p>Jumlah: ${pesanan.jumlah}</p>
+                        <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
+                        <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                    </div>
+                `;
+                receiptSayaItems.appendChild(div);
+                totalSaya += pesanan.totalHargaItem;
+            });
+            receiptSayaTotalAmount.textContent = `Rp ${totalSaya.toLocaleString('id-ID')}`;
+
+            window.print();
+        }
+
+        // Fungsi untuk mencetak Pesanan Saat Ini (dari form)
+        function cetakPesananSaatIni() {
+            const nama = document.getElementById('nama').value;
+            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
+            const brandParfumPilihan = document.getElementById('brandParfum').value;
+            const keharumanLain = document.getElementById('keharumanLain').value;
+            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+
+            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
+                alert('Mohon lengkapi data pesanan di formulir terlebih dahulu untuk mencetak pesanan saat ini.');
+                return;
+            }
+
+            preparePrintArea('receiptCurrent');
+
+            const jenisParfum = jenisParfumRadio.value;
+            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
+            const totalHargaItem = hargaPerBotol * jumlah;
+
+            const currentOrderItemDiv = document.getElementById('currentOrderItem');
+            const receiptCurrentDate = document.getElementById('receiptCurrentDate');
+            const currentDate = new Date();
+            receiptCurrentDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+
+            let brandText = brandParfumPilihan;
+            if (keharumanLain) {
+                brandText = `${brandText || 'Kustom'}: ${keharumanLain}`;
+            }
+
+            currentOrderItemDiv.innerHTML = `
+                <p><strong>Nama Pemesan:</strong> ${nama}</p>
+                <p><strong>Kategori:</strong> ${selectedCategory.value.charAt(0).toUpperCase() + selectedCategory.value.slice(1)}</p>
+                <p><strong>Parfum:</strong> ${brandText}</p>
+                <p><strong>Jenis:</strong> ${jenisParfum}</p>
+                <p><strong>Jumlah:</strong> ${jumlah}</p>
+                <p><strong>Harga per Botol:</strong> Rp ${hargaPerBotol.toLocaleString('id-ID')}</p>
+                <p class="total"><strong>Total Harga:</strong> Rp ${totalHargaItem.toLocaleString('id-ID')}</p>
+            `;
+
+            window.print();
+        }
+
+        // Fungsi untuk mencetak satu item pesanan dari daftar
+        function cetakSingleItem(idToPrint) {
+            const pesanan = pesananList.find(p => p.id === idToPrint);
+            if (!pesanan) {
+                alert('Pesanan tidak ditemukan.');
+                return;
+            }
+
+            preparePrintArea('receiptCurrent'); // Re-use the 'current order' print area
+
+            const currentOrderItemDiv = document.getElementById('currentOrderItem');
+            const receiptCurrentDate = document.getElementById('receiptCurrentDate');
+            const currentDate = new Date();
+            receiptCurrentDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+
+            let brandText = pesanan.brandParfumPilihan;
+            if (pesanan.keharumanLain) {
+                brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
+            }
+
+            currentOrderItemDiv.innerHTML = `
+                <p><strong>Nama Pemesan:</strong> ${pesanan.nama}</p>
+                <p><strong>Kategori:</strong> ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                <p><strong>Parfum:</strong> ${brandText}</p>
+                <p><strong>Jenis:</strong> ${pesanan.jenisParfum}</p>
+                <p><strong>Jumlah:</strong> ${pesanan.jumlah}</p>
+                <p><strong>Harga per Botol:</strong> Rp ${pesanan.hargaPerBotol.toLocaleString('id-ID')}</p>
+                <p class="total"><strong>Total Harga:</strong> Rp ${pesanan.totalHargaItem.toLocaleString('id-ID')}</p>
+                <p style="font-size: 0.9em; text-align: right;">Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+            `;
+
+            window.print();
+        }
+
+        // Fungsi untuk mencetak seluruh riwayat
+        function cetakRiwayat() {
+            if (historyList.length === 0) {
+                alert('Tidak ada riwayat pesanan untuk dicetak.');
+                return;
+            }
+            preparePrintArea('receiptSaya'); // Reuse the 'my print' area for history
+            
+            const receiptSayaItems = document.getElementById('receiptSayaItems');
+            const receiptSayaTotalAmount = document.getElementById('receiptSayaTotalAmount');
+            const receiptSayaDate = document.getElementById('receiptSayaDate');
+
+            receiptSayaItems.innerHTML = '';
+            let totalRiwayat = 0;
+            const currentDate = new Date();
+            receiptSayaDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+
+            historyList.forEach(pesanan => {
+                const div = document.createElement('div');
+                div.classList.add('order-item');
+                let brandText = pesanan.brandParfumPilihan;
+                if (pesanan.keharumanLain) {
+                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
+                }
+
+                div.innerHTML = `
+                    <strong>Nama Pemesan: ${pesanan.nama}</strong>
+                    <div class="order-details">
+                        <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                        <p>Parfum: ${brandText}</p>
+                        <p>Jenis: ${pesanan.jenisParfum}</p>
+                        <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
+                        <p>Jumlah: ${pesanan.jumlah}</p>
+                        <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
+                        <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                    </div>
+                `;
+                receiptSayaItems.appendChild(div);
+                totalRiwayat += pesanan.totalHargaItem;
+            });
+            receiptSayaTotalAmount.textContent = `Rp ${totalRiwayat.toLocaleString('id-ID')}`;
+            window.print();
+        }
+
+
+        // Panggil fungsi ini saat halaman dimuat
+        window.onload = function() {
+            updateHarga(); // Inisialisasi tampilan harga item
+            loadPesanan(); // Muat pesanan yang sedang aktif
+            loadHistory(); // Muat riwayat pesanan
+        };
+    </script>
+</body>
+</html>
