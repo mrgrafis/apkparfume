@@ -214,6 +214,7 @@
             display: flex;
             gap: 8px;
             justify-content: flex-end;
+            flex-wrap: wrap; /* Izinkan wrap pada tombol aksi */
         }
         .item-actions button {
             width: auto;
@@ -228,8 +229,10 @@
         .btn-hapus:hover { background-color: #b71c1c; box-shadow: 0 2px 5px rgba(183, 28, 28, 0.3); }
         .btn-arsip { background-color: #6c757d; color: white; } /* Ganti warna arsip */
         .btn-arsip:hover { background-color: #495057; box-shadow: 0 2px 5px rgba(73, 80, 87, 0.3); }
-        .btn-cetak-item { background-color: #29b6f6; color: white; }
-        .btn-cetak-item:hover { background-color: #0288d1; box-shadow: 0 2px 5px rgba(2, 136, 209, 0.3); }
+        .btn-cetak-item-a4 { background-color: #29b6f6; color: white; }
+        .btn-cetak-item-a4:hover { background-color: #0288d1; box-shadow: 0 2px 5px rgba(2, 136, 209, 0.3); }
+        .btn-cetak-item-termal { background-color: #8bc34a; color: white; } /* Warna hijau untuk termal */
+        .btn-cetak-item-termal:hover { background-color: #689f38; box-shadow: 0 2px 5px rgba(104, 159, 56, 0.3); }
 
 
         .no-pesanan {
@@ -244,6 +247,7 @@
 
         /* --- Print Styles --- */
         @media print {
+            /* Sembunyikan elemen non-cetak */
             body > *:not(.print-area) {
                 display: none !important;
             }
@@ -265,79 +269,115 @@
                 margin: 0;
             }
 
-            /* Styles for Consumer Receipt (Struk) */
-            .receipt-konsumen {
+            /* Styles for Thermal Printer (Struk Alfamart-style) */
+            .receipt-thermal {
                 width: 80mm; /* Standard thermal printer width */
                 margin: 0 auto;
-                padding: 5mm;
+                padding: 5mm; /* Lebih kecil dari sebelumnya */
                 font-family: 'Consolas', 'Courier New', monospace;
-                font-size: 11px;
-                line-height: 1.2;
+                font-size: 16px; /* Huruf diperbesar */
+                line-height: 1.3; /* Jarak baris sedikit lebih longgar */
+                color: #000;
             }
-            .receipt-konsumen .header, .receipt-konsumen .footer {
+            .receipt-thermal .header, .receipt-thermal .footer {
                 text-align: center;
                 margin-bottom: 5mm;
             }
-            .receipt-konsumen .header h3 {
+            .receipt-thermal .header h3 {
                 margin: 0;
-                font-size: 1.2em;
+                font-size: 1.5em; /* Judul toko lebih besar */
+                font-weight: bold;
             }
-            .receipt-konsumen hr {
+            .receipt-thermal .header p {
+                margin: 2px 0;
+                font-size: 0.9em;
+            }
+            .receipt-thermal hr {
                 border: none;
-                border-top: 1px dashed #000;
-                margin: 8px 0;
+                border-top: 1px dashed #000; /* Garis putus-putus */
+                margin: 10px 0;
             }
-            .receipt-konsumen .item-list {
+            .receipt-thermal .section-title {
+                text-align: center;
+                font-weight: bold;
+                margin: 10px 0;
+                font-size: 1.1em;
+            }
+            .receipt-thermal .item-list {
                 list-style: none;
                 padding: 0;
                 margin: 0;
             }
-            .receipt-konsumen .item {
+            .receipt-thermal .item {
                 display: flex;
+                flex-wrap: wrap; /* Agar bisa wrap ke bawah */
                 justify-content: space-between;
-                margin-bottom: 3px;
+                margin-bottom: 8px; /* Jarak antar item lebih jelas */
+                font-size: 1em;
             }
-            .receipt-konsumen .item-details {
-                width: 70%;
-            }
-            .receipt-konsumen .item-price {
-                width: 30%;
-                text-align: right;
-            }
-            .receipt-konsumen .total {
-                border-top: 1px dashed #000;
-                padding-top: 5px;
-                margin-top: 5px;
-                display: flex;
-                justify-content: space-between;
+            .receipt-thermal .item-name {
+                width: 100%; /* Nama item di baris sendiri */
                 font-weight: bold;
             }
+            .receipt-thermal .item-qty-price {
+                width: 60%; /* Jumlah x Harga satuan */
+                text-align: left;
+            }
+            .receipt-thermal .item-total-price {
+                width: 40%; /* Total harga item */
+                text-align: right;
+            }
+            .receipt-thermal .detail-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+            .receipt-thermal .total-summary {
+                border-top: 1px dashed #000;
+                padding-top: 8px;
+                margin-top: 8px;
+                font-size: 1.2em; /* Total keseluruhan lebih besar */
+                font-weight: bold;
+            }
+            .receipt-thermal .footer p {
+                margin: 5px 0;
+                font-size: 0.9em;
+            }
+            .receipt-thermal .info-note {
+                font-size: 0.8em;
+                text-align: center;
+                margin-top: 15px;
+            }
 
-            /* Styles for My Print (Detail) */
-            .receipt-saya {
+
+            /* Styles for A4 Print */
+            .receipt-a4 {
                 padding: 20px;
                 width: 210mm; /* A4 width */
                 margin: 0 auto;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                line-height: 1.5;
             }
-            .receipt-saya h3, .receipt-saya h4 {
+            .receipt-a4 h3, .receipt-a4 h4 {
                 text-align: center;
                 margin-bottom: 15px;
             }
-            .receipt-saya .order-item {
+            .receipt-a4 .order-item {
                 border: 1px solid #ccc;
                 padding: 10px;
                 margin-bottom: 10px;
                 border-radius: 5px;
             }
-            .receipt-saya .order-item strong {
+            .receipt-a4 .order-item strong {
                 display: block;
                 margin-bottom: 5px;
                 font-size: 1.1em;
             }
-            .receipt-saya .order-details p {
+            .receipt-a4 .order-details p {
                 margin: 2px 0;
             }
-            .receipt-saya .total-overall {
+            .receipt-a4 .total-overall {
                 text-align: right;
                 font-size: 1.3em;
                 font-weight: bold;
@@ -345,32 +385,21 @@
                 border-top: 1px solid #000;
                 padding-top: 10px;
             }
-
-            /* Styles for Current Order Print / Single Item Print */
-            .receipt-current {
-                padding: 20px;
-                width: 210mm; /* A4 width */
-                margin: 0 auto;
-            }
-            .receipt-current h3 {
-                text-align: center;
-                margin-bottom: 15px;
-            }
-            .receipt-current .order-detail-box {
+            .receipt-a4 .order-detail-box { /* Re-used for single item A4 print */
                 border: 1px solid #007bff;
                 padding: 15px;
                 border-radius: 8px;
                 background-color: #e7f0ff;
                 margin-bottom: 20px;
             }
-            .receipt-current .order-detail-box p {
+            .receipt-a4 .order-detail-box p {
                 margin: 5px 0;
                 font-size: 1.1em;
             }
-            .receipt-current .order-detail-box strong {
+            .receipt-a4 .order-detail-box strong {
                 color: #0056b3;
             }
-            .receipt-current .order-detail-box .total {
+            .receipt-a4 .order-detail-box .total {
                 font-size: 1.2em;
                 font-weight: bold;
                 margin-top: 10px;
@@ -440,8 +469,11 @@
 
                 <div id="hargaInfo">Total Harga Item: Rp 0</div>
 
-                <button type="submit" id="btnSimpanPesanan">Simpan Pesanan</button>
-                <button type="button" id="btnCetakPesananSaatIni" onclick="cetakPesananSaatIni()">Cetak Pesanan Saat Ini</button>
+                <div class="action-buttons wide">
+                    <button type="submit" id="btnSimpanPesanan">Simpan Pesanan</button>
+                    <button type="button" id="btnCetakPesananSaatIniA4" onclick="cetakPesananSaatIniA4()" style="background-color: #29b6f6;">Cetak Pesanan Saat Ini (A4)</button>
+                    <button type="button" id="btnCetakPesananSaatIniTermal" onclick="cetakPesananSaatIniTermal()" style="background-color: #8bc34a;">Cetak Struk Pesanan Saat Ini (Mini)</button>
+                </div>
             </form>
         </div>
 
@@ -453,8 +485,8 @@
             <div id="totalKeseluruhanInfo">Total Keseluruhan: Rp 0</div>
             
             <div class="action-buttons wide">
-                <button type="button" id="btnCetakKonsumen" onclick="cetakStrukKonsumen()" style="background-color: #28a745;">Cetak Struk Konsumen (Semua Pesanan)</button>
-                <button type="button" id="btnCetakSaya" onclick="cetakDetailSaya()" style="background-color: #17a2b8;">Cetak Detail Laporan (Semua Pesanan)</button>
+                <button type="button" id="btnCetakTermalMini" onclick="cetakDaftarPesananTermal()" style="background-color: #8bc34a;">Cetak Semua Struk (Mini)</button>
+                <button type="button" id="btnCetakSaya" onclick="cetakDaftarPesananA4()" style="background-color: #17a2b8;">Cetak Detail Laporan (A4)</button>
             </div>
             <div class="action-buttons">
                 <button type="button" id="btnResetPesanan" onclick="resetPesanan()" class="btn-hapus">Hapus Semua Pesanan</button>
@@ -468,58 +500,18 @@
                 <p class="no-pesanan">Belum ada riwayat pesanan.</p>
             </ul>
             <div class="action-buttons wide">
-                <button type="button" id="btnCetakRiwayat" onclick="cetakRiwayat()" style="background-color: #6f42c1;">Cetak Riwayat Lengkap</button>
+                <button type="button" id="btnCetakRiwayatTermal" onclick="cetakRiwayatTermal()" style="background-color: #8bc34a;">Cetak Riwayat (Mini)</button>
+                <button type="button" id="btnCetakRiwayatA4" onclick="cetakRiwayatA4()" style="background-color: #6f42c1;">Cetak Riwayat Lengkap (A4)</button>
                 <button type="button" id="btnHapusRiwayat" onclick="hapusRiwayat()" class="btn-hapus">Hapus Semua Riwayat</button>
             </div>
         </div>
     </div>
 
-    <div class="print-area receipt-konsumen" id="receiptKonsumen">
-        <div class="header">
-            <h3>by.ENERGIA AURA</h3>
-            <p>Komp. Taman Cikawao Persada, Blok G1 No 21</p>
-            <p>Telp: 085156427136</p>
-            <p>Tanggal: <span id="receiptKonsumenDate"></span></p>
+    <div class="print-area receipt-thermal" id="thermalPrintArea">
         </div>
-        <hr>
-        <ul class="item-list" id="receiptKonsumenItems">
-            </ul>
-        <hr>
-        <div class="total">
-            <span>TOTAL:</span>
-            <span id="receiptKonsumenTotalAmount">Rp 0</span>
-        </div>
-        <div class="footer">
-            <p>Terima Kasih Atas Pembelian Anda!</p>
-            <p>Kunjungi Kami Kembali!</p>
-        </div>
-    </div>
 
-    <div class="print-area receipt-saya" id="receiptSaya">
-        <h3>Laporan Pesanan Parfum</h3>
-        <h4>by.ENERGIA AURA</h4>
-        <p style="text-align: center;">Tanggal Cetak: <span id="receiptSayaDate"></span></p>
-        <hr>
-        <div id="receiptSayaItems">
-            </div>
-        <div class="total-overall">
-            Total Keseluruhan Pesanan: <span id="receiptSayaTotalAmount">Rp 0</span>
+    <div class="print-area receipt-a4" id="a4PrintArea">
         </div>
-        <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-            Laporan ini mencakup semua pesanan yang tersimpan hingga saat ini.
-        </p>
-    </div>
-
-    <div class="print-area receipt-current" id="receiptCurrent">
-        <h3>Detail Pesanan Saat Ini</h3>
-        <p style="text-align: center;">Tanggal: <span id="receiptCurrentDate"></span></p>
-        <hr>
-        <div class="order-detail-box" id="currentOrderItem">
-            </div>
-        <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-            Detail pesanan ini berdasarkan input formulir saat Anda mencetak.
-        </p>
-    </div>
 
     <script>
         // DOM Elements
@@ -735,10 +727,15 @@
                 arsipButton.classList.add('btn-arsip');
                 arsipButton.onclick = () => arsipPesanan(pesanan.id);
 
-                const cetakItemButton = document.createElement('button');
-                cetakItemButton.textContent = 'Cetak Item';
-                cetakItemButton.classList.add('btn-cetak-item');
-                cetakItemButton.onclick = () => cetakSingleItem(pesanan.id);
+                const cetakItemA4Button = document.createElement('button');
+                cetakItemA4Button.textContent = 'Cetak (A4)';
+                cetakItemA4Button.classList.add('btn-cetak-item-a4');
+                cetakItemA4Button.onclick = () => cetakSingleItemA4(pesanan.id);
+
+                const cetakItemTermalButton = document.createElement('button');
+                cetakItemTermalButton.textContent = 'Cetak Struk (Mini)';
+                cetakItemTermalButton.classList.add('btn-cetak-item-termal');
+                cetakItemTermalButton.onclick = () => cetakSingleItemTermal(pesanan.id);
 
                 const hapusButton = document.createElement('button');
                 hapusButton.textContent = 'Hapus';
@@ -746,7 +743,8 @@
                 hapusButton.onclick = () => hapusPesanan(pesanan.id);
 
                 actionsDiv.appendChild(arsipButton);
-                actionsDiv.appendChild(cetakItemButton);
+                actionsDiv.appendChild(cetakItemA4Button);
+                actionsDiv.appendChild(cetakItemTermalButton);
                 actionsDiv.appendChild(hapusButton);
                 listItem.appendChild(actionsDiv);
             }
@@ -814,108 +812,30 @@
             }
         }
 
-        // --- Fungsi Cetak Berbeda ---
+        // --- Fungsi Cetak (General) ---
         function preparePrintArea(areaId) {
-            // Sembunyikan semua area cetak terlebih dahulu
             document.querySelectorAll('.print-area').forEach(area => {
-                area.style.display = 'none';
+                area.style.display = 'none'; // Sembunyikan semua area cetak
             });
-            // Tampilkan hanya area yang diinginkan
-            document.getElementById(areaId).style.display = 'block';
+            document.getElementById(areaId).style.display = 'block'; // Tampilkan yang diinginkan
         }
 
-        // Fungsi untuk mencetak Struk Konsumen (ringkas, cocok untuk printer roll)
-        function cetakStrukKonsumen() {
-            if (pesananList.length === 0) {
-                alert('Tidak ada pesanan aktif untuk dicetak.');
-                return;
+        // Helper function to format brand/keharuman for print
+        function formatBrandForPrint(pesanan, maxLength = 25) {
+            let brandText = pesanan.brandParfumPilihan;
+            if (pesanan.keharumanLain) {
+                brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
             }
-
-            preparePrintArea('receiptKonsumen');
-            
-            const receiptKonsumenItems = document.getElementById('receiptKonsumenItems');
-            const receiptKonsumenTotalAmount = document.getElementById('receiptKonsumenTotalAmount');
-            const receiptKonsumenDate = document.getElementById('receiptKonsumenDate');
-
-            receiptKonsumenItems.innerHTML = '';
-            let totalKonsumen = 0;
-            const currentDate = new Date();
-            receiptKonsumenDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
-
-            pesananList.forEach(pesanan => {
-                const li = document.createElement('li');
-                li.classList.add('item');
-                let brandText = pesanan.brandParfumPilihan;
-                if (pesanan.keharumanLain) {
-                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
-                }
-
-                li.innerHTML = `
-                    <div class="item-details">
-                        <span>${pesanan.nama.substring(0, 15)}${pesanan.nama.length > 15 ? '...' : ''}</span> 
-                        <span>${brandText} (${pesanan.jenisParfum})</span>
-                        <span>${pesanan.jumlah} x Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</span>
-                    </div>
-                    <div class="item-price">
-                        Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}
-                    </div>
-                `;
-                receiptKonsumenItems.appendChild(li);
-                totalKonsumen += pesanan.totalHargaItem;
-            });
-            receiptKonsumenTotalAmount.textContent = `Rp ${totalKonsumen.toLocaleString('id-ID')}`;
-
-            window.print();
-        }
-
-        // Fungsi untuk mencetak Detail Saya (lebih detail, cocok untuk laporan)
-        function cetakDetailSaya() {
-            if (pesananList.length === 0) {
-                alert('Tidak ada pesanan aktif untuk dicetak sebagai laporan.');
-                return;
+            if (brandText.length > maxLength) {
+                brandText = brandText.substring(0, maxLength - 3) + '...';
             }
-
-            preparePrintArea('receiptSaya');
-
-            const receiptSayaItems = document.getElementById('receiptSayaItems');
-            const receiptSayaTotalAmount = document.getElementById('receiptSayaTotalAmount');
-            const receiptSayaDate = document.getElementById('receiptSayaDate');
-
-            receiptSayaItems.innerHTML = '';
-            let totalSaya = 0;
-            const currentDate = new Date();
-            receiptSayaDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
-
-            pesananList.forEach(pesanan => {
-                const div = document.createElement('div');
-                div.classList.add('order-item');
-                let brandText = pesanan.brandParfumPilihan;
-                if (pesanan.keharumanLain) {
-                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
-                }
-
-                div.innerHTML = `
-                    <strong>Nama Pemesan: ${pesanan.nama}</strong>
-                    <div class="order-details">
-                        <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                        <p>Parfum: ${brandText}</p>
-                        <p>Jenis: ${pesanan.jenisParfum}</p>
-                        <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
-                        <p>Jumlah: ${pesanan.jumlah}</p>
-                        <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
-                        <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
-                    </div>
-                `;
-                receiptSayaItems.appendChild(div);
-                totalSaya += pesanan.totalHargaItem;
-            });
-            receiptSayaTotalAmount.textContent = `Rp ${totalSaya.toLocaleString('id-ID')}`;
-
-            window.print();
+            return brandText;
         }
 
-        // Fungsi untuk mencetak Pesanan Saat Ini (dari form)
-        function cetakPesananSaatIni() {
+        // --- Cetak A4 Functions ---
+
+        // Fungsi untuk mencetak Pesanan Saat Ini (dari form, A4)
+        function cetakPesananSaatIniA4() {
             const nama = document.getElementById('nama').value;
             const selectedCategory = document.querySelector('input[name="kategori"]:checked');
             const brandParfumPilihan = document.getElementById('brandParfum').value;
@@ -928,113 +848,292 @@
                 return;
             }
 
-            preparePrintArea('receiptCurrent');
+            preparePrintArea('a4PrintArea');
+            const a4PrintContent = document.getElementById('a4PrintArea');
 
             const jenisParfum = jenisParfumRadio.value;
             const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
             const totalHargaItem = hargaPerBotol * jumlah;
 
-            const currentOrderItemDiv = document.getElementById('currentOrderItem');
-            const receiptCurrentDate = document.getElementById('receiptCurrentDate');
-            const currentDate = new Date();
-            receiptCurrentDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+            let brandText = formatBrandForPrint({ brandParfumPilihan, keharumanLain }, 50); // Lebih panjang untuk A4
 
-            let brandText = brandParfumPilihan;
-            if (keharumanLain) {
-                brandText = `${brandText || 'Kustom'}: ${keharumanLain}`;
-            }
-
-            currentOrderItemDiv.innerHTML = `
-                <p><strong>Nama Pemesan:</strong> ${nama}</p>
-                <p><strong>Kategori:</strong> ${selectedCategory.value.charAt(0).toUpperCase() + selectedCategory.value.slice(1)}</p>
-                <p><strong>Parfum:</strong> ${brandText}</p>
-                <p><strong>Jenis:</strong> ${jenisParfum}</p>
-                <p><strong>Jumlah:</strong> ${jumlah}</p>
-                <p><strong>Harga per Botol:</strong> Rp ${hargaPerBotol.toLocaleString('id-ID')}</p>
-                <p class="total"><strong>Total Harga:</strong> Rp ${totalHargaItem.toLocaleString('id-ID')}</p>
+            a4PrintContent.innerHTML = `
+                <h3>Detail Pesanan Saat Ini</h3>
+                <p style="text-align: center;">Tanggal: ${new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                <hr style="border-top: 1px solid #000; margin: 20px 0;">
+                <div class="order-detail-box">
+                    <p><strong>Nama Pemesan:</strong> ${nama}</p>
+                    <p><strong>Kategori:</strong> ${selectedCategory.value.charAt(0).toUpperCase() + selectedCategory.value.slice(1)}</p>
+                    <p><strong>Parfum:</strong> ${brandText}</p>
+                    <p><strong>Jenis:</strong> ${jenisParfum}</p>
+                    <p><strong>Jumlah:</strong> ${jumlah}</p>
+                    <p><strong>Harga per Botol:</strong> Rp ${hargaPerBotol.toLocaleString('id-ID')}</p>
+                    <p class="total"><strong>Total Harga:</strong> Rp ${totalHargaItem.toLocaleString('id-ID')}</p>
+                </div>
+                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+                    Detail pesanan ini berdasarkan input formulir saat Anda mencetak.
+                </p>
             `;
-
             window.print();
         }
 
-        // Fungsi untuk mencetak satu item pesanan dari daftar
-        function cetakSingleItem(idToPrint) {
+        // Fungsi untuk mencetak satu item pesanan dari daftar (A4)
+        function cetakSingleItemA4(idToPrint) {
             const pesanan = pesananList.find(p => p.id === idToPrint);
             if (!pesanan) {
                 alert('Pesanan tidak ditemukan.');
                 return;
             }
 
-            preparePrintArea('receiptCurrent'); // Re-use the 'current order' print area
+            preparePrintArea('a4PrintArea');
+            const a4PrintContent = document.getElementById('a4PrintArea');
 
-            const currentOrderItemDiv = document.getElementById('currentOrderItem');
-            const receiptCurrentDate = document.getElementById('receiptCurrentDate');
-            const currentDate = new Date();
-            receiptCurrentDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+            let brandText = formatBrandForPrint(pesanan, 50);
 
-            let brandText = pesanan.brandParfumPilihan;
-            if (pesanan.keharumanLain) {
-                brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
-            }
-
-            currentOrderItemDiv.innerHTML = `
-                <p><strong>Nama Pemesan:</strong> ${pesanan.nama}</p>
-                <p><strong>Kategori:</strong> ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                <p><strong>Parfum:</strong> ${brandText}</p>
-                <p><strong>Jenis:</strong> ${pesanan.jenisParfum}</p>
-                <p><strong>Jumlah:</strong> ${pesanan.jumlah}</p>
-                <p><strong>Harga per Botol:</strong> Rp ${pesanan.hargaPerBotol.toLocaleString('id-ID')}</p>
-                <p class="total"><strong>Total Harga:</strong> Rp ${pesanan.totalHargaItem.toLocaleString('id-ID')}</p>
-                <p style="font-size: 0.9em; text-align: right;">Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+            a4PrintContent.innerHTML = `
+                <h3>Detail Pesanan Individual</h3>
+                <p style="text-align: center;">Tanggal: ${new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                <hr style="border-top: 1px solid #000; margin: 20px 0;">
+                <div class="order-detail-box">
+                    <p><strong>Nama Pemesan:</strong> ${pesanan.nama}</p>
+                    <p><strong>Kategori:</strong> ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                    <p><strong>Parfum:</strong> ${brandText}</p>
+                    <p><strong>Jenis:</strong> ${pesanan.jenisParfum}</p>
+                    <p><strong>Jumlah:</strong> ${pesanan.jumlah}</p>
+                    <p><strong>Harga per Botol:</strong> Rp ${pesanan.hargaPerBotol.toLocaleString('id-ID')}</p>
+                    <p class="total"><strong>Total Harga:</strong> Rp ${pesanan.totalHargaItem.toLocaleString('id-ID')}</p>
+                    <p style="font-size: 0.9em; text-align: right;">Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                </div>
+                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+                    Detail pesanan ini berasal dari daftar pesanan yang tersimpan.
+                </p>
             `;
-
             window.print();
         }
 
-        // Fungsi untuk mencetak seluruh riwayat
-        function cetakRiwayat() {
+        // Fungsi untuk mencetak Detail Laporan (Semua Pesanan Aktif, A4)
+        function cetakDaftarPesananA4() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan aktif untuk dicetak sebagai laporan.');
+                return;
+            }
+
+            preparePrintArea('a4PrintArea');
+            const a4PrintContent = document.getElementById('a4PrintArea');
+
+            let totalSaya = 0;
+            const currentDate = new Date();
+            let itemsHtml = '';
+
+            pesananList.forEach(pesanan => {
+                let brandText = formatBrandForPrint(pesanan, 50);
+                itemsHtml += `
+                    <div class="order-item">
+                        <strong>Nama Pemesan: ${pesanan.nama}</strong>
+                        <div class="order-details">
+                            <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                            <p>Parfum: ${brandText}</p>
+                            <p>Jenis: ${pesanan.jenisParfum}</p>
+                            <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
+                            <p>Jumlah: ${pesanan.jumlah}</p>
+                            <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
+                            <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                `;
+                totalSaya += pesanan.totalHargaItem;
+            });
+
+            a4PrintContent.innerHTML = `
+                <h3>Laporan Pesanan Parfum Aktif</h3>
+                <h4>Toko Parfum Makmur Jaya</h4>
+                <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                <hr style="border-top: 1px solid #000; margin: 20px 0;">
+                ${itemsHtml}
+                <div class="total-overall">
+                    Total Keseluruhan Pesanan Aktif: <span id="receiptSayaTotalAmount">Rp ${totalSaya.toLocaleString('id-ID')}</span>
+                </div>
+                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+                    Laporan ini mencakup semua pesanan yang tersimpan hingga saat ini.
+                </p>
+            `;
+            window.print();
+        }
+
+        // Fungsi untuk mencetak seluruh riwayat (A4)
+        function cetakRiwayatA4() {
             if (historyList.length === 0) {
                 alert('Tidak ada riwayat pesanan untuk dicetak.');
                 return;
             }
-            preparePrintArea('receiptSaya'); // Reuse the 'my print' area for history
-            
-            const receiptSayaItems = document.getElementById('receiptSayaItems');
-            const receiptSayaTotalAmount = document.getElementById('receiptSayaTotalAmount');
-            const receiptSayaDate = document.getElementById('receiptSayaDate');
+            preparePrintArea('a4PrintArea'); 
+            const a4PrintContent = document.getElementById('a4PrintArea');
 
-            receiptSayaItems.innerHTML = '';
             let totalRiwayat = 0;
             const currentDate = new Date();
-            receiptSayaDate.textContent = currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+            let itemsHtml = '';
 
             historyList.forEach(pesanan => {
-                const div = document.createElement('div');
-                div.classList.add('order-item');
-                let brandText = pesanan.brandParfumPilihan;
-                if (pesanan.keharumanLain) {
-                    brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
-                }
-
-                div.innerHTML = `
-                    <strong>Nama Pemesan: ${pesanan.nama}</strong>
-                    <div class="order-details">
-                        <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                        <p>Parfum: ${brandText}</p>
-                        <p>Jenis: ${pesanan.jenisParfum}</p>
-                        <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
-                        <p>Jumlah: ${pesanan.jumlah}</p>
-                        <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
-                        <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                let brandText = formatBrandForPrint(pesanan, 50);
+                itemsHtml += `
+                    <div class="order-item">
+                        <strong>Nama Pemesan: ${pesanan.nama}</strong>
+                        <div class="order-details">
+                            <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
+                            <p>Parfum: ${brandText}</p>
+                            <p>Jenis: ${pesanan.jenisParfum}</p>
+                            <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
+                            <p>Jumlah: ${pesanan.jumlah}</p>
+                            <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
+                            <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
+                        </div>
                     </div>
                 `;
-                receiptSayaItems.appendChild(div);
                 totalRiwayat += pesanan.totalHargaItem;
             });
-            receiptSayaTotalAmount.textContent = `Rp ${totalRiwayat.toLocaleString('id-ID')}`;
+            a4PrintContent.innerHTML = `
+                <h3>Laporan Riwayat Pemesanan</h3>
+                <h4>Toko Parfum Makmur Jaya</h4>
+                <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                <hr style="border-top: 1px solid #000; margin: 20px 0;">
+                ${itemsHtml}
+                <div class="total-overall">
+                    Total Keseluruhan Riwayat: <span id="receiptSayaTotalAmount">Rp ${totalRiwayat.toLocaleString('id-ID')}</span>
+                </div>
+                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
+                    Laporan ini mencakup semua pesanan yang telah diarsipkan.
+                </p>
+            `;
             window.print();
         }
 
+
+        // --- Cetak Thermal (Mini) Functions ---
+
+        /**
+         * Generic function to generate thermal receipt content.
+         * @param {Array} orders - An array of order objects.
+         * @param {string} title - Main title for the receipt (e.g., "STRUK PEMESANAN").
+         * @param {string} [footerNote=''] - Optional note for the footer.
+         */
+        function generateThermalReceiptContent(orders, title, footerNote = '') {
+            const thermalPrintArea = document.getElementById('thermalPrintArea');
+            const currentDate = new Date();
+            let itemsHtml = '';
+            let totalOverall = 0;
+
+            if (orders.length === 0) {
+                itemsHtml = `<p style="text-align: center;">Tidak ada item untuk dicetak.</p>`;
+            } else {
+                orders.forEach(pesanan => {
+                    const brandText = formatBrandForPrint(pesanan, 20); // Batasi lebih pendek untuk termal
+                    const itemPriceFormatted = parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID');
+                    const qtyPrice = `${pesanan.jumlah}x @${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}`;
+                    
+                    itemsHtml += `
+                        <div class="item">
+                            <div class="item-name">${brandText}</div>
+                            <div class="item-qty-price">${qtyPrice}</div>
+                            <div class="item-total-price">Rp ${itemPriceFormatted}</div>
+                        </div>
+                    `;
+                    totalOverall += pesanan.totalHargaItem;
+                });
+            }
+
+            thermalPrintArea.innerHTML = `
+                <div class="header">
+                    <h3>TOKO PARFUM MAKMUR JAYA</h3>
+                    <p>Jl. Contoh No. 123, Majalaya</p>
+                    <p>Telp: 0812-3456-7890</p>
+                    <p>Tgl: ${currentDate.toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}</p>
+                </div>
+                <hr>
+                <div class="section-title">${title}</div>
+                <hr>
+                <ul class="item-list">
+                    ${itemsHtml}
+                </ul>
+                <hr>
+                <div class="total-summary detail-row">
+                    <span>TOTAL:</span>
+                    <span>Rp ${totalOverall.toLocaleString('id-ID')}</span>
+                </div>
+                <hr>
+                <div class="footer">
+                    <p>${footerNote || 'TERIMA KASIH ATAS KUNJUNGANNYA'}</p>
+                    <p>*** BARANG YANG SUDAH DIBELI TIDAK DAPAT DIKEMBALIKAN ***</p>
+                    <p class="info-note">Sistem Pemesanan v1.0</p>
+                </div>
+            `;
+            window.print();
+        }
+
+        // Fungsi untuk mencetak Pesanan Saat Ini (dari form, Thermal)
+        function cetakPesananSaatIniTermal() {
+            const nama = document.getElementById('nama').value;
+            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
+            const brandParfumPilihan = document.getElementById('brandParfum').value;
+            const keharumanLain = document.getElementById('keharumanLain').value;
+            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+
+            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
+                alert('Mohon lengkapi data pesanan di formulir terlebih dahulu untuk mencetak struk.');
+                return;
+            }
+
+            preparePrintArea('thermalPrintArea');
+
+            const jenisParfum = jenisParfumRadio.value;
+            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
+            const totalHargaItem = hargaPerBotol * jumlah;
+
+            const singleOrder = {
+                nama,
+                kategori: selectedCategory.value,
+                brandParfumPilihan: brandParfumPilihan,
+                keharumanLain: keharumanLain,
+                jenisParfum,
+                hargaPerBotol,
+                jumlah,
+                totalHargaItem,
+                timestamp: new Date().toISOString()
+            };
+
+            generateThermalReceiptContent([singleOrder], `STRUK PEMESANAN UNTUK: ${nama.toUpperCase()}`);
+        }
+
+        // Fungsi untuk mencetak satu item pesanan dari daftar (Thermal)
+        function cetakSingleItemTermal(idToPrint) {
+            const pesanan = pesananList.find(p => p.id === idToPrint);
+            if (!pesanan) {
+                alert('Pesanan tidak ditemukan.');
+                return;
+            }
+            preparePrintArea('thermalPrintArea');
+            generateThermalReceiptContent([pesanan], `STRUK PEMESANAN UNTUK: ${pesanan.nama.toUpperCase()}`);
+        }
+
+        // Fungsi untuk mencetak Daftar Pesanan Aktif (Thermal)
+        function cetakDaftarPesananTermal() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan aktif untuk dicetak struk.');
+                return;
+            }
+            preparePrintArea('thermalPrintArea');
+            generateThermalReceiptContent(pesananList, 'STRUK DAFTAR PESANAN AKTIF');
+        }
+
+        // Fungsi untuk mencetak Riwayat Pesanan (Thermal)
+        function cetakRiwayatTermal() {
+            if (historyList.length === 0) {
+                alert('Tidak ada riwayat pesanan untuk dicetak struk.');
+                return;
+            }
+            preparePrintArea('thermalPrintArea');
+            generateThermalReceiptContent(historyList, 'STRUK RIWAYAT PESANAN');
+        }
 
         // Panggil fungsi ini saat halaman dimuat
         window.onload = function() {
