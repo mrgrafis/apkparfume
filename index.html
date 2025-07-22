@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font modern */
-            background: linear-gradient(135deg, #f0f2f0, #e0e5e0); /* Gradien lembut background */
+            background: linear-gradient(135deg, #f0f2f0, #e0e5f0); /* Gradien lembut background */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -114,7 +114,7 @@
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-            background-color: #faffe7; /* Warna latar saat fokus */
+            background-color: #e3f2fd; /* Warna latar saat fokus */
         }
         .radio-group-horizontal label {
             display: inline-block;
@@ -251,12 +251,16 @@
             body > *:not(.print-area) {
                 display: none !important;
             }
+
+            /* Atur margin HTML dan Body menjadi 0 untuk mengklaim seluruh area cetak */
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
             body {
-                background-color: #fff;
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                font-size: 12px;
+                background-color: #fff; /* Pastikan background putih */
+                font-family: 'Consolas', 'Courier New', monospace; /* Font monospace lebih cocok untuk termal */
+                font-size: 10px; /* Ukuran font default untuk cetak, akan di-override di .receipt-thermal */
                 line-height: 1.2;
             }
             .print-area {
@@ -271,86 +275,129 @@
 
             /* Styles for Thermal Printer (Struk Alfamart-style) */
             .receipt-thermal {
-                width: 80mm; /* Standard thermal printer width */
-                margin: 0 auto;
-                padding: 5mm; /* Lebih kecil dari sebelumnya */
-                font-family: 'Consolas', 'Courier New', monospace;
-                font-size: 16px; /* Huruf diperbesar */
-                line-height: 1.3; /* Jarak baris sedikit lebih longgar */
+                width: 55mm; /* Tetap 55mm untuk lebar kertas */
+                min-height: 10mm;
+                margin: 0; /* Pastikan margin 0 */
+                padding: 0; /* Padding 0 untuk kontrol maksimal */
+                font-family: 'Consolas', 'Courier New', monospace; /* Font monospace lebih cocok untuk termal */
+                font-size: 10px; /* **Tingkatkan lagi ke 10px** */
+                line-height: 1.2;
                 color: #000;
+                box-sizing: border-box;
+
+                /* *** Percobaan Penting: Atur Margin dan Padding Internal Element ke 0 *** */
+                /* Ini untuk memastikan tidak ada spasi internal yang mempersempit konten */
+                * { /* Selektor universal untuk semua elemen di dalam .receipt-thermal */
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                
+                /* *** Percobaan Penting: Gunakan Transform Scale jika masih kecil *** */
+                /* Jika printer masih mengecilkan, ini bisa membantu mengisi lebar */
+                /* Aktifkan salah satu dari ini, jangan kedua-duanya */
+                /* transform: scale(1.05); */ /* Coba sedikit scaling up, misalnya 5% */
+                /* transform-origin: top left; */ /* Penting agar scaling dimulai dari kiri atas */
+
+                /* Atau gunakan zoom, tapi transform lebih direkomendasikan */
+                /* zoom: 105%; */ /* Alternatif jika transform tidak berfungsi baik */
             }
             .receipt-thermal .header, .receipt-thermal .footer {
                 text-align: center;
-                margin-bottom: 5mm;
+                margin: 1mm 0; /* Reduced margin */
+                padding: 0 2mm; /* Padding horizontal untuk teks */
             }
             .receipt-thermal .header h3 {
                 margin: 0;
-                font-size: 1.5em; /* Judul toko lebih besar */
+                font-size: 1em; /* Ukuran heading */
                 font-weight: bold;
+                white-space: nowrap; /* Jangan putus baris */
+                overflow: hidden;
+                text-overflow: ellipsis; /* Tambah ellipsis jika terlalu panjang */
             }
             .receipt-thermal .header p {
-                margin: 2px 0;
-                font-size: 0.9em;
+                margin: 0; /* Margin sangat ketat */
+                font-size: 0.9em; /* Ukuran font lebih kecil */
+                white-space: nowrap; /* Jangan putus baris */
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .receipt-thermal hr {
                 border: none;
                 border-top: 1px dashed #000; /* Garis putus-putus */
-                margin: 10px 0;
+                margin: 3px 2mm; /* Margin atas/bawah 3px, horizontal 2mm */
+                width: calc(100% - 4mm); /* Sesuaikan lebar garis dengan padding 2mm kiri kanan */
             }
             .receipt-thermal .section-title {
                 text-align: center;
                 font-weight: bold;
-                margin: 10px 0;
-                font-size: 1.1em;
+                margin: 3px 0; /* Reduced margin */
+                font-size: 1em; /* Adjusted font size */
+                padding: 0 2mm;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .receipt-thermal .item-list {
                 list-style: none;
-                padding: 0;
+                padding: 0 2mm; /* Padding horizontal di sini untuk item */
                 margin: 0;
             }
             .receipt-thermal .item {
                 display: flex;
                 flex-wrap: wrap; /* Agar bisa wrap ke bawah */
                 justify-content: space-between;
-                margin-bottom: 8px; /* Jarak antar item lebih jelas */
-                font-size: 1em;
+                margin-bottom: 2px; /* Reduced margin */
+                font-size: 0.9em; /* Adjusted font size */
             }
             .receipt-thermal .item-name {
                 width: 100%; /* Nama item di baris sendiri */
                 font-weight: bold;
+                white-space: normal; /* **Biarkan nama item wrap jika panjang** */
+                word-break: break-all; /* Paksa break jika terlalu panjang tanpa spasi */
             }
             .receipt-thermal .item-qty-price {
                 width: 60%; /* Jumlah x Harga satuan */
                 text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .receipt-thermal .item-total-price {
                 width: 40%; /* Total harga item */
                 text-align: right;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .receipt-thermal .detail-row {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 5px;
+                margin-bottom: 2px; /* Reduced margin */
+                padding: 0 2mm; /* Padding horizontal di sini */
+                font-size: 0.9em; /* Konsisten dengan item */
             }
             .receipt-thermal .total-summary {
                 border-top: 1px dashed #000;
-                padding-top: 8px;
-                margin-top: 8px;
-                font-size: 1.2em; /* Total keseluruhan lebih besar */
+                padding-top: 3px; /* Reduced padding */
+                margin-top: 3px; /* Reduced margin */
+                font-size: 1em; /* Ukuran total keseluruhan normal */
                 font-weight: bold;
             }
             .receipt-thermal .footer p {
-                margin: 5px 0;
-                font-size: 0.9em;
+                margin: 1px 0; /* Reduced margin */
+                font-size: 0.8em; /* Smaller font for footer */
+                white-space: nowrap; /* Jangan putus baris */
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .receipt-thermal .info-note {
-                font-size: 0.8em;
+                font-size: 0.75em; /* Even smaller for info note */
                 text-align: center;
-                margin-top: 15px;
+                margin-top: 5px; /* Reduced margin */
             }
 
 
-            /* Styles for A4 Print */
+            /* Styles for A4 Print (Tidak Berubah Signifikan) */
             .receipt-a4 {
                 padding: 20px;
                 width: 210mm; /* A4 width */
@@ -530,10 +577,10 @@
 
         // Data Brand Parfum (sekitar 100+ per kategori) - Ditempelkan dari jawaban sebelumnya
         const brandParfumData = {
-            pria: [ "Acqua di Parma", "Armani Code", "Bleu de Chanel", "Boss Bottled", "Bvlgari Man", "Carolina Herrera Bad Boy", "Chanel Allure Homme Sport", "Christian Dior Sauvage", "Creed Aventus", "Davidoff Cool Water", "Dior Homme", "Dolce & Gabbana The One For Men", "Dunhill Icon", "Giorgio Armani Acqua di Gio", "Givenchy Gentleman", "Gucci Guilty Pour Homme", "Hermès Terre d'Hermès", "Invictus Paco Rabanne", "Jean Paul Gaultier Le Male", "Jo Malone Wood Sage & Sea Salt (Men)", "John Varvatos Artisan", "Lacoste L.12.12", "Montblanc Explorer", "Nautica Voyage", "Paco Rabanne 1 Million", "Polo Ralph Lauren Blue", "Prada L'Homme", "Tom Ford Oud Wood", "Versace Dylan Blue", "Viktor & Rolf Spicebomb", "YSL Y", "Azzaro Wanted", "Bentley For Men Intense", "Burberry Brit For Men", "Calvin Klein Eternity for Men", "Coach For Men", "Dolce & Gabbana K", "DSQUARED2 Wood Pour Homme", "Ermenegildo Zegna Uomo", "Ferrari Black", "Gucci Guilty Absolute", "Issey Miyake L'Eau d'Issey Pour Homme", "Jimmy Choo Man", "Kenzo Pour Homme", "Loewe 7", "Maison Margiela Replica Jazz Club", "Mugler A*Men", "Narciso Rodriguez For Him", "Paco Rabanne Phantom", "Penhaligon's Halfeti", "Ralph Lauren Polo Green", "Roja Dove Elysium", "Salvatore Ferragamo F by Ferragamo", "Thierry Mugler Alien Man", "Tommy Hilfiger Tommy", "Trussardi My Land", "Valentino Uomo Born In Roma", "Van Cleef & Arpels Pour Homme", "Versace Eros", "Victorinox Swiss Army Classic", "Yves Saint Laurent La Nuit de L'Homme", "Zegna Essenze Collection", "Adnan B. Royal Touch", "Alfred Dunhill Desire Blue", "Antonio Banderas Blue Seduction", "Bottega Veneta Pour Homme", "Brioni Eau de Parfum", "Cartier Pasha de Cartier", "Coach Platinum", "Creed Green Irish Tweed", "Diesel Only The Brave", "Ermenegildo Zegna Z Zegna", "Ferrari Scuderia Black", "Givenchy Pi", "Gucci Pour Homme II", "Guess Seductive Homme Blue", "Hugo Boss The Scent", "Jaguar Classic Black", "Joop! Homme", "Karl Lagerfeld Pour Homme", "Lalique Encre Noire", "Mancera Cedrat Boise", "Mercedes-Benz Man", "Michael Kors for Men", "Montblanc Legend", "Mugler Cologne", "Paco Rabanne Pure XS", "Penhaligon's Blenheim Bouquet", "Porsche Design 180", "Ralph Lauren Polo Black", "Roja Dove Scandal Pour Homme", "Sergio Tacchini O-Zone Man", "Ted Lapidus Pour Homme", "Tom Ford Beau De Jour", "Truefitt & Hill Trafalgar", "Uomo Salvatore Ferragamo", "Van Gils Between Sheets", "Versace Pour Homme", "Yves Saint Laurent Kouros", "Zadig & Voltaire This Is Him!", "Zara Man Gold", "Ajmal Evoke Gold Edition For Him" ],
-            wanita: [ "Ariana Grande Cloud", "Black Opium YSL", "Britney Spears Fantasy", "Bvlgari Omnia Crystalline", "Calvin Klein Euphoria", "Carolina Herrera Good Girl", "Chanel Chance Eau Tendre", "Chanel Coco Mademoiselle", "Chloe Eau de Parfum", "Christian Dior J'adore", "Dior Miss Dior", "Dolce & Gabbana Light Blue", "Elizabeth Arden 5th Avenue", "Estee Lauder Beautiful", "Givenchy L'Interdit", "Giorgio Armani My Way", "Gucci Bloom", "Guerlain Mon Guerlain", "Jean Paul Gaultier La Belle", "Jo Malone Peony & Blush Suede", "Jimmy Choo Blossom", "Lancôme La Vie Est Belle", "Marc Jacobs Daisy", "Mugler Alien", "Narciso Rodriguez For Her", "Paco Rabanne Lady Million", "Prada Candy", "Thierry Mugler Angel", "Tom Ford Black Orchid", "Versace Bright Crystal", "Viktor & Rolf Flowerbomb", "Yves Saint Laurent Libre", "Burberry Her", "Byredo Mojave Ghost", "Carolina Herrera 212 NYC", "Chanel No. 5", "Clean Reserve Warm Cotton", "Dior Poison Girl", "Donna Karan DKNY Be Delicious", "Elizabeth Taylor White Diamonds", "Escada Miami Blossom", "Estee Lauder Pleasures", "Giorgio Armani Si", "Givenchy Irresistible", "Gucci Flora Gorgeous Gardenia", "Guerlain Shalimar", "Hugo Boss Woman", "Issey Miyake L'Eau d'Issey", "Jean Paul Gaultier Classique", "Juliette Has A Gun Not a Perfume", "Kenzo Flower", "Kilian Love, Don't Be Shy", "Lacoste Pour Femme", "Lanvin Eclat d'Arpège", "Loewe Aura", "Maison Margiela Replica Beach Walk", "Michael Kors Glam Jasmine", "Moschino Toy 2", "Nina Ricci L'Air du Temps", "Paco Rabanne Fame", "Penhaligon's Luna", "Philosophy Amazing Grace", "Ralph Lauren Romance", "Roja Dove Enigma Pour Femme", "Salvatore Ferragamo Signorina", "Shiseido Ever Bloom", "Stella McCartney Stella", "The Body Shop White Musk", "Tiffany & Co. Eau de Parfum", "Tom Ford Orchid Soleil", "Tous Tous Tous Bear", "Trussardi Donna", "Valentino Donna Born In Roma", "Van Cleef & Arpels Feerie", "Vera Wang Princess", "Victoria's Secret Bombshell", "Zara Orchid", "Elizabeth Arden Green Tea", "Escada Cherry in Japan", "Clinique Happy", "DKNY Stories", "Elie Saab Le Parfum", "Gucci Rush", "Guess Seductive", "Hollister Wave For Her", "Jesus Del Pozo Halloween", "Juicy Couture Viva La Juicy", "Kate Spade New York", "Kylie Minogue Darling", "Maison Francis Kurkdjian Baccarat Rouge 540 (Women)", "Moschino I Love Love", "Narciso Rodriguez Pure Musc", "Oscar de la Renta Oscar", "Rihanna Reb'l Fleur", "Tommy Hilfiger Tommy Girl", "Versace Crystal Noir", "Victoria's Secret Tease", "YSL Mon Paris", "Zoella Beauty Splash" ],
+            pria: [ "Acqua di Parma", "Armani Code", "Bleu de Chanel", "Boss Bottled", "Bvlgari Man", "Carolina Herrera Bad Boy", "Chanel Allure Homme Sport", "Christian Dior Sauvage", "Creed Aventus", "Davidoff Cool Water", "Dior Homme", "Dolce & Gabbana The One For Men", "Dunhill Icon", "Giorgio Armani Acqua di Gio", "Givenchy Gentleman", "Gucci Guilty Pour Homme", "Hermès Terre d'Hermès", "Invictus Paco Rabanne", "Jean Paul Gaultier Le Male", "Jo Malone Wood Sage & Sea Salt (Men)", "John Varvatos Artisan", "Lacoste L.12.12", "Montblanc Explorer", "Nautica Voyage", "Paco Rabanne 1 Million", "Polo Ralph Lauren Blue", "Prada L'Homme", "Tom Ford Oud Wood", "Versace Dylan Blue", "Viktor & Rolf Spicebomb", "YSL Y", "Azzaro Wanted", "Bentley For Men Intense", "Burberry Brit For Men", "Calvin Klein Eternity for Men", "Coach For Men", "Dolce & Gabbana K", "DSQUARED2 Wood Pour Homme", "Ermenegildo Zegna Uomo", "Ferrari Black", "Gucci Guilty Absolute", "Issey Miyake L'Eau d'Issey Pour Homme", "Jimmy Choo Man", "Kenzo Pour Homme", "Loewe 7", "Maison Margiela Replica Jazz Club", "Mugler A*Men", "Narciso Rodriguez For Him", "Paco Rabanne Phantom", "Penhaligon's Halfeti", "Ralph Lauren Polo Green", "Roja Dove Elysium", "Salvatore Ferragamo F by Ferragamo", "Thierry Mugler Alien Man", "Tommy Hilfiger Tommy", "Trussardi My Land", "Valentino Uomo Born In Roma", "Van Cleef & Arpels Pour Homme", "Versace Eros", "Victorinox Swiss Army Classic", "Yves Saint Laurent Kouros", "Zegna Essenze Collection", "Adnan B. Royal Touch", "Alfred Dunhill Desire Blue", "Antonio Banderas Blue Seduction", "Bottega Veneta Pour Homme", "Brioni Eau de Parfum", "Cartier Pasha de Cartier", "Coach Platinum", "Creed Green Irish Tweed", "Diesel Only The Brave", "Ermenegildo Zegna Z Zegna", "Ferrari Scuderia Black", "Givenchy Pi", "Gucci Pour Homme II", "Guess Seductive Homme Blue", "Hugo Boss The Scent", "Jaguar Classic Black", "Joop! Homme", "Karl Lagerfeld Pour Homme", "Lalique Encre Noire", "Mancera Cedrat Boise", "Mercedes-Benz Man", "Michael Kors for Men", "Montblanc Legend", "Mugler Cologne", "Paco Rabanne Pure XS", "Penhaligon's Blenheim Bouquet", "Porsche Design 180", "Ralph Lauren Polo Black", "Roja Dove Scandal Pour Homme", "Sergio Tacchini O-Zone Man", "Ted Lapidus Pour Homme", "Tom Ford Beau De Jour", "Truefitt & Hill Trafalgar", "Uomo Salvatore Ferragamo", "Van Gils Between Sheets", "Versace Pour Homme", "Yves Saint Laurent Kouros", "Zadig & Voltaire This Is Him!", "Zara Man Gold", "Ajmal Evoke Gold Edition For Him" ],
+            wanita: [ "Ariana Grande Cloud", "Black Opium YSL", "Britney Spears Fantasy", "Bvlgari Omnia Crystalline", "Calvin Klein Euphoria", "Carolina Herrera Good Girl", "Chanel Chance Eau Tendre", "Chanel Coco Mademoiselle", "Chloe Eau de Parfum", "Christian Dior J'adore", "Dior Miss Dior", "Dolce & Gabbana Light Blue", "Elizabeth Arden 5th Avenue", "Estee Lauder Beautiful", "Givenchy L'Interdit", "Giorgio Armani My Way", "Gucci Bloom", "Guerlain Mon Guerlain", "Jean Paul Gaultier La Belle", "Jo Malone Peony & Blush Suede", "Jimmy Choo Blossom", "Lancôme La Vie Est Belle", "Marc Jacobs Daisy", "Mugler Alien", "Narciso Rodriguez For Her", "Paco Rabanne Lady Million", "Prada Candy", "Thierry Mugler Angel", "Tom Ford Black Orchid", "Versace Bright Crystal", "Viktor & Rolf Flowerbomb", "Yves Saint Laurent Libre", "Burberry Her", "Byredo Mojave Ghost", "Carolina Herrera 212 NYC", "Chanel No. 5", "Clean Reserve Warm Cotton", "Dior Poison Girl", "Donna Karan DKNY Be Delicious", "Elizabeth Taylor White Diamonds", "Escada Miami Blossom", "Estee Lauder Pleasures", "Giorgio Armani Si", "Givenchy Irresistible", "Gucci Flora Gorgeous Gardenia", "Guerlain Shalimar", "Hugo Boss Woman", "Issey Miyake L'Eau d'Issey", "Jean Paul Gaultier Classique", "Juliette Has A Gun Not a Perfume", "Kenzo Flower", "Kilian Love, Don't Be Shy", "Lanvin Eclat d'Arpège", "Loewe Aura", "Maison Margiela Replica Beach Walk", "Michael Kors Glam Jasmine", "Moschino Toy 2", "Nina Ricci L'Air du Temps", "Paco Rabanne Fame", "Penhaligon's Luna", "Philosophy Amazing Grace", "Ralph Lauren Romance", "Roja Dove Enigma Pour Femme", "Salvatore Ferragamo Signorina", "Shiseido Ever Bloom", "Stella McCartney Stella", "The Body Shop White Musk", "Tiffany & Co. Eau de Parfum", "Tom Ford Orchid Soleil", "Tous Tous Tous Bear", "Trussardi Donna", "Valentino Donna Born In Roma", "Van Cleef & Arpels Feerie", "Vera Wang Princess", "Victoria's Secret Bombshell", "Zara Orchid", "Elizabeth Arden Green Tea", "Escada Cherry in Japan", "Clinique Happy", "DKNY Stories", "Elie Saab Le Parfum", "Gucci Rush", "Guess Seductive", "Hollister Wave For Her", "Jesus Del Pozo Halloween", "Juicy Couture Viva La Juicy", "Kate Spade New York", "Kylie Minogue Darling", "Maison Francis Kurkdjian Baccarat Rouge 540 (Women)", "Moschino I Love Love", "Narciso Rodriguez Pure Musc", "Oscar de la Renta Oscar", "Rihanna Reb'l Fleur", "Tommy Hilfiger Tommy Girl", "Versace Crystal Noir", "Victoria's Secret Tease", "YSL Mon Paris", "Zoella Beauty Splash" ],
             unisex: [ "Byredo Gypsy Water", "Byredo Bal d'Afrique", "Calvin Klein CK One", "Clean Reserve Rain", "D.S. & Durga Debaser", "Diptyque Philosykos", "Escentric Molecules Molecule 01", "Ex Nihilo Fleur Narcotique", "Frederic Malle Portrait of a Lady", "Glossier You", "Initio Parfums Prives Oud for Greatness", "Jo Malone Lime Basil & Mandarin", "Kilian Back to Black", "Le Labo Santal 33", "Maison Francis Kurkdjian Baccarat Rouge 540", "Maison Margiela Replica By the Fireplace", "Memo Paris Irish Leather", "Montale Intense Cafe", "Nishane Hacivat", "Ormonde Jayne Ormonde Man", "Parfums de Marly Layton", "Penhaligon's The Tragedy of Lord George", "Roja Dove Aoud", "Serge Lutens Chergui", "Tiziana Terenzi Kirke", "Tom Ford Tobacco Vanille", "Xerjoff Naxos", "Amouage Interlude Man", "Atelier Cologne Orange Sanguine", "Bond No. 9 Wall Street", "Creed Royal Oud", "DSQUARED2 Wood Sage", "Eight & Bob Original", "Floris No. 89", "Givenchy Hot Couture", "Gucci Mémoire d'une Odeur", "Heeley Sel Marin", "Imaginary Authors A City on Fire", "Jovoy Paris Psychedelique", "Kismet Angel by Maison Alhambra", "Lalique White", "Louis Vuitton Ombre Nomade", "Maison Crivelli Papyrus Moléculaire", "Memo Paris African Leather", "Montale Black Aoud", "Nasomatto Black Afgano", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.1", "Amouage Reflection Man", "Atelier Cologne Vanille Insensée", "Bond No. 9 New York Oud", "Creed Virgin Island Water", "Demeter Fragrance Library", "Eight & Bob Annicke Goutal", "Floris Santal", "Givenchy Insense", "Gucci The Alchemist's Garden", "Heeley Menthe Fraiche", "Imaginary Authors Memoirs of a Trespasser", "Jovoy Paris Remember Me", "Kayali Vanilla | 28", "L'Artisan Parfumeur Mûre et Musc", "Louis Vuitton L'Immensité", "Maison Crivelli Rose Saltifolia", "Memo Paris Marfa", "Montale Rose Musk", "Nasomatto Duro", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.2", "Afnan Supremacy Not Only Intense" ],
-            pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)", "Issey Miyake L'Eau d'Issey Pour Homme & L'Eau d'Issey (Pairing)", "Jimmy Choo Man & Blossom (Pairing)", "Joop! Homme & Femme (Pairing)", "Kenzo Pour Homme & Flower (Pairing)", "Maison Francis Kurkdjian Aqua Vitae Forte & Grand Soir (Pairing)", "Michael Kors for Men & Glam Jasmine (Pairing)", "Moschino Toy Boy & Toy 2 (Pairing)", "Narciso Rodriguez For Him & Her (Pairing)", "Oscar de la Renta Oscar & Bella Blanca (Pairing)", "Ralph Lauren Polo Blue & Romance (Pairing)", "Salvatore Ferragamo F by Ferragamo & Signorina (Pairing)", "Thierry Mugler A*Men & Angel (Pairing)", "Tommy Hilfiger Tommy & Tommy Girl (Pairing)", "Trussardi My Land & Donna (Pairing)", "Valentino Uomo Born In Roma & Donna Born In Roma (Pairing)", "Van Cleef & Arpels Pour Homme & Feerie (Pairing)", "Vera Wang for Men & Princess (Pairing)", "Victoria's Secret Tease & Very Sexy (Pairing)", "Zara Man Gold & Orchid (Pairing)", "Adnan B. Royal Touch & Adnan B. Classy (Pairing)", "Alfred Dunhill Desire Blue & Desire (Pairing)", "Antonio Banderas Blue Seduction Men & Women (Pairing)", "Brioni Eau de Parfum & Eau de Parfum Intense (Pairing)", "Cartier Declaration & Baiser Vole (Pairing)", "Clean Reserve Warm Cotton & Rain (Pairing)", "Creed Green Irish Tweed & Silver Mountain Water (Often paired by users)", "Demeter Fragrance Library (Many for pairing)", "Eight & Bob Original & Annicke Goutal (Pairing)", "Floris No. 89 & White Rose (Pairing)", "Gucci Guilty Absolute & Bloom (Pairing)", "Heeley Sel Marin & Iris de Nuit (Pairing)", "Imaginary Authors A City on Fire & Saint Julep (Pairing for contrast)", "Jovoy Paris Psychedelique & Remember Me (Pairing)", "Karl Lagerfeld Pour Homme & Eau de Parfum for Her (Pairing)", "Kilian Love, Don't Be Shy & Straight to Heaven (Pairing)", "L'Artisan Parfumeur Mûre et Musc & Premier Figuier (Pairing)", "Lalique Encre Noire & Amethyst (Pairing)", "Louis Vuitton L'Immensité & Rose des Vents (Pairing)", "Maison Crivelli Papyrus Moléculaire & Rose Saltifolia (Pairing)", "Memo Paris African Leather & Marfa (Pairing)", "Montale Black Aoud & Roses Musk (Pairing)", "Nasomatto Black Afgano & Narcotic Venus (Pairing)", "Ormonde Jayne Black Gold & Ta'if (Pairing)", "Paco Rabanne Phantom & Fame (Pairing)", "Penhaligon's Blenheim Bouquet & Elisabethan Rose (Pairing)", "Philosophy Amazing Grace & Pure Grace (Pairing)", "Roja Dove Elysium & Elixir (Pairing)", "Serge Lutens Ambre Sultan & Feminite du Bois (Pairing)", "The House of Oud Dates Delight & Breath Of The Infinite (Pairing)", "Tom Ford Soleil Blanc & Oud Wood (Pairing)", "Tiziana Terenzi Laudano Nero & Andromeda (Pairing)", "Uomo Salvatore Ferragamo & Signorina Misteriosa (Pairing)", "Versace Pour Homme & Versense (Pairing)", "Victorinox Swiss Army Classic & For Her (Pairing)", "Yves Saint Laurent Kouros & Opium (Pairing)", "Zadig & Voltaire This Is Him! & This Is Her! (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.3 (Pairing)", "Kilian Angels' Share & Roses on Ice (Pairing)" ]
+            pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paften Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Polo Ralph Lauren Blue & Romance (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)", "Issey Miyake L'Eau d'Issey Pour Homme & L'Eau d'Issey (Pairing)", "Jimmy Choo Man & Blossom (Pairing)", "Joop! Homme & Femme (Pairing)", "Kenzo Pour Homme & Flower (Pairing)", "Maison Francis Kurkdjian Aqua Vitae Forte & Grand Soir (Pairing)", "Michael Kors for Men & Glam Jasmine (Pairing)", "Moschino Toy Boy & Toy 2 (Pairing)", "Narciso Rodriguez For Him & Her (Pairing)", "Oscar de la Renta Oscar & Bella Blanca (Pairing)", "Ralph Lauren Polo Blue & Romance (Pairing)", "Salvatore Ferragamo F by Ferragamo & Signorina (Pairing)", "Thierry Mugler A*Men & Angel (Pairing)", "Tommy Hilfiger Tommy & Tommy Girl (Pairing)", "Trussardi My Land & Donna (Pairing)", "Valentino Uomo Born In Roma & Donna Born In Roma (Pairing)", "Van Cleef & Arpels Pour Homme & Feerie (Pairing)", "Vera Wang for Men & Princess (Pairing)", "Victoria's Secret Tease & Very Sexy (Pairing)", "Zara Man Gold & Orchid (Pairing)", "Adnan B. Royal Touch & Adnan B. Classy (Pairing)", "Alfred Dunhill Desire Blue & Desire (Pairing)", "Antonio Banderas Blue Seduction Men & Women (Pairing)", "Brioni Eau de Parfum & Eau de Parfum Intense (Pairing)", "Cartier Declaration & Baiser Vole (Pairing)", "Clean Reserve Warm Cotton & Rain (Pairing)", "Creed Green Irish Tweed & Silver Mountain Water (Often paired by users)", "Demeter Fragrance Library (Many for pairing)", "Eight & Bob Original & Annicke Goutal (Pairing)", "Floris No. 89 & White Rose (Pairing)", "Gucci Guilty Absolute & Bloom (Pairing)", "Heeley Sel Marin & Iris de Nuit (Pairing)", "Imaginary Authors A City on Fire & Saint Julep (Pairing for contrast)", "Jovoy Paris Psychedelique & Remember Me (Pairing)", "Karl Lagerfeld Pour Homme & Eau de Parfum for Her (Pairing)", "Kilian Love, Don't Be Shy & Straight to Heaven (Pairing)", "L'Artisan Parfumeur Mûre et Musc & Premier Figuier (Pairing)", "Lalique Encre Noire & Amethyst (Pairing)", "Louis Vuitton L'Immensité & Rose des Vents (Pairing)", "Maison Crivelli Papyrus Moléculaire & Rose Saltifolia (Pairing)", "Memo Paris African Leather & Marfa (Pairing)", "Montale Black Aoud & Roses Musk (Pairing)", "Nasomatto Black Afgano & Narcotic Venus (Pairing)", "Ormonde Jayne Black Gold & Ta'if (Pairing)", "Paco Rabanne Phantom & Fame (Pairing)", "Penhaligon's Blenheim Bouquet & Elisabethan Rose (Pairing)", "Philosophy Amazing Grace & Pure Grace (Pairing)", "Roja Dove Elysium & Elixir (Pairing)", "Serge Lutens Ambre Sultan & Feminite du Bois (Pairing)", "The House of Oud Dates Delight & Breath Of The Infinite (Pairing)", "Tom Ford Soleil Blanc & Oud Wood (Pairing)", "Tiziana Terenzi Laudano Nero & Andromeda (Pairing)", "Uomo Salvatore Ferragamo & Signorina Misteriosa (Pairing)", "Versace Pour Homme & Versense (Pairing)", "Victorinox Swiss Army Classic & For Her (Pairing)", "Yves Saint Laurent Kouros & Opium (Pairing)", "Zadig & Voltaire This Is Him! & This Is Her! (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.3 (Pairing)", "Kilian Angels' Share & Roses on Ice (Pairing)" ]
         };
 
         // --- Navigasi Menu ---
@@ -680,7 +727,8 @@
 
             if (pesananList.length === 0) {
                 daftarPesananUL.innerHTML = '<p class="no-pesanan">Belum ada pesanan tersimpan.</p>';
-            } else {
+            }
+            else {
                 pesananList.forEach((pesanan) => {
                     const listItem = createOrderItemElement(pesanan, true); // true for actions
                     daftarPesananUL.appendChild(listItem);
@@ -706,7 +754,7 @@
             const listItem = document.createElement('li');
             let brandDisplay = pesanan.brandParfumPilihan;
             if (pesanan.keharumanLain) {
-                brandDisplay = `${brandDisplay || 'Kustom'}: ${pesanan.keharumanLain}`;
+                brandDisplay = `${brandDisplay ? brandDisplay + ' / ' : ''}${pesanan.keharumanLain}`;
             }
 
             listItem.innerHTML = `
@@ -745,6 +793,7 @@
                 actionsDiv.appendChild(arsipButton);
                 actionsDiv.appendChild(cetakItemA4Button);
                 actionsDiv.appendChild(cetakItemTermalButton);
+                hapusButton.style.flexBasis = '100%'; /* Force delete button to full width on its own row */
                 actionsDiv.appendChild(hapusButton);
                 listItem.appendChild(actionsDiv);
             }
@@ -821,16 +870,27 @@
         }
 
         // Helper function to format brand/keharuman for print
-        function formatBrandForPrint(pesanan, maxLength = 25) {
+        function formatBrandForPrint(pesanan, maxLength) {
             let brandText = pesanan.brandParfumPilihan;
             if (pesanan.keharumanLain) {
-                brandText = `${brandText || 'Kustom'}: ${pesanan.keharumanLain}`;
+                // If there's a selected brand AND custom text, combine them.
+                // Otherwise, just use the custom text.
+                brandText = `${brandText ? brandText + ' / ' : ''}${pesanan.keharumanLain}`; 
             }
+            
+            // Trim and add ellipsis if needed
             if (brandText.length > maxLength) {
-                brandText = brandText.substring(0, maxLength - 3) + '...';
+                const trimmedText = brandText.substring(0, maxLength - 3);
+                // Try to cut at a word boundary if possible
+                const lastSpaceIndex = trimmedText.lastIndexOf(' ');
+                if (lastSpaceIndex > -1) {
+                    return trimmedText.substring(0, lastSpaceIndex) + '...';
+                }
+                return trimmedText + '...';
             }
             return brandText;
         }
+
 
         // --- Cetak A4 Functions ---
 
@@ -946,7 +1006,7 @@
 
             a4PrintContent.innerHTML = `
                 <h3>Laporan Pesanan Parfum Aktif</h3>
-                <h4>Toko Parfum Makmur Jaya</h4>
+                <h4>By. Energia Aura Parfume</h4>
                 <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
                 <hr style="border-top: 1px solid #000; margin: 20px 0;">
                 ${itemsHtml}
@@ -993,7 +1053,7 @@
             });
             a4PrintContent.innerHTML = `
                 <h3>Laporan Riwayat Pemesanan</h3>
-                <h4>Toko Parfum Makmur Jaya</h4>
+                <h4>By. Energia Aura Parfume</h4>
                 <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
                 <hr style="border-top: 1px solid #000; margin: 20px 0;">
                 ${itemsHtml}
@@ -1015,20 +1075,48 @@
          * @param {Array} orders - An array of order objects.
          * @param {string} title - Main title for the receipt (e.g., "STRUK PEMESANAN").
          * @param {string} [footerNote=''] - Optional note for the footer.
+         * @param {boolean} isSingleOrderFromForm - True if only printing a single order directly from the form.
+         * @param {boolean} isSingleItemFromList - True if printing a single item from the saved list.
          */
-        function generateThermalReceiptContent(orders, title, footerNote = '') {
+        function generateThermalReceiptContent(orders, title, footerNote = '', isSingleOrderFromForm = false, isSingleItemFromList = false) {
             const thermalPrintArea = document.getElementById('thermalPrintArea');
             const currentDate = new Date();
             let itemsHtml = '';
             let totalOverall = 0;
 
             if (orders.length === 0) {
-                itemsHtml = `<p style="text-align: center;">Tidak ada item untuk dicetak.</p>`;
+                itemsHtml = `<p style="text-align: center; font-size: 0.8em;">Tidak ada item untuk dicetak.</p>`; 
             } else {
                 orders.forEach(pesanan => {
-                    const brandText = formatBrandForPrint(pesanan, 20); // Batasi lebih pendek untuk termal
+                    // Adjust maxLength based on whether it's a single item from form/list or multiple
+                    const maxLengthItemName = (isSingleOrderFromForm || isSingleItemFromList) ? 18 : 20; // 18-20 chars is usually safe
+                    let brandText = formatBrandForPrint(pesanan, maxLengthItemName);
+                    
+                    // Specific formatting for the single item print based on image
+                    if (isSingleOrderFromForm || isSingleItemFromList) {
+                        // The image shows "VIP Man Premium"
+                        let itemCombinedName = '';
+                        if (pesanan.brandParfumPilihan && pesanan.brandParfumPilihan !== '-- Pilih Brand Parfum --') {
+                             // Try to use 3 letter abbreviation for common brands, or just first word
+                            let brandAbbr = pesanan.brandParfumPilihan.split(' ')[0];
+                            if (brandAbbr.length > 5) brandAbbr = brandAbbr.substring(0, 5); // Trim to 5 chars max
+                            itemCombinedName = `${brandAbbr} ${pesanan.jenisParfum}`;
+                        } else if (pesanan.keharumanLain) {
+                            itemCombinedName = `${pesanan.keharumanLain.split(' ')[0]} ${pesanan.jenisParfum}`;
+                        } else {
+                            itemCombinedName = pesanan.jenisParfum; // Fallback
+                        }
+
+                        // Ensure it fits, e.g., "Chanel Premium"
+                        if (itemCombinedName.length > 20) { // Limit combined name length
+                            itemCombinedName = itemCombinedName.substring(0, 17) + '...';
+                        }
+                        brandText = itemCombinedName; // Use this combined name as the item-name
+                    }
+
                     const itemPriceFormatted = parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID');
-                    const qtyPrice = `${pesanan.jumlah}x @${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}`;
+                    const hargaPerBotolFormatted = parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID');
+                    const qtyPrice = `${pesanan.jumlah}x @${hargaPerBotolFormatted}`;
                     
                     itemsHtml += `
                         <div class="item">
@@ -1043,10 +1131,10 @@
 
             thermalPrintArea.innerHTML = `
                 <div class="header">
-                    <h3>TOKO PARFUM MAKMUR JAYA</h3>
-                    <p>Jl. Contoh No. 123, Majalaya</p>
-                    <p>Telp: 0812-3456-7890</p>
-                    <p>Tgl: ${currentDate.toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}</p>
+                    <h3>By. ENERGIA AURA PARFUME</h3>
+                    <p>Jl. Komp. Cikawao Persada Blok G1 No 21</p>
+                    <p>Telp: 0851-4215-6602</p>
+                    <p>Tgl: ${currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' })}, ${currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(/\./g, ':')}</p>
                 </div>
                 <hr>
                 <div class="section-title">${title}</div>
@@ -1062,10 +1150,12 @@
                 <hr>
                 <div class="footer">
                     <p>${footerNote || 'TERIMA KASIH ATAS KUNJUNGANNYA'}</p>
-                    <p>*** BARANG YANG SUDAH DIBELI TIDAK DAPAT DIKEMBALIKAN ***</p>
+                    <p>*** BARANG YANG SUDAH DIBELI TIDAK</p>
+                    <p>DAPAT DIKEMBALIKAN ***</p>
                     <p class="info-note">Sistem Pemesanan v1.0</p>
                 </div>
             `;
+            // Trigger print
             window.print();
         }
 
@@ -1094,14 +1184,15 @@
                 kategori: selectedCategory.value,
                 brandParfumPilihan: brandParfumPilihan,
                 keharumanLain: keharumanLain,
-                jenisParfum,
+                jenisParfum, 
                 hargaPerBotol,
                 jumlah,
                 totalHargaItem,
                 timestamp: new Date().toISOString()
             };
 
-            generateThermalReceiptContent([singleOrder], `STRUK PEMESANAN UNTUK: ${nama.toUpperCase()}`);
+            // Pass true for isSingleOrderFromForm
+            generateThermalReceiptContent([singleOrder], `STRUK PEMESANAN UNTUK:\n${nama.toUpperCase()}`, '', true, false);
         }
 
         // Fungsi untuk mencetak satu item pesanan dari daftar (Thermal)
@@ -1112,7 +1203,8 @@
                 return;
             }
             preparePrintArea('thermalPrintArea');
-            generateThermalReceiptContent([pesanan], `STRUK PEMESANAN UNTUK: ${pesanan.nama.toUpperCase()}`);
+            // Pass true for isSingleItemFromList
+            generateThermalReceiptContent([pesanan], `STRUK PEMESANAN UNTUK:\n${pesanan.nama.toUpperCase()}`, '', false, true);
         }
 
         // Fungsi untuk mencetak Daftar Pesanan Aktif (Thermal)
@@ -1122,6 +1214,7 @@
                 return;
             }
             preparePrintArea('thermalPrintArea');
+            // For multiple items, use the generic layout (both flags false)
             generateThermalReceiptContent(pesananList, 'STRUK DAFTAR PESANAN AKTIF');
         }
 
@@ -1132,6 +1225,7 @@
                 return;
             }
             preparePrintArea('thermalPrintArea');
+            // For multiple items, use the generic layout (both flags false)
             generateThermalReceiptContent(historyList, 'STRUK RIWAYAT PESANAN');
         }
 
