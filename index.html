@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Pemesanan Parfum</title>
     <style>
+        /* General Body Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f0f2f0, #e0e5f0);
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 10vh; /* Sesuaikan agar body tidak terlalu panjang saat scroll */
+            min-height: 100vh; /* Changed back to 100vh for better overall layout */
             margin: 0;
             padding: 30px;
             color: #333;
+            box-sizing: border-box; /* Ensures padding is included in total width/height */
         }
+
+        /* Main Application Container */
         .app-container {
             background-color: #fff;
             padding: 30px;
@@ -24,7 +28,10 @@
             width: 100%;
             max-width: 700px;
             margin-bottom: 30px;
+            box-sizing: border-box;
         }
+
+        /* Navigation Menu Styles */
         .nav-menu {
             display: flex;
             justify-content: space-around;
@@ -56,6 +63,7 @@
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
 
+        /* Content Section Styles */
         .content-section {
             display: none;
             padding-top: 20px;
@@ -64,12 +72,12 @@
             display: block;
             animation: fadeIn 0.5s ease-out;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Heading Styles */
         h2 {
             text-align: center;
             color: #37474f;
@@ -88,6 +96,7 @@
             border-radius: 2px;
         }
 
+        /* Form Group Styles */
         .form-group {
             margin-bottom: 25px;
         }
@@ -100,7 +109,7 @@
         input[type="text"],
         input[type="number"],
         select {
-            width: calc(100% - 24px);
+            width: calc(100% - 24px); /* Account for padding */
             padding: 12px;
             border: 1px solid #cfd8dc;
             border-radius: 6px;
@@ -116,6 +125,8 @@
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
             background-color: #e3f2fd;
         }
+
+        /* Radio Group Styles */
         .radio-group-horizontal label {
             display: inline-block;
             margin-right: 25px;
@@ -128,6 +139,7 @@
             cursor: pointer;
         }
         
+        /* Button Styles */
         button {
             background-color: #007bff;
             color: white;
@@ -151,6 +163,7 @@
             box-shadow: 0 1px 3px rgba(0, 86, 179, 0.4);
         }
 
+        /* Action Buttons Layout */
         .action-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -165,9 +178,10 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .action-buttons.wide button {
-             flex: 1 1 100%;
+            flex: 1 1 100%;
         }
 
+        /* Info Display Styles */
         #hargaInfo, #totalKeseluruhanInfo {
             font-weight: bold;
             color: #1e88e5;
@@ -181,9 +195,10 @@
             border: 1px solid #90caf9;
         }
         #brandParfumGroup {
-            display: none;
+            display: none; /* Hidden by default until category selected */
         }
 
+        /* List Item Styles */
         #daftarPesanan, #riwayatPesanan {
             list-style: none;
             padding: 0;
@@ -207,6 +222,8 @@
             color: #37474f;
             font-size: 1.1em;
         }
+
+        /* Item Action Buttons (inside list items) */
         .item-actions {
             margin-top: 12px;
             display: flex;
@@ -232,7 +249,7 @@
         .btn-cetak-item-termal { background-color: #8bc34a; color: white; }
         .btn-cetak-item-termal:hover { background-color: #689f38; box-shadow: 0 2px 5px rgba(104, 159, 56, 0.3); }
 
-
+        /* No Pesanan Message */
         .no-pesanan {
             text-align: center;
             color: #78909c;
@@ -243,128 +260,172 @@
             margin-top: 20px;
         }
 
-        /* --- PRINT CSS UNTUK IFRAME --- */
-        /* CSS ini akan dimasukkan ke dalam iframe cetak */
-        .receipt-thermal {
-            /* PENTING: Lebar fisik kertas thermal Anda. 55mm = 5.5cm */
-            width: 55mm; 
-            max-width: 55mm; /* Batasi juga max-width */
-            min-height: 10mm; 
-            margin: 0; /* Pastikan margin 0 */
-            padding: 0; /* Pastikan padding 0 */
-            font-family: 'Consolas', 'Courier New', monospace; /* Font monospace seringkali lebih baik untuk thermal */
-            font-size: 15px; /* Sesuaikan ukuran font, lebih besar bisa lebih jelas */
-            line-height: 1.2; /* Sedikit lebih rapat agar tidak terlalu panjang */
-            color: #000;
-            box-sizing: border-box; /* Pastikan padding dan border termasuk dalam width */
+        /* ======================================================= */
+        /* PRINT CSS - INI YANG PENTING UNTUK MENCETAK DENGAN BENAR */
+        /* ======================================================= */
 
-            /* PENTING: Ini adalah upaya terakhir dari sisi CSS untuk "memaksa" cetakan lebih besar. */
-            /* COBA SALAH SATU! Transform atau Zoom. Coba satu per satu dan lihat mana yang lebih baik. */
-            /* Transform: Scale akan memperbesar seluruh elemen. Bisa menyebabkan sedikit blur/pixelated */
-            /* transform: scale(1.25);  */ /* Nilai 1.0 = 100%. 1.25 = 125% */
-            /* transform-origin: top left; */ /* Scaling dimulai dari kiri atas */
-            
-            /* ALTERNATIF: Zoom. Kadang lebih kompatibel dan tajam di beberapa browser/driver */
-            zoom: 125%; /* Coba nilai ini. Jika masih kecil, naikkan ke 130% atau 140% */
-            
-            /* Jika ada masalah clipping (terpotong), bisa jadi karena driver atau perlu sedikit margin negatif. */
-            /* margin-left: -5mm; */ /* HANYA COBA INI JIKA TERPOTONG DI KIRI */
-            /* margin-right: -5mm; */ /* HANYA COBA INI JIKA TERPOTONG DI KANAN */
-            /* PENTING: Negative margin harus disesuaikan sangat hati-hati dan mungkin tidak selalu berhasil. */
-        }
-        
-        /* Reset margin dan padding bawaan elemen dalam receipt-thermal secara agresif */
-        /* Ini untuk menghilangkan margin/padding default dari browser */
-        .receipt-thermal * { 
+        /* Iframe for printing - initially hidden */
+        #printIframe {
+            display: none; /* Hide by default */
+            visibility: hidden; /* Also hide from screen readers/accessibility */
+            position: absolute; /* Position off-screen */
+            left: -9999px;
+            top: -9999px;
+            width: 1px; /* Minimal size */
+            height: 1px; /* Minimal size */
+            border: none !important;
             margin: 0 !important;
             padding: 0 !important;
-            box-sizing: border-box !important; /* Pastikan box-sizing juga diset */
         }
 
-        /* Penyesuaian padding untuk elemen internal agar tidak terlalu rapat setelah reset universal */
-        /* Padding harus relatif kecil untuk kertas thermal sempit */
-        .receipt-thermal .header, 
-        .receipt-thermal .footer, 
-        .receipt-thermal .section-title,
-        .receipt-thermal .item-list {
-            padding: 0 2mm !important; /* Padding horizontal 2mm. Sesuaikan jika masih ada ruang kosong. */
+        /* Styles applied ONLY when printing */
+        @media print {
+            /* Hide ALL main UI elements that should NOT be printed */
+            body > *:not(#printIframe) { /* Select all direct children of body EXCEPT #printIframe */
+                display: none !important;
+            }
+            .app-container,
+            .nav-menu,
+            .content-section,
+            .action-buttons,
+            #hargaInfo,
+            #totalKeseluruhanInfo {
+                display: none !important; /* Ensure these are hidden */
+            }
+
+            /* Show the iframe and make it take over the print area */
+            #printIframe {
+                display: block !important;
+                visibility: visible !important;
+                position: static !important; /* Make it part of the normal flow */
+                width: 100% !important; /* Take full width */
+                height: auto !important; /* Adjust height based on content */
+                top: auto !important;
+                left: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                overflow: visible !important; /* Ensure content is not clipped */
+            }
+
+            /* Global @page rules for the main document - useful as a fallback */
+            @page {
+                margin: 0 !important; /* Remove default page margins */
+                padding: 0 !important;
+                /* This specifies a default size, but iframe's @page will be more specific */
+                size: auto; /* Let content define size, or specify a large canvas if needed */
+            }
         }
 
-        .receipt-thermal hr {
+        /* --- STYLES FOR THERMAL RECEIPT CONTENT (INSIDE IFRAME) --- */
+        /* These styles will be injected into the iframe's <head> when printing thermal */
+        .receipt-thermal-body {
+            /* IMPORTANT: Set actual physical width of your thermal paper (e.g., 55mm for 5.5cm) */
+            width: 55mm; /* This is the target width */
+            max-width: 55mm; /* Ensure it doesn't exceed this */
+            min-height: 10mm; /* Minimal height */
+            margin: 0;
+            padding: 0;
+            font-family: 'Consolas', 'Courier New', monospace; /* Monospace font for consistent spacing */
+            font-size: 15px; /* Adjust font size here, usually larger for readability */
+            line-height: 1.2; /* Tighter line spacing */
+            color: #000;
+            box-sizing: border-box; /* Include padding/border in width */
+
+            /* IMPORTANT: Scaling for smaller printers / better readability on some drivers */
+            /* Try one of these. Start with zoom: 125% */
+            zoom: 125%; /* Increase content size by 25% */
+            /* transform: scale(1.25); transform-origin: top left; */ /* Alternative scaling */
+        }
+        /* Reset aggressive margins/padding for all elements inside thermal receipt */
+        .receipt-thermal-body * {
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Specific padding/spacing for elements inside thermal receipt */
+        .receipt-thermal-body .header,
+        .receipt-thermal-body .footer,
+        .receipt-thermal-body .section-title,
+        .receipt-thermal-body .item-list {
+            padding: 0 2mm !important; /* Horizontal padding for content, adjust as needed */
+        }
+        .receipt-thermal-body hr {
             border: none;
-            border-top: 1px dashed #000; /* Garis putus-putus */
-            margin: 2mm 2mm !important; /* Sesuaikan margin horizontal dengan padding */
-            width: calc(100% - 4mm) !important; /* Lebar disesuaikan dengan padding 2mm kiri kanan */
+            border-top: 1px dashed #000; /* Dashed line separator */
+            margin: 2mm 2mm !important; /* Margin for separator, matching padding */
+            width: calc(100% - 4mm) !important; /* Adjust width to fit within padding */
         }
-
-        .receipt-thermal .header h3 {
-            font-size: 1.2em; /* Sedikit lebih besar untuk heading utama */
+        .receipt-thermal-body .header h3 {
+            font-size: 1.2em;
             margin-bottom: 0.5mm !important;
-            text-align: center; /* Rata tengah untuk header */
+            text-align: center;
         }
-        .receipt-thermal .header p {
-            font-size: 0.9em; /* Ukuran font alamat/telp */
+        .receipt-thermal-body .header p {
+            font-size: 0.9em;
             margin-bottom: 0.2mm !important;
-            text-align: center; /* Rata tengah untuk alamat/telp */
+            text-align: center;
         }
-        .receipt-thermal .item-name {
-            width: 100%; 
+        .receipt-thermal-body .item-name {
+            width: 100%;
             font-weight: bold;
-            white-space: normal; 
-            word-break: break-word; /* MENGGUNAKAN BREAK-WORD UNTUK MENGATASI KATA TERLALU PANJANG */
-            font-size: 1.1em; /* Ukuran font nama item lebih besar */
+            white-space: normal;
+            word-break: break-word; /* Crucial for long names to wrap */
+            font-size: 1.1em;
             margin-bottom: 0.5mm !important;
-            text-align: left; /* Pastikan rata kiri */
+            text-align: left;
         }
-        .receipt-thermal .item-qty-price,
-        .receipt-thermal .item-total-price {
-            font-size: 1.05em; /* Sedikit lebih besar untuk harga dan qty */
+        .receipt-thermal-body .item-qty-price,
+        .receipt-thermal-body .item-total-price {
+            font-size: 1.05em;
         }
-        .receipt-thermal .detail-row {
-            margin-bottom: 1mm !important; /* Jarak antar baris detail */
-            display: flex; /* Untuk menyejajarkan teks dan angka */
+        .receipt-thermal-body .detail-row {
+            margin-bottom: 1mm !important;
+            display: flex;
             justify-content: space-between;
             align-items: baseline;
-            padding: 0 2mm !important; /* Padding yang sama dengan konten lain */
+            padding: 0 2mm !important;
         }
-        .receipt-thermal .total-summary {
-            font-size: 1.4em; /* Ukuran font total akhir lebih besar lagi */
+        .receipt-thermal-body .total-summary {
+            font-size: 1.4em;
             margin-top: 5px !important;
             padding-top: 5px !important;
-            font-weight: bold; /* Total lebih tebal */
+            font-weight: bold;
         }
-        .receipt-thermal .footer p {
-            font-size: 0.9em; /* Ukuran footer */
+        .receipt-thermal-body .footer p {
+            font-size: 0.9em;
             margin: 1mm 0 !important;
-            text-align: center; /* Pastikan footer rata tengah */
+            text-align: center;
         }
-        .receipt-thermal .info-note {
-            font-size: 0.7em; /* Paling kecil untuk info sistem, tapi tetap readable */
+        .receipt-thermal-body .info-note {
+            font-size: 0.7em;
             margin-top: 2mm !important;
             text-align: center;
         }
-        .receipt-thermal .item {
+        .receipt-thermal-body .item {
             display: flex;
-            flex-wrap: wrap; /* Izinkan wrap untuk item detail */
+            flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: 4px !important; /* Jarak antar item lebih lega */
+            margin-bottom: 4px !important;
         }
-        .receipt-thermal .item .item-name {
-            flex-basis: 100%; /* Nama item ambil seluruh lebar */
+        .receipt-thermal-body .item .item-name {
+            flex-basis: 100%;
             text-align: left;
         }
-        .receipt-thermal .item .item-qty-price {
-            flex-basis: 50%; /* Quantity dan harga di kiri bawah */
+        .receipt-thermal-body .item .item-qty-price {
+            flex-basis: 50%;
             text-align: left;
         }
-        .receipt-thermal .item .item-total-price {
-            flex-basis: 50%; /* Total harga di kanan bawah */
+        .receipt-thermal-body .item .item-total-price {
+            flex-basis: 50%;
             text-align: right;
             font-weight: bold;
         }
 
-        /* Styles for A4 Print */
-        .receipt-a4 {
+        /* --- STYLES FOR A4 RECEIPT CONTENT (INSIDE IFRAME) --- */
+        /* These styles will be injected into the iframe's <head> when printing A4 */
+        .receipt-a4-body {
             padding: 20px;
             width: 210mm; /* A4 width */
             margin: 0 auto;
@@ -372,26 +433,27 @@
             font-size: 12px;
             line-height: 1.5;
             color: #000;
+            box-sizing: border-box;
         }
-        .receipt-a4 h3, .receipt-a4 h4 {
+        .receipt-a4-body h3, .receipt-a4-body h4 {
             text-align: center;
             margin-bottom: 15px;
         }
-        .receipt-a4 .order-item {
+        .receipt-a4-body .order-item {
             border: 1px solid #ccc;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
         }
-        .receipt-a4 .order-item strong {
+        .receipt-a4-body .order-item strong {
             display: block;
             margin-bottom: 5px;
             font-size: 1.1em;
         }
-        .receipt-a4 .order-details p {
+        .receipt-a4-body .order-details p {
             margin: 2px 0;
         }
-        .receipt-a4 .total-overall {
+        .receipt-a4-body .total-overall {
             text-align: right;
             font-size: 1.3em;
             font-weight: bold;
@@ -399,21 +461,21 @@
             border-top: 1px solid #000;
             padding-top: 10px;
         }
-        .receipt-a4 .order-detail-box { /* Re-used for single item A4 print */
+        .receipt-a4-body .order-detail-box { /* Re-used for single item A4 print */
             border: 1px solid #007bff;
             padding: 15px;
             border-radius: 8px;
             background-color: #e7f0ff;
             margin-bottom: 20px;
         }
-        .receipt-a4 .order-detail-box p {
+        .receipt-a4-body .order-detail-box p {
             margin: 5px 0;
             font-size: 1.1em;
         }
-        .receipt-a4 .order-detail-box strong {
+        .receipt-a4-body .order-detail-box strong {
             color: #0056b3;
         }
-        .receipt-a4 .order-detail-box .total {
+        .receipt-a4-body .order-detail-box .total {
             font-size: 1.2em;
             font-weight: bold;
             margin-top: 10px;
@@ -421,6 +483,7 @@
             border-top: 1px dashed #007bff;
             padding-top: 5px;
         }
+
     </style>
 </head>
 <body>
@@ -520,6 +583,8 @@
         </div>
     </div>
 
+    <iframe id="printIframe" name="printIframe" style="display: none; visibility: hidden; width: 1px; height: 1px;"></iframe>
+
     <script>
         // DOM Elements
         const parfumForm = document.getElementById('parfumForm');
@@ -535,28 +600,343 @@
         let pesananList = []; // Untuk pesanan yang sedang diproses/tersimpan
         let historyList = []; // Untuk pesanan yang sudah diarsipkan
 
-        // Data Brand Parfum (sekitar 100+ per kategori) - Ditempelkan dari jawaban sebelumnya
+        // Data Brand Parfum (sekitar 100+ per kategori) - Sudah ada dari kode Anda
         const brandParfumData = {
             pria: [ "Acqua di Parma", "Armani Code", "Bleu de Chanel", "Boss Bottled", "Bvlgari Man", "Carolina Herrera Bad Boy", "Chanel Allure Homme Sport", "Christian Dior Sauvage", "Creed Aventus", "Davidoff Cool Water", "Dior Homme", "Dolce & Gabbana The One For Men", "Dunhill Icon", "Giorgio Armani Acqua di Gio", "Givenchy Gentleman", "Gucci Guilty Pour Homme", "Hermès Terre d'Hermès", "Invictus Paco Rabanne", "Jean Paul Gaultier Le Male", "Jo Malone Wood Sage & Sea Salt (Men)", "John Varvatos Artisan", "Lacoste L.12.12", "Montblanc Explorer", "Nautica Voyage", "Paco Rabanne 1 Million", "Polo Ralph Lauren Blue", "Prada L'Homme", "Tom Ford Oud Wood", "Versace Dylan Blue", "Viktor & Rolf Spicebomb", "YSL Y", "Azzaro Wanted", "Bentley For Men Intense", "Burberry Brit For Men", "Calvin Klein Eternity for Men", "Coach For Men", "Dolce & Gabbana K", "DSQUARED2 Wood Pour Homme", "Ermenegildo Zegna Uomo", "Ferrari Black", "Gucci Guilty Absolute", "Issey Miyake L'Eau d'Issey Pour Homme", "Jimmy Choo Man", "Kenzo Pour Homme", "Loewe 7", "Maison Margiela Replica Jazz Club", "Mugler A*Men", "Narciso Rodriguez For Him", "Paco Rabanne Phantom", "Penhaligon's Halfeti", "Ralph Lauren Polo Green", "Roja Dove Elysium", "Salvatore Ferragamo F by Ferragamo", "Thierry Mugler Alien Man", "Tommy Hilfiger Tommy", "Trussardi My Land", "Valentino Uomo Born In Roma", "Van Cleef & Arpels Pour Homme", "Versace Eros", "Victorinox Swiss Army Classic", "Yves Saint Laurent Kouros", "Zegna Essenze Collection", "Adnan B. Royal Touch", "Alfred Dunhill Desire Blue", "Antonio Banderas Blue Seduction", "Bottega Veneta Pour Homme", "Brioni Eau de Parfum", "Cartier Pasha de Cartier", "Coach Platinum", "Creed Green Irish Tweed", "Diesel Only The Brave", "Ermenegildo Zegna Z Zegna", "Ferrari Scuderia Black", "Givenchy Pi", "Gucci Pour Homme II", "Guess Seductive Homme Blue", "Hugo Boss The Scent", "Jaguar Classic Black", "Joop! Homme", "Karl Lagerfeld Pour Homme", "Lalique Encre Noire", "Mancera Cedrat Boise", "Mercedes-Benz Man", "Michael Kors for Men", "Montblanc Legend", "Mugler Cologne", "Paco Rabanne Pure XS", "Penhaligon's Blenheim Bouquet", "Porsche Design 180", "Ralph Lauren Polo Black", "Roja Dove Scandal Pour Homme", "Sergio Tacchini O-Zone Man", "Ted Lapidus Pour Homme", "Tom Ford Beau De Jour", "Truefitt & Hill Trafalgar", "Uomo Salvatore Ferragamo", "Van Gils Between Sheets", "Versace Pour Homme", "Yves Saint Laurent Kouros", "Zadig & Voltaire This Is Him!", "Zara Man Gold", "Ajmal Evoke Gold Edition For Him" ],
             wanita: [ "Ariana Grande Cloud", "Black Opium YSL", "Britney Spears Fantasy", "Bvlgari Omnia Crystalline", "Calvin Klein Euphoria", "Carolina Herrera Good Girl", "Chanel Chance Eau Tendre", "Chanel Coco Mademoiselle", "Chloe Eau de Parfum", "Christian Dior J'adore", "Dior Miss Dior", "Dolce & Gabbana Light Blue", "Elizabeth Arden 5th Avenue", "Estee Lauder Beautiful", "Givenchy L'Interdit", "Giorgio Armani My Way", "Gucci Bloom", "Guerlain Mon Guerlain", "Jean Paul Gaultier La Belle", "Jo Malone Peony & Blush Suede", "Jimmy Choo Blossom", "Lancôme La Vie Est Belle", "Marc Jacobs Daisy", "Mugler Alien", "Narciso Rodriguez For Her", "Paco Rabanne Lady Million", "Prada Candy", "Thierry Mugler Angel", "Tom Ford Black Orchid", "Versace Bright Crystal", "Viktor & Rolf Flowerbomb", "Yves Saint Laurent Libre", "Burberry Her", "Byredo Mojave Ghost", "Carolina Herrera 212 NYC", "Chanel No. 5", "Clean Reserve Warm Cotton", "Dior Poison Girl", "Donna Karan DKNY Be Delicious", "Elizabeth Taylor White Diamonds", "Escada Miami Blossom", "Estee Lauder Pleasures", "Giorgio Armani Si", "Givenchy Irresistible", "Gucci Flora Gorgeous Gardenia", "Guerlain Shalimar", "Hugo Boss Woman", "Issey Miyake L'Eau d'Issey", "Jean Paul Gaultier Classique", "Juliette Has A Gun Not a Perfume", "Kenzo Flower", "Kilian Love, Don't Be Shy", "Lanvin Eclat d'Arpège", "Loewe Aura", "Maison Margiela Replica Beach Walk", "Michael Kors Glam Jasmine", "Moschino Toy 2", "Nina Ricci L'Air du Temps", "Paco Rabanne Fame", "Penhaligon's Luna", "Philosophy Amazing Grace", "Ralph Lauren Romance", "Roja Dove Enigma Pour Femme", "Salvatore Ferragamo Signorina", "Shiseido Ever Bloom", "Stella McCartney Stella", "The Body Shop White Musk", "Tiffany & Co. Eau de Parfum", "Tom Ford Orchid Soleil", "Tous Tous Tous Bear", "Trussardi Donna", "Valentino Donna Born In Roma", "Van Cleef & Arpels Feerie", "Vera Wang Princess", "Victoria's Secret Bombshell", "Zara Orchid", "Elizabeth Arden Green Tea", "Escada Cherry in Japan", "Clinique Happy", "DKNY Stories", "Elie Saab Le Parfum", "Gucci Rush", "Guess Seductive", "Hollister Wave For Her", "Jesus Del Pozo Halloween", "Juicy Couture Viva La Juicy", "Kate Spade New York", "Kylie Minogue Darling", "Maison Francis Kurkdjian Baccarat Rouge 540 (Women)", "Moschino I Love Love", "Narciso Rodriguez Pure Musc", "Oscar de la Renta Oscar", "Rihanna Reb'l Fleur", "Tommy Hilfiger Tommy Girl", "Versace Crystal Noir", "Victoria's Secret Tease", "YSL Mon Paris", "Zoella Beauty Splash" ],
             unisex: [ "Byredo Gypsy Water", "Byredo Bal d'Afrique", "Calvin Klein CK One", "Clean Reserve Rain", "D.S. & Durga Debaser", "Diptyque Philosykos", "Escentric Molecules Molecule 01", "Ex Nihilo Fleur Narcotique", "Frederic Malle Portrait of a Lady", "Glossier You", "Initio Parfums Prives Oud for Greatness", "Jo Malone Lime Basil & Mandarin", "Kilian Back to Black", "Le Labo Santal 33", "Maison Francis Kurkdjian Baccarat Rouge 540", "Maison Margiela Replica By the Fireplace", "Memo Paris Irish Leather", "Montale Intense Cafe", "Nishane Hacivat", "Ormonde Jayne Ormonde Man", "Parfums de Marly Layton", "Penhaligon's The Tragedy of Lord George", "Roja Dove Aoud", "Serge Lutens Chergui", "Tiziana Terenzi Kirke", "Tom Ford Tobacco Vanille", "Xerjoff Naxos", "Amouage Interlude Man", "Atelier Cologne Orange Sanguine", "Bond No. 9 Wall Street", "Creed Royal Oud", "DSQUARED2 Wood Sage", "Eight & Bob Original", "Floris No. 89", "Givenchy Hot Couture", "Gucci Mémoire d'une Odeur", "Heeley Sel Marin", "Imaginary Authors A City on Fire", "Jovoy Paris Psychedelique", "Kismet Angel by Maison Alhambra", "Lalique White", "Louis Vuitton Ombre Nomade", "Maison Crivelli Papyrus Moléculaire", "Memo Paris African Leather", "Montale Black Aoud", "Nasomatto Black Afgano", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.1", "Amouage Reflection Man", "Atelier Cologne Vanille Insensée", "Bond No. 9 New York Oud", "Creed Virgin Island Water", "Demeter Fragrance Library", "Eight & Bob Annicke Goutal", "Floris Santal", "Givenchy Insense", "Gucci The Alchemist's Garden", "Guess Seductive", "Hollister Wave For Her", "Hugo Boss The Scent", "Imaginary Authors Memoirs of a Trespasser", "Jovoy Paris Remember Me", "Kayali Vanilla | 28", "L'Artisan Parfumeur Mûre et Musc", "Lalique Encre Noire", "Louis Vuitton L'Immensité", "Maison Crivelli Rose Saltifolia", "Memo Paris Marfa", "Montale Rose Musk", "Nasomatto Duro", "Ormonde Jayne Montabaco", "Parfums de Marly Herod", "Penhaligon's Endymion", "Phaedon Antigua", "Roja Dove Reckless", "Serge Lutens Ambre Sultan", "The House of Oud Breath Of The Infinite", "Tom Ford Fucking Fabulous", "Tiziana Terenzi Laudano Nero", "Xerjoff Alexandria II", "Zara Ebony Wood", "Zarkoperfume Cloud Collection No.2", "Afnan Supremacy Not Only Intense" ],
-            pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paften Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Polo Ralph Lauren Blue & Romance (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)", "Issey Miyake L'Eau d'Issey Pour Homme & L'Eau d'Issey (Pairing)", "Jimmy Choo Man & Blossom (Pairing)", "Joop! Homme & Femme (Pairing)", "Kenzo Pour Homme & Flower (Pairing)", "Maison Francis Kurkdjian Aqua Vitae Forte & Grand Soir (Pairing)", "Michael Kors for Men & Glam Jasmine (Pairing)", "Moschino Toy Boy & Toy 2 (Pairing)", "Narciso Rodriguez For Him & Her (Pairing)", "Oscar de la Renta Oscar & Bella Blanca (Pairing)", "Ralph Lauren Polo Blue & Romance (Pairing)", "Salvatore Ferragamo F by Ferragamo & Signorina (Pairing)", "Thierry Mugler A*Men & Angel (Pairing)", "Tommy Hilfiger Tommy & Tommy Girl (Pairing)", "Trussardi My Land & Donna (Pairing)", "Valentino Uomo Born In Roma & Donna Born In Roma (Pairing)", "Van Cleef & Arpels Pour Homme & Feerie (Pairing)", "Vera Wang for Men & Princess (Pairing)", "Victoria's Secret Tease & Very Sexy (Pairing)", "Zara Man Gold & Orchid (Pairing)", "Adnan B. Royal Touch & Adnan B. Classy (Pairing)", "Alfred Dunhill Desire Blue & Desire (Pairing)", "Antonio Banderas Blue Seduction Men & Women (Pairing)", "Brioni Eau de Parfum & Eau de Parfum Intense (Pairing)", "Cartier Declaration & Baiser Vole (Pairing)", "Clean Reserve Warm Cotton & Rain (Pairing)", "Creed Green Irish Tweed & Silver Mountain Water (Often paired by users)", "Demeter Fragrance Library (Many for pairing)", "Eight & Bob Original & Annicke Goutal (Pairing)", "Floris No. 89 & White Rose (Pairing)", "Gucci Guilty Absolute & Bloom (Pairing)", "Heeley Sel Marin & Iris de Nuit (Pairing)", "Imaginary Authors A City on Fire & Saint Julep (Pairing)", "Jovoy Paris Psychedelique & Remember Me (Pairing)", "Karl Lagerfeld Pour Homme & Eau de Parfum for Her (Pairing)", "Kilian Love, Don't Be Shy & Straight to Heaven (Pairing)", "L'Artisan Parfumeur Mûre et Musc & Premier Figuier (Pairing)", "Lalique Encre Noire & Amethyst (Pairing)", "Louis Vuitton L'Immensité & Rose des Vents (Pairing)", "Maison Crivelli Papyrus Moléculaire & Rose Saltifolia (Pairing)", "Memo Paris African Leather & Marfa (Pairing)", "Montale Black Aoud & Roses Musk (Pairing)", "Nasomatto Black Afgano & Narcotic Venus (Pairing)", "Ormonde Jayne Black Gold & Ta'if (Pairing)", "Paco Rabanne Phantom & Fame (Pairing)", "Penhaligon's Blenheim Bouquet & Elisabethan Rose (Pairing)", "Philosophy Amazing Grace & Pure Grace (Pairing)", "Roja Dove Elysium & Elixir (Pairing)", "Serge Lutens Ambre Sultan & Feminite du Bois (Pairing)", "The House of Oud Dates Delight & Breath Of The Infinite (Pairing)", "Tom Ford Soleil Blanc & Oud Wood (Pairing)", "Tiziana Terenzi Laudano Nero & Andromeda (Pairing)", "Uomo Salvatore Ferragamo & Signorina Misteriosa (Pairing)", "Versace Pour Homme & Versense (Pairing)", "Victorinox Swiss Army Classic & For Her (Pairing)", "Yves Saint Laurent Kouros & Opium (Pairing)", "Zadig & Voltaire This Is Him! & This Is Her! (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.3 (Pairing)", "Kilian Angels' Share & Roses on Ice (Pairing)" ]
+            pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paften Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Polo Ralph Lauren Blue & Romance (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)" ]
         };
 
-        // --- Navigasi Menu ---
+        // Global variables to store generated HTML content for "current order"
+        let thermalReceiptHtml = "";
+        let a4ReceiptHtml = "";
+
+        // --- Helper Functions ---
+
+        function formatRupiah(angka) {
+            let reverse = angka.toString().split('').reverse().join('');
+            let ribuan = reverse.match(/\d{1,3}/g);
+            let result = ribuan.join('.').split('').reverse().join('');
+            return 'Rp ' + result;
+        }
+
+        // Generate content for Thermal Receipt (raw text/simple HTML)
+        function generateThermalReceiptContent(pesanan) {
+            const selectedBrand = pesanan.brand || 'Tidak ada brand/keharuman lain'; // Fallback if empty
+            const formattedHargaItem = formatRupiah(pesanan.hargaItem);
+            const formattedTotalHarga = formatRupiah(pesanan.totalHarga);
+            const formattedHargaPerBotol = formatRupiah(pesanan.hargaPerBotol);
+
+            return `
+<pre>
+By. ENERGIA AURA PARFUME
+Jl. Komp. CikawaO Persada Blok G1 No 21
+Telp: 0851-4215-6602
+Tgl: ${pesanan.tanggal}, ${pesanan.waktu}
+------------------------------------
+STRUK PEMESANAN UNTUK: ${pesanan.namaPemesanan.toUpperCase()}
+------------------------------------
+Produk  : ${selectedBrand}
+Jenis   : ${pesanan.jenis}
+Jumlah  : ${pesanan.jumlah} Botol
+Harga/B : ${formattedHargaPerBotol}
+Total   : ${formattedHargaItem}
+------------------------------------
+TOTAL KESELURUHAN: ${formattedTotalHarga}
+------------------------------------
+TERIMA KASIH ATAS KUNJUNGANNYA
+*** BARANG YANG SUDAH DIBELI TIDAK
+    DAPAT DIKEMBALIKAN ***
+Sistem Pemesanan v1.0
+</pre>
+            `;
+        }
+
+        // Generate content for A4 Receipt (more structured HTML)
+        function generateA4ReceiptContent(pesanan) {
+            const selectedBrand = pesanan.brand || 'Tidak ada brand/keharuman lain'; // Fallback if empty
+            const formattedHargaItem = formatRupiah(pesanan.hargaItem);
+            const formattedTotalHarga = formatRupiah(pesanan.totalHarga);
+            const formattedHargaPerBotol = formatRupiah(pesanan.hargaPerBotol);
+
+            return `
+                <div class="receipt-a4-content">
+                    <div class="header">
+                        <h3>By. ENERGIA AURA PARFUME</h3>
+                        <p>Jl. Komp. CikawaO Persada Blok G1 No 21</p>
+                        <p>Telp: 0851-4215-6602</p>
+                        <p>Tgl: ${pesanan.tanggal}, ${pesanan.waktu}</p>
+                        <hr/>
+                        <h4>STRUK PEMESANAN UNTUK: ${pesanan.namaPemesanan.toUpperCase()}</h4>
+                    </div>
+                    <div class="order-detail-box">
+                        <p><strong>Produk:</strong> ${selectedBrand}</p>
+                        <p><strong>Jenis:</strong> ${pesanan.jenis}</p>
+                        <p><strong>Jumlah:</strong> ${pesanan.jumlah} botol</p>
+                        <p><strong>Harga per botol:</strong> ${formattedHargaPerBotol}</p>
+                        <p class="total"><strong>Total Item:</strong> ${formattedHargaItem}</p>
+                    </div>
+                    <div class="total-overall">
+                        Total Keseluruhan: ${formattedTotalHarga}
+                    </div>
+                    <hr/>
+                    <div class="footer" style="text-align: center;">
+                        <p>TERIMA KASIH ATAS KUNJUNGANNYA</p>
+                        <p>*** BARANG YANG SUDAH DIBELI TIDAK DAPAT DIKEMBALIKAN ***</p>
+                        <p>Sistem Pemesanan v1.0</p>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // --- Core Application Logic ---
+
+        function showBrandOptions() {
+            const kategori = document.querySelector('input[name="kategori"]:checked')?.value;
+            brandParfumSelect.innerHTML = '<option value="">-- Pilih Brand Parfum --</option>'; // Reset options
+
+            if (kategori && brandParfumData[kategori]) {
+                brandParfumData[kategori].forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    brandParfumSelect.appendChild(option);
+                });
+                brandParfumGroup.style.display = 'block';
+            } else {
+                brandParfumGroup.style.display = 'none';
+            }
+        }
+
+        function updateHarga() {
+            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+            let hargaPerBotol = 0;
+
+            if (jenisParfumRadio) {
+                hargaPerBotol = parseInt(jenisParfumRadio.dataset.harga);
+            }
+
+            const totalHargaItem = hargaPerBotol * (isNaN(jumlah) ? 0 : jumlah);
+            hargaInfo.textContent = `Total Harga Item: ${formatRupiah(totalHargaItem)}`;
+        }
+
+        function renderPesanan() {
+            daftarPesananUL.innerHTML = ''; // Clear current list
+            if (pesananList.length === 0) {
+                daftarPesananUL.innerHTML = '<p class="no-pesanan">Belum ada pesanan tersimpan.</p>';
+            } else {
+                pesananList.forEach((pesanan, index) => {
+                    const listItem = document.createElement('li');
+                    const selectedBrand = pesanan.brand || pesanan.keharumanLain || 'Tidak ada brand/keharuman lain';
+
+                    listItem.innerHTML = `
+                        <strong>${pesanan.namaPemesanan}</strong> (${pesanan.tanggal} ${pesanan.waktu})<br>
+                        Produk: ${selectedBrand}<br>
+                        Jenis: ${pesanan.jenis}<br>
+                        Jumlah: ${pesanan.jumlah} botol @${formatRupiah(pesanan.hargaPerBotol)}<br>
+                        Total: ${formatRupiah(pesanan.totalHarga)}
+                        <div class="item-actions">
+                            <button onclick="cetakItemTermal(${index})" class="btn-cetak-item-termal">Cetak Mini</button>
+                            <button onclick="cetakItemA4(${index})" class="btn-cetak-item-a4">Cetak A4</button>
+                            <button onclick="arsipPesanan(${index})" class="btn-arsip">Arsipkan</button>
+                            <button onclick="hapusPesanan(${index})" class="btn-hapus">Hapus</button>
+                        </div>
+                    `;
+                    daftarPesananUL.appendChild(listItem);
+                });
+            }
+            updateOverallTotal();
+            saveData();
+        }
+
+        function renderHistory() {
+            riwayatPesananUL.innerHTML = ''; // Clear current list
+            if (historyList.length === 0) {
+                riwayatPesananUL.innerHTML = '<p class="no-pesanan">Belum ada riwayat pesanan.</p>';
+            } else {
+                historyList.forEach((pesanan, index) => {
+                    const listItem = document.createElement('li');
+                    const selectedBrand = pesanan.brand || pesanan.keharumanLain || 'Tidak ada brand/keharuman lain';
+                    listItem.innerHTML = `
+                        <strong>${pesanan.namaPemesanan}</strong> (${pesanan.tanggal} ${pesanan.waktu}) [Arsip]<br>
+                        Produk: ${selectedBrand}<br>
+                        Jenis: ${pesanan.jenis}<br>
+                        Jumlah: ${pesanan.jumlah} botol @${formatRupiah(pesanan.hargaPerBotol)}<br>
+                        Total: ${formatRupiah(pesanan.totalHarga)}
+                        <div class="item-actions">
+                            <button onclick="cetakHistoryItemTermal(${index})" class="btn-cetak-item-termal">Cetak Mini</button>
+                            <button onclick="cetakHistoryItemA4(${index})" class="btn-cetak-item-a4">Cetak A4</button>
+                            <button onclick="restorePesanan(${index})" class="btn-arsip">Pulihkan</button>
+                            <button onclick="hapusHistoryPesanan(${index})" class="btn-hapus">Hapus</button>
+                        </div>
+                    `;
+                    riwayatPesananUL.appendChild(listItem);
+                });
+            }
+            saveData();
+        }
+
+        function updateOverallTotal() {
+            const total = pesananList.reduce((sum, pesanan) => sum + pesanan.totalHarga, 0);
+            totalKeseluruhanInfo.textContent = `Total Keseluruhan: ${formatRupiah(total)}`;
+        }
+
+        function saveData() {
+            localStorage.setItem('pesananList', JSON.stringify(pesananList));
+            localStorage.setItem('historyList', JSON.stringify(historyList));
+        }
+
+        function loadData() {
+            const storedPesanan = localStorage.getItem('pesananList');
+            const storedHistory = localStorage.getItem('historyList');
+            if (storedPesanan) {
+                pesananList = JSON.parse(storedPesanan);
+            }
+            if (storedHistory) {
+                historyList = JSON.parse(storedHistory);
+            }
+            renderPesanan();
+            renderHistory();
+        }
+
+        parfumForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('nama').value;
+            const kategori = document.querySelector('input[name="kategori"]:checked')?.value;
+            const brand = brandParfumSelect.value;
+            const keharumanLain = document.getElementById('keharumanLain').value;
+            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
+            const jenisParfum = jenisParfumRadio ? jenisParfumRadio.value : '';
+            const hargaPerBotol = jenisParfumRadio ? parseInt(jenisParfumRadio.dataset.harga) : 0;
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+
+            // Validasi lebih lanjut jika diperlukan
+            if (!nama || !kategori || (!brand && !keharumanLain) || !jenisParfum || isNaN(jumlah) || jumlah <= 0) {
+                alert('Mohon lengkapi semua data pesanan yang wajib (Nama, Kategori, Brand/Keharuman Lain, Jenis, Jumlah)!');
+                return;
+            }
+
+            const totalHargaItem = hargaPerBotol * jumlah;
+            const now = new Date();
+            const tanggal = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' }).replace(/\//g, '/');
+            const waktu = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+            const newPesanan = {
+                id: Date.now(), // Unique ID for each order
+                namaPemesanan: nama,
+                kategori: kategori,
+                brand: brand,
+                keharumanLain: keharumanLain,
+                jenis: jenisParfum,
+                hargaPerBotol: hargaPerBotol,
+                jumlah: jumlah,
+                hargaItem: hargaPerBotol * jumlah, // Harga per item
+                totalHarga: totalHargaItem, // Total harga keseluruhan untuk pesanan ini
+                tanggal: tanggal,
+                waktu: waktu
+            };
+
+            pesananList.push(newPesanan);
+            renderPesanan();
+            parfumForm.reset(); // Reset form after submission
+            hargaInfo.textContent = 'Total Harga Item: Rp 0'; // Reset harga info
+            brandParfumGroup.style.display = 'none'; // Hide brand options
+
+            // Store current order HTML for immediate printing
+            thermalReceiptHtml = generateThermalReceiptContent(newPesanan);
+            a4ReceiptHtml = generateA4ReceiptContent(newPesanan);
+
+            alert('Pesanan berhasil disimpan!');
+        });
+
+        function hapusPesanan(index) {
+            if (confirm('Anda yakin ingin menghapus pesanan ini?')) {
+                pesananList.splice(index, 1);
+                renderPesanan();
+            }
+        }
+
+        function arsipPesanan(index) {
+            if (confirm('Anda yakin ingin mengarsipkan pesanan ini?')) {
+                const [movedPesanan] = pesananList.splice(index, 1);
+                historyList.push(movedPesanan);
+                renderPesanan();
+                renderHistory();
+            }
+        }
+
+        function restorePesanan(index) {
+            if (confirm('Anda yakin ingin memulihkan pesanan ini dari arsip?')) {
+                const [movedPesanan] = historyList.splice(index, 1);
+                pesananList.push(movedPesanan);
+                renderPesanan();
+                renderHistory();
+            }
+        }
+
+        function hapusHistoryPesanan(index) {
+            if (confirm('Anda yakin ingin menghapus riwayat pesanan ini secara permanen?')) {
+                historyList.splice(index, 1);
+                renderHistory();
+            }
+        }
+
+        function resetPesanan() {
+            if (confirm('Anda yakin ingin menghapus semua pesanan saat ini? (Ini tidak akan menghapus riwayat)')) {
+                pesananList = [];
+                renderPesanan();
+                alert('Semua pesanan saat ini telah dihapus.');
+            }
+        }
+
+        function arsipSemuaPesanan() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan untuk diarsipkan.');
+                return;
+            }
+            if (confirm('Anda yakin ingin mengarsipkan semua pesanan saat ini?')) {
+                historyList = historyList.concat(pesananList); // Add all current orders to history
+                pesananList = []; // Clear current orders
+                renderPesanan();
+                renderHistory();
+                alert('Semua pesanan telah diarsipkan.');
+            }
+        }
+
+        function hapusRiwayat() {
+            if (historyList.length === 0) {
+                alert('Tidak ada riwayat untuk dihapus.');
+                return;
+            }
+            if (confirm('Anda yakin ingin menghapus semua riwayat pesanan secara permanen?')) {
+                historyList = [];
+                renderHistory();
+                alert('Semua riwayat pesanan telah dihapus.');
+            }
+        }
+
+
+        // --- Navigasi Tab ---
         navButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const targetId = button.dataset.target;
 
-                // Remove active class from all buttons and sections
                 navButtons.forEach(btn => btn.classList.remove('active'));
-                contentSections.forEach(section => section.classList.remove('active'));
-
-                // Add active class to clicked button and target section
                 button.classList.add('active');
-                document.getElementById(targetId).classList.add('active');
 
-                // Re-render lists if navigating to them
+                contentSections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+
+                // Re-render appropriate list when tab is clicked
                 if (targetId === 'daftar') {
                     renderPesanan();
                 } else if (targetId === 'riwayat') {
@@ -565,644 +945,228 @@
             });
         });
 
-        // --- Fungsi Form Pemesanan ---
-        function updateHarga() {
-            const premiumRadio = document.getElementById('premium');
-            const superPremiumRadio = document.getElementById('superPremium');
-            const jumlahInput = document.getElementById('jumlah');
-            
-            let hargaPerBotol = 0;
-            if (premiumRadio && premiumRadio.checked) {
-                hargaPerBotol = parseFloat(premiumRadio.getAttribute('data-harga'));
-            } else if (superPremiumRadio && superPremiumRadio.checked) {
-                hargaPerBotol = parseFloat(superPremiumRadio.getAttribute('data-harga'));
-            }
+        // --- Print Functions using Iframe ---
 
-            const jumlah = parseInt(jumlahInput.value) || 0;
-            const totalHargaItem = hargaPerBotol * jumlah;
-
-            hargaInfo.innerText = `Total Harga Item: Rp ${totalHargaItem.toLocaleString('id-ID')}`;
-        }
-
-        function showBrandOptions() {
-            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
-            
-            if (!selectedCategory) {
-                brandParfumGroup.style.display = 'none';
-                brandParfumSelect.innerHTML = '<option value="">-- Pilih Brand Parfum --</option>';
+        // Helper function to print content via iframe
+        function printContentViaIframe(contentHtml, paperType) {
+            const printIframe = document.getElementById('printIframe');
+            if (!printIframe) {
+                console.error("Iframe for printing not found!");
+                alert("Terjadi kesalahan: Elemen cetak tidak ditemukan.");
                 return;
             }
 
-            const categoryValue = selectedCategory.value;
-            const brands = brandParfumData[categoryValue];
+            const iframeDoc = printIframe.contentWindow.document;
 
-            brandParfumSelect.innerHTML = '<option value="">-- Pilih Brand Parfum --</option>';
-            if (brands) {
-                brands.forEach(brand => {
-                    const option = document.createElement('option');
-                    option.value = brand;
-                    option.textContent = brand;
-                    brandParfumSelect.appendChild(option);
-                });
-            }
-
-            brandParfumGroup.style.display = 'block';
-            brandParfumSelect.focus();
-        }
-
-        parfumForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const nama = document.getElementById('nama').value;
-            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
-            const brandParfumPilihan = document.getElementById('brandParfum').value;
-            const keharumanLain = document.getElementById('keharumanLain').value;
-            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
-            const jumlah = parseInt(document.getElementById('jumlah').value);
-
-            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
-                alert('Mohon lengkapi semua data pemesanan (nama, kategori, brand/keharuman, jenis, dan jumlah).');
-                return;
-            }
-
-            const jenisParfum = jenisParfumRadio.value;
-            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
-            const totalHargaItem = hargaPerBotol * jumlah;
-
-            const newPesanan = {
-                id: Date.now(), // Unique ID for each order
-                nama,
-                kategori: selectedCategory.value,
-                brandParfumPilihan: brandParfumPilihan,
-                keharumanLain: keharumanLain,
-                jenisParfum,
-                hargaPerBotol,
-                jumlah,
-                totalHargaItem,
-                timestamp: new Date().toISOString()
-            };
-
-            pesananList.push(newPesanan);
-            savePesanan(); // Save to current orders
-            renderPesanan(); // Update display for current orders
-
-            // Reset form after saving
-            parfumForm.reset();
-            updateHarga();
-            brandParfumGroup.style.display = 'none';
-            document.querySelectorAll('input[name="kategori"]').forEach(radio => radio.checked = false);
-            document.getElementById('nama').focus();
-        });
-
-        // --- Fungsi Penyimpanan & Render Data ---
-        function loadPesanan() {
-            try {
-                const storedPesanan = localStorage.getItem('daftarParfumPesanan');
-                if (storedPesanan) {
-                    pesananList = JSON.parse(storedPesanan);
-                } else {
-                    pesananList = [];
-                }
-            } catch (e) {
-                console.error("Error loading pesanan from localStorage:", e);
-                pesananList = [];
-            }
-            renderPesanan();
-        }
-
-        function savePesanan() {
-            try {
-                localStorage.setItem('daftarParfumPesanan', JSON.stringify(pesananList));
-            } catch (e) {
-                console.error("Error saving pesanan to localStorage:", e);
-                alert("Gagal menyimpan pesanan. Mungkin penyimpanan penuh atau ada masalah browser.");
-            }
-        }
-
-        function loadHistory() {
-            try {
-                const storedHistory = localStorage.getItem('riwayatParfumPesanan');
-                if (storedHistory) {
-                    historyList = JSON.parse(storedHistory);
-                } else {
-                    historyList = [];
-                }
-            } catch (e) {
-                console.error("Error loading history from localStorage:", e);
-                historyList = [];
-            }
-            renderHistory();
-        }
-
-        function saveHistory() {
-            try {
-                localStorage.setItem('riwayatParfumPesanan', JSON.stringify(historyList));
-            } catch (e) {
-                console.error("Error saving history to localStorage:", e);
-                alert("Gagal menyimpan riwayat. Mungkin penyimpanan penuh atau ada masalah browser.");
-            }
-        }
-
-        function renderPesanan() {
-            daftarPesananUL.innerHTML = '';
-            let totalKeseluruhan = 0;
-
-            if (pesananList.length === 0) {
-                daftarPesananUL.innerHTML = '<p class="no-pesanan">Belum ada pesanan tersimpan.</p>';
-            }
-            else {
-                pesananList.forEach((pesanan) => {
-                    const listItem = createOrderItemElement(pesanan, true); // true for actions
-                    daftarPesananUL.appendChild(listItem);
-                    totalKeseluruhan += pesanan.totalHargaItem;
-                });
-            }
-            totalKeseluruhanInfo.innerText = `Total Keseluruhan: Rp ${totalKeseluruhan.toLocaleString('id-ID')}`;
-        }
-
-        function renderHistory() {
-            riwayatPesananUL.innerHTML = '';
-            if (historyList.length === 0) {
-                riwayatPesananUL.innerHTML = '<p class="no-pesanan">Belum ada riwayat pesanan.</p>';
-            } else {
-                historyList.forEach((pesanan) => {
-                    const listItem = createOrderItemElement(pesanan, false); // false for no actions
-                    riwayatPesananUL.appendChild(listItem);
-                });
-            }
-        }
-
-        function createOrderItemElement(pesanan, showActions) {
-            const listItem = document.createElement('li');
-            let brandDisplay = pesanan.brandParfumPilihan;
-            if (pesanan.keharumanLain) {
-                brandDisplay = `${brandDisplay ? brandDisplay + ' / ' : ''}${pesanan.keharumanLain}`;
-            }
-
-            listItem.innerHTML = `
-                <strong>${pesanan.nama}</strong><br>
-                Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}<br>
-                Parfum: ${brandDisplay}<br>
-                Jenis: ${pesanan.jenisParfum} (${pesanan.jumlah}x Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')})<br>
-                Total: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}<br>
-                Waktu: ${new Date(pesanan.timestamp).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}
-            `;
-            
-            if (showActions) {
-                const actionsDiv = document.createElement('div');
-                actionsDiv.classList.add('item-actions');
-                
-                const arsipButton = document.createElement('button');
-                arsipButton.textContent = 'Arsipkan';
-                arsipButton.classList.add('btn-arsip');
-                arsipButton.onclick = () => arsipPesanan(pesanan.id);
-
-                const cetakItemA4Button = document.createElement('button');
-                cetakItemA4Button.textContent = 'Cetak (A4)';
-                cetakItemA4Button.classList.add('btn-cetak-item-a4');
-                cetakItemA4Button.onclick = () => cetakSingleItemA4(pesanan.id);
-
-                const cetakItemTermalButton = document.createElement('button');
-                cetakItemTermalButton.textContent = 'Cetak Struk (Mini)';
-                cetakItemTermalButton.classList.add('btn-cetak-item-termal');
-                cetakItemTermalButton.onclick = () => cetakSingleItemTermal(pesanan.id);
-
-                const hapusButton = document.createElement('button');
-                hapusButton.textContent = 'Hapus';
-                hapusButton.classList.add('btn-hapus');
-                hapusButton.onclick = () => hapusPesanan(pesanan.id);
-
-                actionsDiv.appendChild(arsipButton);
-                actionsDiv.appendChild(cetakItemA4Button);
-                actionsDiv.appendChild(cetakItemTermalButton);
-                hapusButton.style.flexBasis = '100%';
-                actionsDiv.appendChild(hapusButton);
-                listItem.appendChild(actionsDiv);
-            }
-            return listItem;
-        }
-
-        // --- Aksi pada Daftar Pesanan ---
-        function arsipPesanan(idToArsip) {
-            const index = pesananList.findIndex(p => p.id === idToArsip);
-            if (index > -1) {
-                const [pesananToArchive] = pesananList.splice(index, 1);
-                historyList.unshift(pesananToArchive); // Add to history, newest first
-                savePesanan();
-                saveHistory();
-                renderPesanan();
-                renderHistory();
-                alert('Pesanan berhasil diarsipkan.');
-            }
-        }
-
-        function hapusPesanan(idToHapus) {
-            if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
-                pesananList = pesananList.filter(p => p.id !== idToHapus);
-                savePesanan();
-                renderPesanan();
-            }
-        }
-
-        function resetPesanan() {
-            if (confirm('Apakah Anda yakin ingin menghapus SEMUA pesanan aktif? Tindakan ini tidak bisa dibatalkan.')) {
-                localStorage.removeItem('daftarParfumPesanan');
-                pesananList = [];
-                renderPesanan();
-                alert('Semua pesanan aktif telah dihapus.');
-            }
-        }
-
-        function arsipSemuaPesanan() {
-            if (pesananList.length === 0) {
-                alert('Tidak ada pesanan aktif untuk diarsipkan.');
-                return;
-            }
-            if (confirm('Apakah Anda yakin ingin mengarsipkan SEMUA pesanan aktif?')) {
-                historyList = [...pesananList, ...historyList]; // Add current list to history
-                pesananList = [];
-                savePesanan();
-                saveHistory();
-                renderPesanan();
-                renderHistory();
-                alert('Semua pesanan aktif telah diarsipkan.');
-            }
-        }
-
-        // --- Aksi pada Riwayat Pemesanan ---
-        function hapusRiwayat() {
-            if (historyList.length === 0) {
-                alert('Tidak ada riwayat untuk dihapus.');
-                return;
-            }
-            if (confirm('Apakah Anda yakin ingin menghapus SEMUA riwayat pesanan? Tindakan ini tidak bisa dibatalkan.')) {
-                localStorage.removeItem('riwayatParfumPesanan');
-                historyList = [];
-                renderHistory();
-                alert('Semua riwayat pesanan telah dihapus.');
-            }
-        }
-
-        // Helper function to format brand/keharuman for print
-        function formatBrandForPrint(pesanan, maxLength) {
-            let brandText = pesanan.brandParfumPilihan;
-            if (pesanan.keharumanLain) {
-                brandText = `${brandText ? brandText + ' / ' : ''}${pesanan.keharumanLain}`; 
-            }
-            
-            if (!brandText) return '';
-
-            // This logic is specifically for thermal print to avoid long lines
-            // For A4, the max length might be different or not needed to truncate
-            if (brandText.length > maxLength) {
-                const trimmedText = brandText.substring(0, maxLength - 3);
-                const lastSpaceIndex = trimmedText.lastIndexOf(' ');
-                if (lastSpaceIndex > -1) {
-                    return trimmedText.substring(0, lastSpaceIndex) + '...';
-                }
-                return trimmedText + '...';
-            }
-            return brandText;
-        }
-
-        function printContent(htmlContent, paperType, autoPrint = false) {
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none'; 
-            document.body.appendChild(iframe);
-
-            const iframeDoc = iframe.contentWindow.document;
             iframeDoc.open();
-            iframeDoc.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Print</title>
-                    <style>
-                        /* Salin CSS yang relevan ke sini */
-                        body {
-                            margin: 0; padding: 0;
-                            font-family: Arial, sans-serif;
-                            color: #000;
-                            /* PENTING: Untuk memastikan body iframe juga 0 margin/padding */
-                            width: 100vw; 
-                            height: 100vh;
-                            overflow: hidden; /* Hindari scrollbar di iframe cetak */
-                        }
-                        .receipt-thermal {
-                            width: 55mm; 
-                            max-width: 55mm; 
-                            min-height: 10mm; 
-                            margin: 0; 
-                            padding: 0; 
-                            font-family: 'Consolas', 'Courier New', monospace; 
-                            font-size: 15px; 
-                            line-height: 1.2;
-                            color: #000;
-                            box-sizing: border-box; 
-                            
-                            /* PENTING: PILIH SALAH SATU DI BAWAH */
-                            /* transform: scale(1.25); */ 
-                            /* transform-origin: top left; */ 
-                            zoom: 125%; /* Gunakan zoom. Bisa naikkan jika masih kurang lebar: 130%, 140% */
-                        }
-                        .receipt-thermal * { 
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            box-sizing: border-box !important; 
-                        }
-                        .receipt-thermal .header, 
-                        .receipt-thermal .footer, 
-                        .receipt-thermal .section-title,
-                        .receipt-thermal .item-list {
-                            padding: 0 2mm !important; 
-                        }
-                        .receipt-thermal hr {
-                            border: none;
-                            border-top: 1px dashed #000; 
-                            margin: 2mm 2mm !important; 
-                            width: calc(100% - 4mm) !important; 
-                        }
-                        .receipt-thermal .header h3 { font-size: 1.2em; margin-bottom: 0.5mm !important; text-align: center; }
-                        .receipt-thermal .header p { font-size: 0.9em; margin-bottom: 0.2mm !important; text-align: center; }
-                        .receipt-thermal .item-name {
-                            width: 100%; font-weight: bold; white-space: normal; word-break: break-word; font-size: 1.1em; margin-bottom: 0.5mm !important; text-align: left;
-                        }
-                        .receipt-thermal .item-qty-price, .receipt-thermal .item-total-price { font-size: 1.05em; }
-                        .receipt-thermal .detail-row { 
-                            margin-bottom: 1mm !important; 
-                            display: flex; 
-                            justify-content: space-between; 
-                            align-items: baseline; 
-                            padding: 0 2mm !important; /* Penting: agar detail row juga punya padding */
-                        }
-                        .receipt-thermal .total-summary { font-size: 1.4em; margin-top: 5px !important; padding-top: 5px !important; font-weight: bold; }
-                        .receipt-thermal .footer p { font-size: 0.9em; margin: 1mm 0 !important; text-align: center; }
-                        .receipt-thermal .info-note { font-size: 0.7em; margin-top: 2mm !important; text-align: center;}
-                        .receipt-thermal .item { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 4px !important; }
-                        .receipt-thermal .item .item-name { flex-basis: 100%; text-align: left; }
-                        .receipt-thermal .item .item-qty-price { flex-basis: 50%; text-align: left; }
-                        .receipt-thermal .item .item-total-price { flex-basis: 50%; text-align: right; font-weight: bold; }
-
-                        /* Styles for A4 Print */
-                        .receipt-a4 {
-                            padding: 20px;
-                            width: 210mm;
-                            margin: 0 auto;
-                            font-family: Arial, sans-serif;
-                            font-size: 12px;
-                            line-height: 1.5;
-                            color: #000;
-                        }
-                        .receipt-a4 h3, .receipt-a4 h4 { text-align: center; margin-bottom: 15px; }
-                        .receipt-a4 .order-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-                        .receipt-a4 .order-item strong { display: block; margin-bottom: 5px; font-size: 1.1em; }
-                        .receipt-a4 .order-details p { margin: 2px 0; }
-                        .receipt-a4 .total-overall { text-align: right; font-size: 1.3em; font-weight: bold; margin-top: 20px; border-top: 1px solid #000; padding-top: 10px; }
-                        .receipt-a4 .order-detail-box { border: 1px solid #007bff; padding: 15px; border-radius: 8px; background-color: #e7f0ff; margin-bottom: 20px; }
-                        .receipt-a4 .order-detail-box p { margin: 5px 0; font-size: 1.1em; }
-                        .receipt-a4 .order-detail-box strong { color: #0056b3; }
-                        .receipt-a4 .order-detail-box .total { font-size: 1.2em; font-weight: bold; margin-top: 10px; text-align: right; border-top: 1px dashed #007bff; padding-top: 5px; }
-
-                        @media print {
-                            body { margin: 0; padding: 0; }
-                            /* Pastikan tidak ada margin browser yang diterapkan secara default */
-                            @page {
+            if (paperType === 'Thermal') {
+                iframeDoc.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Struk Thermal</title>
+                        <style>
+                            /* Styles for the body inside the thermal iframe */
+                            body {
+                                margin: 0; padding: 0;
+                                font-family: 'Consolas', 'Courier New', monospace;
+                                color: #000;
+                                width: 55mm; /* Crucial for thermal printer width */
+                                max-width: 55mm;
+                                box-sizing: border-box;
+                                /* Try 'zoom' first, if not good, try 'transform' */
+                                zoom: 125%; /* Adjust this value (e.g., 120%, 130%) to make print larger/smaller */
+                                /* transform: scale(1.25); transform-origin: top left; */
+                            }
+                            /* Ensure pre tag or main content div fills width and wraps */
+                            pre {
+                                margin: 0; padding: 0;
+                                white-space: pre-wrap; /* Allows text to wrap */
+                                word-wrap: break-word; /* For very long words */
+                                font-family: 'Consolas', 'Courier New', monospace;
+                                font-size: 15px; /* Adjust font size within the thermal content */
+                                line-height: 1.2;
+                                width: 100%; /* Make pre fill 100% of body width */
+                                box-sizing: border-box;
+                            }
+                            /* Styles for structured thermal content if not using <pre> */
+                            .receipt-thermal-body * {
                                 margin: 0 !important;
                                 padding: 0 !important;
+                                box-sizing: border-box !important;
                             }
-                        }
-                    </style>
-                </head>
-                <body class="${paperType === 'Thermal' ? 'receipt-thermal' : 'receipt-a4'}">
-                    ${htmlContent}
-                </body>
-                </html>
-            `);
+                            .receipt-thermal-body .header, .receipt-thermal-body .footer, .receipt-thermal-body .section-title, .receipt-thermal-body .item-list { padding: 0 2mm !important; }
+                            .receipt-thermal-body hr { border: none; border-top: 1px dashed #000; margin: 2mm 2mm !important; width: calc(100% - 4mm) !important; }
+                            .receipt-thermal-body .header h3 { font-size: 1.2em; margin-bottom: 0.5mm !important; text-align: center; }
+                            .receipt-thermal-body .header p { font-size: 0.9em; margin-bottom: 0.2mm !important; text-align: center; }
+                            .receipt-thermal-body .item-name { width: 100%; font-weight: bold; white-space: normal; word-break: break-word; font-size: 1.1em; margin-bottom: 0.5mm !important; text-align: left; }
+                            .receipt-thermal-body .item-qty-price, .receipt-thermal-body .item-total-price { font-size: 1.05em; }
+                            .receipt-thermal-body .detail-row { margin-bottom: 1mm !important; display: flex; justify-content: space-between; align-items: baseline; padding: 0 2mm !important; }
+                            .receipt-thermal-body .total-summary { font-size: 1.4em; margin-top: 5px !important; padding-top: 5px !important; font-weight: bold; }
+                            .receipt-thermal-body .footer p { font-size: 0.9em; margin: 1mm 0 !important; text-align: center; }
+                            .receipt-thermal-body .info-note { font-size: 0.7em; margin-top: 2mm !important; text-align: center; }
+                            .receipt-thermal-body .item { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 4px !important; }
+                            .receipt-thermal-body .item .item-name { flex-basis: 100%; text-align: left; }
+                            .receipt-thermal-body .item .item-qty-price { flex-basis: 50%; text-align: left; }
+                            .receipt-thermal-body .item .item-total-price { flex-basis: 50%; text-align: right; font-weight: bold; }
+
+                            /* @page rules for thermal printing within the iframe */
+                            @page {
+                                margin: 0 !important; /* No margins */
+                                padding: 0 !important;
+                                size: 5.5cm auto; /* Width 5.5cm, height auto */
+                            }
+                        </style>
+                    </head>
+                    <body class="receipt-thermal-body">
+                        ${contentHtml}
+                    </body>
+                    </html>
+                `);
+            } else if (paperType === 'A4') {
+                iframeDoc.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Laporan A4</title>
+                        <style>
+                            /* Styles for the body inside the A4 iframe */
+                            body {
+                                margin: 0; padding: 0;
+                                font-family: Arial, sans-serif;
+                                color: #000;
+                                width: 210mm; /* Standard A4 width */
+                                box-sizing: border-box;
+                            }
+                            /* Styles for the main content div within the A4 iframe */
+                            .receipt-a4-content {
+                                padding: 20px;
+                                width: 100%;
+                                margin: 0 auto;
+                                font-family: Arial, sans-serif;
+                                font-size: 12px;
+                                line-height: 1.5;
+                                color: #000;
+                                box-sizing: border-box;
+                            }
+                            /* Copy all .receipt-a4-body styles here */
+                            .receipt-a4-content h3, .receipt-a4-content h4 { text-align: center; margin-bottom: 15px; }
+                            .receipt-a4-content .order-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+                            .receipt-a4-content .order-item strong { display: block; margin-bottom: 5px; font-size: 1.1em; }
+                            .receipt-a4-content .order-details p { margin: 2px 0; }
+                            .receipt-a4-content .total-overall { text-align: right; font-size: 1.3em; font-weight: bold; margin-top: 20px; border-top: 1px solid #000; padding-top: 10px; }
+                            .receipt-a4-content .order-detail-box { border: 1px solid #007bff; padding: 15px; border-radius: 8px; background-color: #e7f0ff; margin-bottom: 20px; }
+                            .receipt-a4-content .order-detail-box p { margin: 5px 0; font-size: 1.1em; }
+                            .receipt-a4-content .order-detail-box strong { color: #0056b3; }
+                            .receipt-a4-content .order-detail-box .total { font-size: 1.2em; font-weight: bold; margin-top: 10px; text-align: right; border-top: 1px dashed #007bff; padding-top: 5px; }
+
+                            /* @page rules for A4 printing within the iframe */
+                            @page {
+                                size: A4;
+                                margin: 1cm; /* Standard A4 margins */
+                            }
+                        </style>
+                    </head>
+                    <body class="receipt-a4-body">
+                        ${contentHtml}
+                    </body>
+                    </html>
+                `);
+            }
             iframeDoc.close();
 
-            iframe.contentWindow.focus();
-            
-            // Tambahkan instruksi penting di dalam JavaScript cetak
-            const printInstructions = `
-                <div style="padding: 10px; background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; margin: 15px; font-size: 0.9em; text-align: center;">
-                    <p><strong>PENTING:</strong> Setelah dialog cetak muncul:</p>
-                    <ol style="text-align: left; margin: 0 auto; display: inline-block;">
-                        <li>Di bagian <strong>Margin</strong>, pilih <strong>"None"</strong> atau atur semua ke <strong>"0"</strong>.</li>
-                        <li>Di bagian <strong>Skala (Scale)</strong>, pilih <strong>"Default"</strong> atau atur ke <strong>"100%"</strong>.</li>
-                        <li>Pastikan centang <strong>"Headers and Footers"</strong> (atau "Tajuk dan Catatan Kaki") <strong>DIHILANGKAN</strong>.</li>
-                        <li>Pilih ukuran kertas yang paling sesuai (misal: "Roll Paper 58mm" atau custom jika ada).</li>
-                    </ol>
-                    <p style="margin-top: 10px;">Ini KRITIS agar struk memenuhi lebar 5.5cm.</p>
-                </div>
-            `;
-            // Hanya tampilkan instruksi ini jika cetak thermal
-            if (paperType === 'Thermal' && !autoPrint) {
-                // Untuk kasus cetak manual, instruksi bisa muncul di halaman utama atau alert
-                // Karena kita pakai autoPrint, instruksi ini tidak akan muncul di layar utama
-                // Tapi ini adalah pesan yang harus selalu Anda ingat saat tes cetak
-                console.warn("INSTRUKSI CETAK THERMAL: Pastikan margin 'None' dan skala '100%' di dialog cetak browser. Hapus Header/Footer.");
-            }
-
-
-            if (autoPrint) {
+            // Set a timeout to ensure iframe content is rendered before printing
+            // This is especially helpful on mobile browsers.
+            setTimeout(() => {
                 try {
-                    // Beri sedikit waktu untuk browser merender sebelum mencetak
-                    setTimeout(() => {
-                        iframe.contentWindow.print();
-                    }, 100); 
+                    printIframe.contentWindow.focus();
+                    printIframe.contentWindow.print();
                 } catch (e) {
-                    console.error("Auto print failed, user might need to click print button:", e);
-                    alert("Gagal mencetak otomatis. Silakan klik tombol 'Cetak' pada dialog yang muncul.");
+                    console.error("Auto print failed:", e);
+                    alert("Gagal mencetak otomatis. Silakan atur manual print dari menu browser.");
                 }
-            } else {
-                iframe.contentWindow.print();
-            }
-
-            iframe.contentWindow.onafterprint = function() {
-                iframe.remove();
-            };
+            }, 500); // 500ms delay, adjust if needed
         }
 
+        // --- Specific Print Call Functions ---
 
-        function generateThermalReceiptContentHTML(orders, title, footerNote = '', isSingleOrderFromForm = false, isSingleItemFromList = false) {
-            const currentDate = new Date();
-            let itemsHtml = '';
-            let totalOverall = 0;
-
-            if (orders.length === 0) {
-                itemsHtml = `<div style="text-align: center; font-size: 0.8em;">Tidak ada item untuk dicetak.</div>`; 
-            } else {
-                orders.forEach(pesanan => {
-                    let brandText = pesanan.brandParfumPilihan;
-                    if (pesanan.keharumanLain) {
-                        brandText = `${brandText ? brandText + ' / ' : ''}${pesanan.keharumanLain}`; 
-                    }
-                    
-                    // Logic untuk menyingkat nama item pada struk thermal agar tidak terlalu panjang
-                    let displayItemName = brandText;
-                    if (displayItemName.length > 20) { // Menurunkan batas karakter untuk nama item agar lebih pasti muat
-                        displayItemName = displayItemName.substring(0, 17) + '...'; 
-                    }
-
-                    const itemPriceFormatted = parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID');
-                    const hargaPerBotolFormatted = parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID');
-                    
-                    // Adjust padding for qty and price to align them better
-                    const qtyPrice = `${pesanan.jumlah}x @${hargaPerBotolFormatted}`;
-                    
-                    itemsHtml += `
-                        <div class="item">
-                            <div class="item-name">${displayItemName}</div>
-                            <div class="item-qty-price">${qtyPrice}</div>
-                            <div class="item-total-price">Rp ${itemPriceFormatted}</div>
-                        </div>
-                    `;
-                    totalOverall += pesanan.totalHargaItem;
-                });
+        function cetakPesananSaatIniTermal() {
+            if (!thermalReceiptHtml) {
+                alert('Belum ada struk pesanan saat ini untuk dicetak. Harap simpan pesanan terlebih dahulu.');
+                return;
             }
-
-            return `
-                <div class="header">
-                    <h3>By. ENERGIA AURA PARFUME</h3>
-                    <p>Jl. Komp. Cikawao Persada Blok G1 No 21</p>
-                    <p>Telp: 0851-4215-6602</p>
-                    <p>Tgl: ${currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' })}, ${currentDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(/\./g, ':')}</p>
-                </div>
-                <hr>
-                <div class="section-title" style="text-align:center; font-weight:bold; font-size:1.1em; padding:2mm 0; white-space: pre-wrap;">${title}</div>
-                <hr>
-                <div class="item-list">
-                    ${itemsHtml}
-                </div>
-                <hr>
-                <div class="total-summary detail-row">
-                    <span>TOTAL:</span>
-                    <span>Rp ${totalOverall.toLocaleString('id-ID')}</span>
-                </div>
-                <hr>
-                <div class="footer">
-                    <p>${footerNote || 'TERIMA KASIH ATAS KUNJUNGANNYA'}</p>
-                    <p>*** BARANG YANG SUDAH DIBELI TIDAK</p>
-                    <p>DAPAT DIKEMBALIKAN ***</p>
-                    <p class="info-note">Sistem Pemesanan v1.0</p>
-                </div>
-            `;
+            printContentViaIframe(thermalReceiptHtml, 'Thermal');
         }
-
-        // --- Cetak A4 Functions (Tidak Berubah) ---
 
         function cetakPesananSaatIniA4() {
-            const nama = document.getElementById('nama').value;
-            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
-            const brandParfumPilihan = document.getElementById('brandParfum').value;
-            const keharumanLain = document.getElementById('keharumanLain').value;
-            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
-            const jumlah = parseInt(document.getElementById('jumlah').value);
-
-            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
-                alert('Mohon lengkapi data pesanan di formulir terlebih dahulu untuk mencetak pesanan saat ini.');
+            if (!a4ReceiptHtml) {
+                alert('Belum ada detail pesanan saat ini untuk dicetak. Harap simpan pesanan terlebih dahulu.');
                 return;
             }
-
-            const jenisParfum = jenisParfumRadio.value;
-            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
-            const totalHargaItem = hargaPerBotol * jumlah;
-
-            let brandText = formatBrandForPrint({ brandParfumPilihan, keharumanLain }, 50);
-
-            const htmlContent = `
-                <h3>Detail Pesanan Saat Ini</h3>
-                <p style="text-align: center;">Tanggal: ${new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
-                <hr style="border-top: 1px solid #000; margin: 20px 0;">
-                <div class="order-detail-box">
-                    <p><strong>Nama Pemesan:</strong> ${nama}</p>
-                    <p><strong>Kategori:</strong> ${selectedCategory.value.charAt(0).toUpperCase() + selectedCategory.value.slice(1)}</p>
-                    <p><strong>Parfum:</strong> ${brandText}</p>
-                    <p><strong>Jenis:</strong> ${jenisParfum}</p>
-                    <p><strong>Jumlah:</strong> ${jumlah}</p>
-                    <p><strong>Harga per Botol:</strong> Rp ${hargaPerBotol.toLocaleString('id-ID')}</p>
-                    <p class="total"><strong>Total Harga:</strong> Rp ${totalHargaItem.toLocaleString('id-ID')}</p>
-                </div>
-                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-                    Detail pesanan ini berdasarkan input formulir saat Anda mencetak.
-                </p>
-            `;
-            printContent(htmlContent, 'A4', true);
+            printContentViaIframe(a4ReceiptHtml, 'A4');
         }
 
-        function cetakSingleItemA4(idToPrint) {
-            const pesanan = pesananList.find(p => p.id === idToPrint);
-            if (!pesanan) {
-                alert('Pesanan tidak ditemukan.');
+        function cetakItemTermal(index) {
+            const pesanan = pesananList[index];
+            if (!pesanan) return; // Should not happen
+            printContentViaIframe(generateThermalReceiptContent(pesanan), 'Thermal');
+        }
+
+        function cetakItemA4(index) {
+            const pesanan = pesananList[index];
+            if (!pesanan) return; // Should not happen
+            printContentViaIframe(generateA4ReceiptContent(pesanan), 'A4');
+        }
+
+        function cetakHistoryItemTermal(index) {
+            const pesanan = historyList[index];
+            if (!pesanan) return;
+            printContentViaIframe(generateThermalReceiptContent(pesanan), 'Thermal');
+        }
+
+        function cetakHistoryItemA4(index) {
+            const pesanan = historyList[index];
+            if (!pesanan) return;
+            printContentViaIframe(generateA4ReceiptContent(pesanan), 'A4');
+        }
+
+
+        function cetakDaftarPesananTermal() {
+            if (pesananList.length === 0) {
+                alert('Tidak ada pesanan dalam daftar untuk dicetak.');
                 return;
             }
-
-            let brandText = formatBrandForPrint(pesanan, 50);
-
-            const htmlContent = `
-                <h3>Detail Pesanan Individual</h3>
-                <p style="text-align: center;">Tanggal: ${new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
-                <hr style="border-top: 1px solid #000; margin: 20px 0;">
-                <div class="order-detail-box">
-                    <p><strong>Nama Pemesan:</strong> ${pesanan.nama}</p>
-                    <p><strong>Kategori:</strong> ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                    <p><strong>Parfum:</strong> ${brandText}</p>
-                    <p><strong>Jenis:</strong> ${pesanan.jenisParfum}</p>
-                    <p><strong>Jumlah:</strong> ${pesanan.jumlah}</p>
-                    <p><strong>Harga per Botol:</strong> Rp ${pesanan.hargaPerBotol.toLocaleString('id-ID')}</p>
-                    <p class="total"><strong>Total Harga:</strong> Rp ${pesanan.totalHargaItem.toLocaleString('id-ID')}</p>
-                    <p style="font-size: 0.9em; text-align: right;">Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
-                </div>
-                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-                    Detail pesanan ini berasal dari daftar pesanan yang tersimpan.
-                </p>
-            `;
-            printContent(htmlContent, 'A4', true);
+            let allThermalReceipts = '';
+            pesananList.forEach(pesanan => {
+                // Add content for each order, and a clear visual break for thermal
+                allThermalReceipts += generateThermalReceiptContent(pesanan) + '<br>------------------------------------<br><br>';
+            });
+            printContentViaIframe(allThermalReceipts, 'Thermal');
         }
 
         function cetakDaftarPesananA4() {
             if (pesananList.length === 0) {
-                alert('Tidak ada pesanan aktif untuk dicetak sebagai laporan.');
+                alert('Tidak ada pesanan dalam daftar untuk dicetak.');
                 return;
             }
-
-            let totalSaya = 0;
-            const currentDate = new Date();
-            let itemsHtml = '';
-
+            let allA4Receipts = '';
             pesananList.forEach(pesanan => {
-                let brandText = formatBrandForPrint(pesanan, 50);
-                itemsHtml += `
-                    <div class="order-item">
-                        <strong>Nama Pemesan: ${pesanan.nama}</strong>
-                        <div class="order-details">
-                            <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                            <p>Parfum: ${brandText}</p>
-                            <p>Jenis: ${pesanan.jenisParfum}</p>
-                            <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
-                            <p>Jumlah: ${pesanan.jumlah}</p>
-                            <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
-                            <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
-                        </div>
-                    </div>
-                `;
-                totalSaya += pesanan.totalHargaItem;
+                // Add content for each order, and force a page break for A4
+                allA4Receipts += generateA4ReceiptContent(pesanan) + '<div style="page-break-after: always;"></div>';
             });
+            printContentViaIframe(allA4Receipts, 'A4');
+        }
 
-            const htmlContent = `
-                <h3>Laporan Pesanan Parfum Aktif</h3>
-                <h4>By. Energia Aura Parfume</h4>
-                <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
-                <hr style="border-top: 1px solid #000; margin: 20px 0;">
-                ${itemsHtml}
-                <div class="total-overall">
-                    Total Keseluruhan Pesanan Aktif: <span id="receiptSayaTotalAmount">Rp ${totalSaya.toLocaleString('id-ID')}</span>
-                </div>
-                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-                    Laporan ini mencakup semua pesanan yang tersimpan hingga saat ini.
-                </p>
-            `;
-            printContent(htmlContent, 'A4', true);
+        function cetakRiwayatTermal() {
+            if (historyList.length === 0) {
+                alert('Tidak ada riwayat pesanan untuk dicetak.');
+                return;
+            }
+            let allThermalReceipts = '';
+            historyList.forEach(pesanan => {
+                allThermalReceipts += generateThermalReceiptContent(pesanan) + '<br>------------------------------------<br><br>';
+            });
+            printContentViaIframe(allThermalReceipts, 'Thermal');
         }
 
         function cetakRiwayatA4() {
@@ -1210,116 +1174,19 @@
                 alert('Tidak ada riwayat pesanan untuk dicetak.');
                 return;
             }
-            
-            let totalRiwayat = 0;
-            const currentDate = new Date();
-            let itemsHtml = '';
-
+            let allA4Receipts = '';
             historyList.forEach(pesanan => {
-                let brandText = formatBrandForPrint(pesanan, 50);
-                itemsHtml += `
-                    <div class="order-item">
-                        <strong>Nama Pemesan: ${pesanan.nama}</strong>
-                        <div class="order-details">
-                            <p>Kategori: ${pesanan.kategori.charAt(0).toUpperCase() + pesanan.kategori.slice(1)}</p>
-                            <p>Parfum: ${brandText}</p>
-                            <p>Jenis: ${pesanan.jenisParfum}</p>
-                            <p>Harga per Botol: Rp ${parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID')}</p>
-                            <p>Jumlah: ${pesanan.jumlah}</p>
-                            <p>Total Item: Rp ${parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID')}</p>
-                            <p>Waktu Pesan: ${new Date(pesanan.timestamp).toLocaleString('id-ID')}</p>
-                        </div>
-                    </div>
-                `;
-                totalRiwayat += pesanan.totalHargaItem;
+                allA4Receipts += generateA4ReceiptContent(pesanan) + '<div style="page-break-after: always;"></div>';
             });
-            const htmlContent = `
-                <h3>Laporan Riwayat Pemesanan</h3>
-                <h4>By. Energia Aura Parfume</h4>
-                <p style="text-align: center;">Tanggal Cetak: ${currentDate.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}</p>
-                <hr style="border-top: 1px solid #000; margin: 20px 0;">
-                ${itemsHtml}
-                <div class="total-overall">
-                    Total Keseluruhan Riwayat: <span id="receiptSayaTotalAmount">Rp ${totalRiwayat.toLocaleString('id-ID')}</span>
-                </div>
-                <p style="text-align: center; font-size: 0.9em; margin-top: 20px;">
-                    Laporan ini mencakup semua pesanan yang telah diarsipkan.
-                </p>
-            `;
-            printContent(htmlContent, 'A4', true);
+            printContentViaIframe(allA4Receipts, 'A4');
         }
 
-
-        // --- Cetak Thermal (Mini) Functions ---
-
-        function cetakPesananSaatIniTermal() {
-            const nama = document.getElementById('nama').value;
-            const selectedCategory = document.querySelector('input[name="kategori"]:checked');
-            const brandParfumPilihan = document.getElementById('brandParfum').value;
-            const keharumanLain = document.getElementById('keharumanLain').value;
-            const jenisParfumRadio = document.querySelector('input[name="jenisParfum"]:checked');
-            const jumlah = parseInt(document.getElementById('jumlah').value);
-
-            if (!nama || !selectedCategory || (!brandParfumPilihan && !keharumanLain) || !jenisParfumRadio || jumlah < 1) {
-                alert('Mohon lengkapi data pesanan di formulir terlebih dahulu untuk mencetak struk.');
-                return;
-            }
-
-            const jenisParfum = jenisParfumRadio.value;
-            const hargaPerBotol = parseFloat(jenisParfumRadio.getAttribute('data-harga'));
-            const totalHargaItem = hargaPerBotol * jumlah;
-
-            const singleOrder = {
-                nama,
-                kategori: selectedCategory.value,
-                brandParfumPilihan: brandParfumPilihan,
-                keharumanLain: keharumanLain,
-                jenisParfum, 
-                hargaPerBotol,
-                jumlah,
-                totalHargaItem,
-                timestamp: new Date().toISOString()
-            };
-
-            const htmlContent = generateThermalReceiptContentHTML([singleOrder], `STRUK PEMESANAN UNTUK:\n${nama.toUpperCase()}`, '', true, false);
-            printContent(htmlContent, 'Thermal', true);
-        }
-
-        function cetakSingleItemTermal(idToPrint) {
-            const pesanan = pesananList.find(p => p.id === idToPrint);
-            if (!pesanan) {
-                alert('Pesanan tidak ditemukan.');
-                return;
-            }
-            const htmlContent = generateThermalReceiptContentHTML([pesanan], `STRUK PEMESANAN UNTUK:\n${pesanan.nama.toUpperCase()}`, '', false, true);
-            printContent(htmlContent, 'Thermal', true);
-        }
-
-        function cetakDaftarPesananTermal() {
-            if (pesananList.length === 0) {
-                alert('Tidak ada pesanan aktif untuk dicetak struk.');
-                return;
-            }
-            const htmlContent = generateThermalReceiptContentHTML(pesananList, 'STRUK DAFTAR PESANAN AKTIF');
-            printContent(htmlContent, 'Thermal', true);
-        }
-
-        function cetakRiwayatTermal() {
-            if (historyList.length === 0) {
-                alert('Tidak ada riwayat pesanan untuk dicetak struk.');
-                return;
-            }
-            const htmlContent = generateThermalReceiptContentHTML(historyList, 'STRUK RIWAYAT PESANAN');
-            printContent(htmlContent, 'Thermal', true);
-        }
-
-
-        // Panggil fungsi ini saat halaman dimuat
-        window.onload = function() {
-            updateHarga();
-            loadPesanan();
-            loadHistory();
-        };
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateHarga(); // Initialize price display on load
+            showBrandOptions(); // Initialize brand options if a category is pre-selected (e.g., from local storage)
+        });
     </script>
 </body>
 </html>
