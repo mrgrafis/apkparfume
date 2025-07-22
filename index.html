@@ -253,7 +253,7 @@
             margin: 0; /* Pastikan margin 0 */
             padding: 0; /* Padding 0 untuk kontrol maksimal */
             font-family: 'Consolas', 'Courier New', monospace; /* Font monospace lebih cocok untuk termal */
-            font-size: 11px; /* **NAIKKAN FONT LEBIH BESAR LAGI KE 11PX** */
+            font-size: 12px; /* **NAIKKAN FONT KE 12PX UNTUK LEBIH JELAS** */
             line-height: 1.2;
             color: #000;
             box-sizing: border-box; /* Sangat Penting: Pastikan padding/border tidak menambah lebar */
@@ -310,7 +310,7 @@
             width: 100%; 
             font-weight: bold;
             white-space: normal; 
-            word-break: break-word; /* Menggunakan break-word untuk mengatasi kata terlalu panjang */
+            word-break: break-word; /* MENGGUNAKAN BREAK-WORD UNTUK MENGATASI KATA TERLALU PANJANG */
             font-size: 1em; /* Ukuran font nama item */
             margin-bottom: 0.5mm !important;
         }
@@ -845,6 +845,8 @@
             
             if (!brandText) return '';
 
+            // This truncation logic is for general purpose. 
+            // For thermal, we'll use a more specific method or rely on word-break.
             if (brandText.length > maxLength) {
                 const trimmedText = brandText.substring(0, maxLength - 3);
                 const lastSpaceIndex = trimmedText.lastIndexOf(' ');
@@ -887,7 +889,7 @@
                             margin: 0; 
                             padding: 0; 
                             font-family: 'Consolas', 'Courier New', monospace; 
-                            font-size: 11px; 
+                            font-size: 12px; /* **FONT INI JUGA HARUS SAMA DENGAN DI ATAS (12PX)** */
                             line-height: 1.2;
                             color: #000;
                             box-sizing: border-box; 
@@ -949,12 +951,7 @@
                         /* Media print untuk spesifik iframe */
                         @media print {
                             body { margin: 0; padding: 0; }
-                            .receipt-thermal { /* Pastikan gaya thermal diterapkan hanya jika paperType adalah Thermal */
-                                /* Karena CSS ini sudah spesifik di class, tidak perlu @media print lagi jika sudah diisolasi */
-                            }
-                            .receipt-a4 { /* Pastikan gaya A4 diterapkan hanya jika paperType adalah A4 */
-                                /* Sama seperti di atas */
-                            }
+                            /* Karena CSS ini sudah spesifik di class, tidak perlu @media print lagi jika sudah diisolasi */
                         }
                     </style>
                 </head>
@@ -992,25 +989,35 @@
                 itemsHtml = `<div style="text-align: center; font-size: 0.8em;">Tidak ada item untuk dicetak.</div>`; 
             } else {
                 orders.forEach(pesanan => {
-                    const maxLengthItemName = (isSingleOrderFromForm || isSingleItemFromList) ? 16 : 18; 
-                    let brandText = formatBrandForPrint(pesanan, maxLengthItemName);
+                    // Penyesuaian panjang nama item untuk thermal print yang rapat
+                    // Ini adalah pendekatan yang lebih baik daripada memotong teks secara keras.
+                    // Biarkan CSS word-break yang bekerja.
+                    let brandText = pesanan.brandParfumPilihan;
+                    if (pesanan.keharumanLain) {
+                        brandText = `${brandText ? brandText + ' / ' : ''}${pesanan.keharumanLain}`; 
+                    }
                     
+                    // Untuk single order, kita bisa membuat nama item lebih ringkas jika perlu
                     if (isSingleOrderFromForm || isSingleItemFromList) {
                         let itemCombinedName = '';
                         if (pesanan.brandParfumPilihan && pesanan.brandParfumPilihan !== '-- Pilih Brand Parfum --') {
+                            // Ambil kata pertama dari brand, dan gabungkan dengan jenis
                             let brandAbbr = pesanan.brandParfumPilihan.split(' ')[0];
-                            if (brandAbbr.length > 5) brandAbbr = brandAbbr.substring(0, 5); 
+                            if (brandAbbr.length > 5) brandAbbr = brandAbbr.substring(0, 5); // Singkat jika terlalu panjang
                             itemCombinedName = `${brandAbbr.toUpperCase()} ${pesanan.jenisParfum.toUpperCase()}`;
                         } else if (pesanan.keharumanLain) {
+                            // Ambil kata pertama dari keharuman lain
                             itemCombinedName = `${pesanan.keharumanLain.split(' ')[0].toUpperCase()} ${pesanan.jenisParfum.toUpperCase()}`;
                         } else {
                             itemCombinedName = pesanan.jenisParfum.toUpperCase();
                         }
+                        // Batasi panjang nama jika masih terlalu panjang setelah disingkat
                         if (itemCombinedName.length > 20) { 
                             itemCombinedName = itemCombinedName.substring(0, 17) + '...';
                         }
-                        brandText = itemCombinedName; 
+                        brandText = itemCombinedName; // Gunakan nama yang diringkas ini untuk item thermal
                     }
+
 
                     const itemPriceFormatted = parseFloat(pesanan.totalHargaItem).toLocaleString('id-ID');
                     const hargaPerBotolFormatted = parseFloat(pesanan.hargaPerBotol).toLocaleString('id-ID');
