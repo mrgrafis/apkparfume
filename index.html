@@ -898,28 +898,543 @@
             pasangan: [ "Calvin Klein Obsessed For Men & Women", "Jo Malone English Pear & Freesia (Unisex/Pairing)", "Tom Ford Ombre Leather (Often Paired)", "Byredo Mixed Emotions (Often Paften Paired)", "Initio Parfums Prives Oud for Greatness (Pairing)", "Montale Intense Cafe & Roses Musk (Pairing)", "Le Labo Bergamote 22 & Santal 33 (Pairing)", "Roja Dove Scandal Pour Homme & Enigma Pour Femme (Pairing)", "Creed Aventus & Aventus for Her (Pairing)", "YSL Y & Libre (Pairing)", "Dior Sauvage & J'adore (Pairing)", "Chanel Bleu de Chanel & Coco Mademoiselle (Pairing)", "Paco Rabanne 1 Million & Lady Million (Pairing)", "Giorgio Armani Acqua di Gio & My Way (Pairing)", "Versace Eros & Bright Crystal (Pairing)", "Dolce & Gabbana The One For Men & The One For Women (Pairing)", "Givenchy Gentleman & L'Interdit (Pairing)", "Gucci Guilty Pour Homme & Guilty Pour Femme (Pairing)", "Hermès Terre d'Hermès & Twilly d'Hermès (Pairing)", "Polo Ralph Lauren Blue & Romance (Pairing)", "Prada L'Homme & La Femme (Pairing)", "Viktor & Rolf Spicebomb & Flowerbomb (Pairing)", "Penhaligon's Endymion & Luna (Pairing)", "Maison Margiela Replica By the Fireplace & Jazz Club (Pairing)", "Amouage Interlude Man & Interlude Woman (Pairing)", "Xerjoff Naxos & Erba Pura (Pairing)", "Bvlgari Man & Omnia Crystalline (Pairing)", "Hugo Boss Bottled & Boss The Scent for Her (Pairing)", "Lacoste L.12.12 Pour Homme & Pour Femme (Pairing)", "Montblanc Explorer & Legend Spirit (Pairing for fresh)", "Nishane Hacivat & Ani (Pairing)", "Ormonde Jayne Ormonde Man & Woman (Pairing)", "Parfums de Marly Layton & Delina (Pairing)", "Serge Lutens Chergui & Ambre Sultan (Pairing for oriental)", "Tiziana Terenzi Kirke & Andromeda (Pairing)", "Zara Vibrant Leather & Zara Orchid (Pairing)", "Zarkoperfume Cloud Collection No.1 & No.2 (Pairing)", "Bottega Veneta Pour Homme & Femme (Pairing)", "Burberry Brit For Men & Her (Pairing)", "Calvin Klein Eternity for Men & Women (Pairing)", "Coach For Men & Women (Pairing)", "Diesel Only The Brave & Loverdose (Pairing)", "Dunhill Icon & Desire (Pairing)", "Elizabeth Arden 5th Avenue & Green Tea (Pairing)", "Estee Lauder Beautiful & Pleasures (Pairing)", "Guerlain L'Homme Ideal & Mon Guerlain (Pairing)", "Guess Seductive Homme & Seductive (Pairing)" ]
         };
 
-        // NEW: Data Katalog Parfum - Akan diisi secara dinamis
-        let parfumCatalogData = [];
+        // Data Katalog Parfum - Akan diisi secara dinamis dengan detail
+let parfumCatalogData = [];
 
-        // Function to populate parfumCatalogData from brandParfumData
-        function populateParfumCatalogData() {
-            parfumCatalogData = [];
-            for (const category in brandParfumData) {
-                if (brandParfumData.hasOwnProperty(category)) {
-                    brandParfumData[category].forEach(brandName => {
-                        parfumCatalogData.push({
-                            name: brandName,
-                            category: category,
-                            description: `[DESKRIPSI PARFUM ${brandName.toUpperCase()} - ${category.toUpperCase()}] Ini adalah deskripsi default. Silakan ganti dengan deskripsi rinci tentang aroma, inspirasi, dan nuansa unik parfum ini.`,
-                            notes: ["[Top Note]", "[Middle Note]", "[Base Note]"],
-                            characteristics: ["[Karakteristik 1]", "[Karakteristik 2]", "[Karakteristik 3]"],
-                            idealFor: `[COCOK UNTUK - ${category.toUpperCase()}] Individu yang menghargai aroma ${brandName}.`
-                        });
-                    });
+// Fungsi untuk mengisi parfumCatalogData dari brandParfumData dengan detail spesifik
+function populateParfumCatalogData() {
+    parfumCatalogData = []; // Kosongkan data sebelumnya untuk memastikan tidak ada duplikasi
+    for (const category in brandParfumData) {
+        if (brandParfumData.hasOwnProperty(category)) {
+            brandParfumData[category].forEach(brandName => {
+                let description = ""; // Akan diisi lengkap
+                let notes = {
+                    top: [],
+                    middle: [],
+                    base: []
+                };
+                let characteristics = [];
+                let idealFor = ""; // Akan diisi lengkap
+
+                // --- DETAIL LENGKAP UNTUK PARFUM PRIA ---
+                if (category === "pria") {
+                    switch (brandName) {
+                        case "Acqua di Parma":
+                            description = "Acqua di Parma Colonia adalah wewangian klasik Italia yang tak lekang oleh waktu, memancarkan elegansi yang ringan dan kesegaran yang canggih. Aroma ini bersih, cerah, dan sangat menyegarkan.";
+                            notes = { top: ["Lemon", "Sweet Orange", "Bergamot Calabrian"], middle: ["Lavender", "Rose", "Verbena", "Rosemary"], base: ["Vetiver", "Sandalwood", "Patchouli"] };
+                            characteristics = ["Citrus", "Aromatic", "Fresh", "Classic", "Bright"];
+                            idealFor = "Pria yang menghargai elegansi klasik, kesegaran abadi, dan gaya Italia yang understated. Sempurna untuk penggunaan sehari-hari, musim semi dan panas, atau acara siang hari.";
+                            break;
+                        case "Armani Code":
+                            description = "Armani Code adalah parfum oriental-spicy yang sensual dan misterius untuk pria. Aroma ini modern dan menggoda, memadukan kesegaran lemon dengan kehangatan rempah dan kulit.";
+                            notes = { top: ["Bergamot", "Lemon"], middle: ["Star Anise", "Olive Blossom", "Guaiac Wood"], base: ["Kulit", "Tonka Bean", "Amber", "Tobacco"] };
+                            characteristics = ["Warm Spicy", "Leather", "Citrus", "Amber", "Aromatic"];
+                            idealFor = "Pria yang ingin tampil misterius, percaya diri, dan menarik. Sangat cocok untuk malam hari, kencan, atau acara formal di musim gugur/dingin.";
+                            break;
+                        case "Bleu de Chanel":
+                            description = "Bleu de Chanel adalah aroma woody-aromatic untuk pria, perpaduan elegan antara kekuatan dan kebebasan. Aroma yang segar, bersih, dan modern, cocok untuk pria yang mandiri dan berkarisma.";
+                            notes = { top: ["Grapefruit", "Lemon", "Peppermint", "Pink Pepper"], middle: ["Ginger", "Nutmeg", "Jasmine", "Iso E Super"], base: ["Incense", "Vetiver", "Cedar", "Sandalwood", "Patchouli", "White Musk"] };
+                            characteristics = ["Woody", "Aromatic", "Citrus", "Warm Spicy", "Fresh Spicy", "Amber"];
+                            idealFor = "Pria yang elegan, misterius, dan berkelas. Sangat serbaguna, cocok untuk penggunaan sehari-hari, kantor, maupun acara formal.";
+                            break;
+                        case "Boss Bottled":
+                            description = "Boss Bottled adalah parfum woody-spicy klasik yang melambangkan pria modern dengan ambisi dan keberanian. Aromanya segar, tajam, dan hangat, memberikan kesan percaya diri dan profesional.";
+                            notes = { top: ["Apel", "Bergamot", "Lemon", "Oakmoss", "Geranium", "Plum"], middle: ["Mahogany", "Carnation", "Cinnamon"], base: ["Sandalwood", "Cedar", "Vanilla", "Vetiver", "Olive Tree"] };
+                            characteristics = ["Fruity", "Warm Spicy", "Woody", "Vanilla", "Cinnamon"];
+                            idealFor = "Pria profesional dan berorientasi pada tujuan. Cocok untuk penggunaan sehari-hari di kantor, pertemuan, atau acara semi-formal.";
+                            break;
+                        case "Bvlgari Man":
+                            description = "Bvlgari Man adalah parfum neo-oriental woody yang elegan dan modern. Aroma ini memancarkan maskulinitas yang murni dan berkarisma, cocok untuk pria yang kuat dan berwibawa.";
+                            notes = { top: ["Lotus", "Bergamot", "Violet Leaf", "Pear"], middle: ["Woody Notes", "Vetiver", "Sandalwood", "Amber", "Cashmere Wood"], base: ["Benzoin", "Musk", "White Honey", "Tonka Bean"] };
+                            characteristics = ["Woody", "Warm Spicy", "Balsamic", "Amber", "Powdery"];
+                            idealFor = "Pria yang percaya diri, tenang, dan memiliki kehadiran yang kuat. Ideal untuk penggunaan sehari-hari di kantor atau acara formal di musim gugur/dingin.";
+                            break;
+                        case "Carolina Herrera Bad Boy":
+                            description = "Bad Boy adalah parfum oriental-spicy yang provokatif dan berani untuk pria, melambangkan dualitas pria modern yang kuat namun sensitif. Botol berbentuk kilat yang ikonik mencerminkan karakternya yang misterius.";
+                            notes = { top: ["White Pepper", "Black Pepper", "Bergamot"], middle: ["Sage", "Cedar"], base: ["Tonka Bean", "Cacao", "Amberwood"] };
+                            characteristics = ["Warm Spicy", "Cacao", "Amber", "Woody", "Aromatic"];
+                            idealFor = "Pria yang berani, percaya diri, dan suka menonjol. Sangat cocok untuk malam hari, pesta, atau saat ingin menarik perhatian.";
+                            break;
+                        case "Chanel Allure Homme Sport":
+                            description = "Chanel Allure Homme Sport adalah parfum fresh-spicy yang dinamis dan berenergi untuk pria aktif. Aroma ini memadukan kesegaran citrus dengan sentuhan rempah dan kehangatan woody.";
+                            notes = { top: ["Orange", "Mandarin Orange", "Sea Notes", "Aldehydes"], middle: ["Pepper", "Neroli", "Cedar"], base: ["Tonka Bean", "Vanila", "White Musk", "Amber", "Vetiver"] };
+                            characteristics = ["Citrus", "Marine", "Fresh Spicy", "Aldehydic", "Woody"];
+                            idealFor = "Pria yang sporty, dinamis, dan menyukai kesegaran yang energik. Sempurna untuk penggunaan sehari-hari, setelah berolahraga, atau di cuaca hangat.";
+                            break;
+                        case "Christian Dior Sauvage":
+                            description = "Sauvage adalah parfum pria yang segar, mentah, dan mulia. Terinspirasi oleh ruang terbuka yang luas, aroma ini memancarkan kekuatan dan kebebasan dengan komposisi yang sangat terkontrol namun liar.";
+                            notes = { top: ["Bergamot Calabria", "Lada Sichuan"], middle: ["Ambroxan", "Elemi", "Geranium", "Lavender"], base: ["Cedar", "Labdanum", "Patchouli", "Vetiver"] };
+                            characteristics = ["Fresh Spicy", "Amber", "Citrus", "Woody", "Musky", "Aromatic"];
+                            idealFor = "Pria modern yang berani, misterius, dan suka petualangan. Cocok untuk penggunaan sehari-hari maupun malam hari, memberikan kesan maskulin dan percaya diri.";
+                            break;
+                        case "Creed Aventus":
+                            description = "Creed Aventus adalah parfum ikonik yang merayakan kekuatan, kesuksesan, dan keberanian. Terinspirasi dari kehidupan dramatis Kaisar Napoleon, aroma ini memancarkan kemewahan, keunikan, dan kepercayaan diri yang tak tertandingi.";
+                            notes = { top: ["Nanas", "Bergamot", "Blackcurrant", "Apel"], middle: ["Birch", "Patchouli", "Melati Mesir", "Mawar"], base: ["Musk", "Oakmoss", "Ambergris", "Vanila"] };
+                            characteristics = ["Fruity", "Sweet", "Smoky", "Leather", "Woody", "Musky"];
+                            idealFor = "Pria ambisius, karismatik, dan berkelas yang ingin meninggalkan kesan tak terlupakan. Sangat cocok untuk acara penting, pertemuan bisnis, atau saat ingin tampil istimewa.";
+                            break;
+                        case "Davidoff Cool Water":
+                            description = "Davidoff Cool Water adalah parfum aromatik akuatik yang segar dan bersih, terinspirasi oleh kekuatan samudra. Aroma ini melambangkan vitalitas dan maskulinitas alami.";
+                            notes = { top: ["Sea Water", "Mint", "Green Notes", "Lavender", "Coriander", "Rosemary", "Calone"], middle: ["Sandalwood", "Neroli", "Geranium", "Jasmine"], base: ["Musk", "Oakmoss", "Cedar", "Tobacco", "Amber"] };
+                            characteristics = ["Aromatic", "Marine", "Fresh Spicy", "Green", "Woody"];
+                            idealFor = "Pria yang menyukai aroma segar, sporty, dan klasik. Ideal untuk penggunaan sehari-hari, terutama di cuaca hangat dan aktivitas outdoor.";
+                            break;
+                        case "Dior Homme":
+                            description = "Dior Homme adalah parfum woody-floral-musk yang elegan dan canggih untuk pria. Dikenal dengan sentuhan irisnya yang unik, aroma ini memancarkan modernitas dan daya tarik yang lembut namun kuat.";
+                            notes = { top: ["Lavender", "Bergamot", "Sage"], middle: ["Iris", "Cacao", "Amber"], base: ["Kulit", "Vetiver", "Patchouli"] };
+                            characteristics = ["Floral", "Powdery", "Woody", "Cacao", "Leather"];
+                            idealFor = "Pria yang modern, berkelas, dan menghargai detail. Cocok untuk penggunaan sehari-hari di kantor, acara semi-formal, atau kencan di musim dingin.";
+                            break;
+                        case "Dolce & Gabbana The One For Men":
+                            description = "The One For Men adalah parfum woody-spicy yang elegan dan sensual. Aroma ini kaya dan maskulin, dirancang untuk pria yang menawan dan berkarisma.";
+                            notes = { top: ["Grapefruit", "Coriander", "Basil"], middle: ["Ginger", "Cardamom", "Orange Blossom"], base: ["Amber", "Tobacco", "Cedar"] };
+                            characteristics = ["Warm Spicy", "Amber", "Tobacco", "Citrus", "Woody"];
+                            idealFor = "Pria yang menawan dan percaya diri. Ideal untuk malam hari, acara formal, dan kencan di musim gugur/dingin.";
+                            break;
+                        case "Dunhill Icon":
+                            description = "Dunhill Icon adalah parfum woody-aromatic yang elegan dan klasik, terinspirasi oleh perjalanan panjang. Aroma yang segar, maskulin, dan canggih.";
+                            notes = { top: ["Bergamot", "Neroli", "Black Pepper", "Petitgrain"], middle: ["Lavender", "Sage", "Juniper Berries", "Cardamom"], base: ["Vetiver", "Oud", "Leather", "Oakmoss"] };
+                            characteristics = ["Aromatic", "Fresh Spicy", "Woody", "Citrus", "Warm Spicy"];
+                            idealFor = "Pria yang berkelas, petualang, dan menghargai tradisi. Cocok untuk penggunaan sehari-hari maupun acara formal.";
+                            break;
+                        case "Givenchy Gentleman":
+                            description = "Givenchy Gentleman adalah parfum woody-floral-musk modern yang memadukan kekuatan dengan kelembutan. Aroma ini elegan, powdery, dan sangat maskulin.";
+                            notes = { top: ["Pir", "Cardamom", "Pineapple"], middle: ["Iris", "Geranium", "Lavender"], base: ["Kulit", "Patchouli", "Black Vanilla Husk"] };
+                            characteristics = ["Woody", "Powdery", "Aromatic", "Floral", "Sweet"];
+                            idealFor = "Pria modern yang percaya diri, lembut, namun tetap tegas. Ideal untuk penggunaan sehari-hari, kantor, dan acara semi-formal.";
+                            break;
+                        case "Gucci Guilty Pour Homme":
+                            description = "Gucci Guilty Pour Homme adalah parfum woody-aromatic yang berani dan menggoda, merepresentasikan pria yang suka tantangan dan hidup di luar batas.";
+                            notes = { top: ["Lemon", "Lavender"], middle: ["Orange Blossom"], base: ["Cedar", "Patchouli"] };
+                            characteristics = ["Aromatic", "Citrus", "Woody", "Floral", "Fresh Spicy"];
+                            idealFor = "Pria yang percaya diri, berani, dan suka bersosialisasi. Cocok untuk penggunaan malam hari, pesta, atau saat ingin tampil menarik.";
+                            break;
+                        case "Hermès Terre d'Hermès":
+                            description = "Terre d'Hermès adalah parfum woody-spicy yang elegan dan earthy, terinspirasi dari elemen bumi. Aroma ini maskulin, mineral, dan sangat khas, melambangkan koneksi pria dengan alam.";
+                            notes = { top: ["Orange", "Grapefruit"], middle: ["Pepper", "Pelargonium"], base: ["Benzoin", "Patchouli", "Cedar", "Vetiver"] };
+                            characteristics = ["Citrus", "Woody", "Earthy", "Spicy", "Mineral"];
+                            idealFor = "Pria yang menghargai alam, elegan, dan memiliki karisma yang tenang. Cocok untuk penggunaan sehari-hari, kantor, dan acara formal.";
+                            break;
+                        case "Invictus Paco Rabanne":
+                            description = "Invictus adalah parfum woody-aquatic yang segar dan energik, melambangkan kemenangan dan kekuatan. Aroma ini dinamis, sporty, dan sangat maskulin.";
+                            notes = { top: ["Grapefruit", "Sea Notes", "Mandarin Orange"], middle: ["Bay Leaf", "Jasmine"], base: ["Ambroxan", "Guaiac Wood", "Oakmoss", "Patchouli"] };
+                            characteristics = ["Aromatic", "Marine", "Citrus", "Fresh Spicy", "Woody"];
+                            idealFor = "Pria muda yang sporty, ambisius, dan selalu mencari kemenangan. Ideal untuk penggunaan sehari-hari, olahraga, atau acara kasual.";
+                            break;
+                        case "Jo Malone Wood Sage & Sea Salt (Men)":
+                            description = "Wood Sage & Sea Salt adalah parfum aromatik yang segar dan bebas, menangkap esensi pantai Inggris. Aroma yang earthy, mineral, dan sedikit asin, cocok untuk pria dan wanita.";
+                            notes = { top: ["Ambrette Seeds", "Sea Salt", "Sage"], middle: ["Seaweed", "Grapefruit"], base: ["Woody Notes"] };
+                            characteristics = ["Aromatic", "Marine", "Salty", "Woody", "Musky"];
+                            idealFor = "Pria yang menyukai aroma segar, alami, dan tidak terlalu formal. Ideal untuk penggunaan sehari-hari dan musim panas.";
+                            break;
+                        case "Montblanc Explorer":
+                            description = "Montblanc Explorer adalah parfum woody-aromatic yang terinspirasi dari petualangan keliling dunia. Aroma ini segar, maskulin, dan sophisticated, cocok untuk pria yang modern dan berjiwa penjelajah.";
+                            notes = { top: ["Bergamot", "Pink Pepper", "Clary Sage"], middle: ["Haitian Vetiver", "Kulit"], base: ["Ambroxan", "Akigalawood", "Patchouli"] };
+                            characteristics = ["Citrus", "Woody", "Amber", "Leather", "Fresh Spicy"];
+                            idealFor = "Pria yang berjiwa petualang, ingin menjelajahi dunia, dan memiliki gaya hidup modern. Cocok untuk penggunaan sehari-hari dan perjalanan.";
+                            break;
+                        case "Nautica Voyage":
+                            description = "Nautica Voyage adalah parfum akuatik-woody yang sangat segar dan ringan, menangkap esensi angin laut dan petualangan di lautan. Aroma ini bersih, energik, dan sangat populer.";
+                            notes = { top: ["Green Apple", "Green Leaves"], middle: ["Mimosa", "Lotus", "Amber"], base: ["Musk", "Cedar", "Oakmoss"] };
+                            characteristics = ["Aquatic", "Fruity", "Green", "Fresh", "Woody"];
+                            idealFor = "Pria yang menyukai aroma segar, bersih, dan kasual. Sangat cocok untuk penggunaan sehari-hari, terutama di cuaca panas dan aktivitas outdoor.";
+                            break;
+                        case "Polo Ralph Lauren Blue":
+                            description = "Polo Blue adalah parfum aromatik-fougere yang segar dan energik, terinspirasi oleh kebebasan samudra dan langit biru tak berujung. Aroma ini clean, sporty, dan maskulin.";
+                            notes = { top: ["Melon", "Mandarin Orange", "Cucumber"], middle: ["Basil", "Sage", "Geranium"], base: ["Musk", "Woody Notes", "Suede"] };
+                            characteristics = ["Aromatic", "Fresh Spicy", "Green", "Aquatic", "Woody"];
+                            idealFor = "Pria yang sporty, aktif, dan menyukai gaya hidup bersih serta energik. Ideal untuk penggunaan sehari-hari dan musim panas.";
+                            break;
+                        case "Prada L'Homme":
+                            description = "Prada L'Homme adalah parfum amber-woody yang elegan dan sophisticated, sebuah interpretasi modern dari aroma klasik. Aroma ini bersih, powdery, dan sangat berkelas.";
+                            notes = { top: ["Neroli", "Black Pepper", "Cardamom", "Carrot Seeds"], middle: ["Iris", "Amber", "Violet", "Geranium"], base: ["Patchouli", "Cedar", "Sandalwood"] };
+                            characteristics = ["Powdery", "Iris", "Amber", "Woody", "Musky"];
+                            idealFor = "Pria modern yang elegan, berkelas, dan menghargai kebersihan serta kesederhanaan yang mewah. Ideal untuk kantor, acara formal, dan penggunaan sehari-hari.";
+                            break;
+                        case "Viktor & Rolf Spicebomb":
+                            description = "Spicebomb adalah parfum woody-spicy yang eksplosif dan adiktif, memadukan rempah-rempah yang kuat dengan sentuhan manis dan kulit. Aroma ini berani, hangat, dan sangat maskulin.";
+                            notes = { top: ["Pink Pepper", "Elemi", "Bergamot", "Grapefruit"], middle: ["Cinnamon", "Saffron", "Paprika"], base: ["Kulit", "Tembakau", "Vetiver"] };
+                            characteristics = ["Warm Spicy", "Tobacco", "Leather", "Cinnamon", "Sweet"];
+                            idealFor = "Pria yang berani, percaya diri, dan suka menjadi pusat perhatian. Sangat cocok untuk malam hari, musim dingin, atau acara khusus.";
+                            break;
+                        case "YSL Y":
+                            description = "YSL Y adalah parfum aromatik-fougere yang segar dan kuat, mewakili pria yang berani mengikuti passion-nya dan mencapai kesuksesan. Aroma ini modern, energik, dan maskulin.";
+                            notes = { top: ["Apel", "Ginger", "Bergamot"], middle: ["Sage", "Juniper Berries", "Geranium"], base: ["Amberwood", "Tonka Bean", "Cedar", "Vetiver", "Olibanum"] };
+                            characteristics = ["Aromatic", "Fresh Spicy", "Amber", "Fruity", "Woody"];
+                            idealFor = "Pria muda yang ambisius, kreatif, dan berani mengambil risiko. Cocok untuk penggunaan sehari-hari, kantor, maupun acara semi-formal.";
+                            break;
+                        // ... (Lanjutkan untuk semua parfum pria lainnya dengan detail spesifik)
+                        case "Azzaro Wanted":
+                            description = "Azzaro Wanted adalah parfum woody-spicy-citrus yang berani dan menggoda, dirancang untuk pria yang ingin 'diinginkan'. Sebuah perpaduan segar dan hangat yang kuat.";
+                            notes = { top: ["Lemon", "Ginger", "Lavender", "Mint"], middle: ["Cardamom Guatemala", "Juniper", "Apple", "Geranium"], base: ["Tonka Bean", "Amberwood", "Vetiver"] };
+                            characteristics = ["Warm Spicy", "Citrus", "Aromatic", "Woody", "Fruity"];
+                            idealFor = "Pria yang percaya diri, suka tampil menonjol, dan ingin meninggalkan kesan kuat. Ideal untuk malam hari dan acara sosial.";
+                            break;
+                        case "Bentley For Men Intense":
+                            description = "Bentley For Men Intense adalah parfum oriental-spicy yang sangat mewah dan kaya, dengan fokus pada aroma rum dan kulit. Memberikan kesan yang sangat maskulin, kuat, dan berkelas.";
+                            notes = { top: ["Bergamot", "Black Pepper", "Bay Leaf"], middle: ["Rum", "Clary Sage", "Cinnamon", "Woody Notes", "Geranium"], base: ["Kulit", "Benzoin", "Incense", "Cedar", "Patchouli"] };
+                            characteristics = ["Warm Spicy", "Leather", "Balsamic", "Amber", "Woody"];
+                            idealFor = "Pria yang menghargai kemewahan, kehangatan, dan aura maskulin yang dalam. Sangat cocok untuk malam hari, musim dingin, dan acara formal.";
+                            break;
+                        case "Burberry Brit For Men":
+                            description = "Burberry Brit For Men adalah parfum woody-spicy yang elegan dan modern, dengan sentuhan oriental. Aroma ini hangat, klasik, namun tetap kontemporer.";
+                            notes = { top: ["Green Mandarin", "Ginger", "Bergamot", "Cardamom"], middle: ["Wild Rose", "Nutmeg", "Cedar"], base: ["Tonka Bean", "Grey Musk", "Patchouli", "Woody Notes"] };
+                            characteristics = ["Warm Spicy", "Amber", "Woody", "Rose", "Fresh Spicy"];
+                            idealFor = "Pria yang stylish, santai namun tetap berkelas. Ideal untuk penggunaan sehari-hari dan acara semi-formal di musim gugur/dingin.";
+                            break;
+                        case "Calvin Klein Eternity for Men":
+                            description = "Calvin Klein Eternity for Men adalah parfum aromatik-fougere klasik yang melambangkan maskulinitas tradisional dan keabadian. Aroma ini bersih, segar, dan menenangkan.";
+                            notes = { top: ["Lavender", "Mandarin Orange", "Bergamot", "Lemon"], middle: ["Coriander", "Lily", "Orange Blossom", "Juniper Berries", "Basil", "Jasmine", "Sage", "Lily-of-the-Valley"], base: ["Sandalwood", "Amber", "Musk", "Vetiver", "Brazilian Rosewood"] };
+                            characteristics = ["Aromatic", "Fresh Spicy", "Green", "Woody", "Citrus"];
+                            idealFor = "Pria yang menghargai nilai-nilai klasik, kesetiaan, dan stabilitas. Cocok untuk penggunaan sehari-hari dan di kantor.";
+                            break;
+                        case "Coach For Men":
+                            description = "Coach For Men adalah parfum woody-aromatic yang dinamis dan segar, terinspirasi dari energi kota New York. Aroma ini modern, maskulin, dan energik.";
+                            notes = { top: ["Green Nashi Pear", "Bergamot", "Kumquat"], middle: ["Cardamom", "Coriander", "Geranium"], base: ["Vetiver Haiti", "Suede", "Ambergris"] };
+                            characteristics = ["Aromatic", "Fruity", "Woody", "Fresh Spicy"];
+                            idealFor = "Pria yang urban, stylish, dan berjiwa petualang. Ideal untuk penggunaan sehari-hari dan suasana kasual.";
+                            break;
+                        // Placeholder untuk sisa parfum pria
+                        default:
+                            description = `Detail aroma dan karakteristik untuk parfum pria **${brandName}** akan segera ditambahkan di sini. Parfum ini memiliki profil aroma yang menarik.`;
+                            notes = { top: ["(Segar/Citrus/Rempah)"], middle: ["(Aromatik/Woody/Herbal)"], base: ["(Musky/Amber/Kulit)"] };
+                            characteristics = ["(Maskulin)", "(Modern)", "(Berkarakter)"];
+                            idealFor = `Ideal untuk pria yang mencari aroma **${brandName}** untuk (aktivitas/musim/kesan) tertentu.`;
+                            break;
+                    }
                 }
-            }
-            console.log("Parfum Catalog Data Populated:", parfumCatalogData.length, "items");
+                // --- DETAIL LENGKAP UNTUK PARFUM WANITA ---
+                else if (category === "wanita") {
+                    switch (brandName) {
+                        case "Ariana Grande Cloud":
+                            description = "Ariana Grande Cloud adalah parfum gourmand-fruity yang lembut dan manis, memberikan kesan nyaman seperti awan. Aroma ini modern, menyenangkan, dan sangat populer.";
+                            notes = { top: ["Lavender", "Pear", "Bergamot"], middle: ["Coconut", "Praline", "Vanilla Orchid"], base: ["Musk", "Woody Notes"] };
+                            characteristics = ["Sweet", "Vanilla", "Fruity", "Coconut", "Musky", "Gourmand"];
+                            idealFor = "Wanita muda yang ceria, suka aroma manis yang lembut dan nyaman. Ideal untuk penggunaan sehari-hari dan musim dingin/gugur.";
+                            break;
+                        case "Black Opium YSL":
+                            description = "Black Opium dari YSL adalah parfum adiktif dengan perpaduan kopi hitam, bunga putih yang memikat, dan vanila yang sensual. Memberikan kesan misterius, modern, dan sangat memikat.";
+                            notes = { top: ["Pear", "Pink Pepper", "Orange Blossom"], middle: ["Kopi", "Melati", "Almond Pahit", "Licorice"], base: ["Vanila", "Patchouli", "Cedar", "Kayu Kasmir"] };
+                            characteristics = ["Warm Spicy", "Coffee", "Vanilla", "Sweet", "Floral", "Gourmand"];
+                            idealFor = "Wanita yang berani, energik, dan suka tampil misterius serta menggoda. Cocok untuk malam hari, pesta, atau saat ingin tampil berani.";
+                            break;
+                        case "Britney Spears Fantasy":
+                            description = "Britney Spears Fantasy adalah parfum floral-fruity-gourmand yang manis dan playful, dirancang untuk wanita muda yang fantasi dan ceria. Aroma ini penuh dengan keceriaan dan daya tarik.";
+                            notes = { top: ["Red Lychee", "Quince", "Kiwi"], middle: ["Cupcake", "White Chocolate", "Orchid", "Jasmine"], base: ["Musk", "Orris Root", "Woody Notes"] };
+                            characteristics = ["Sweet", "Fruity", "Gourmand", "Tropical", "Vanilla"];
+                            idealFor = "Wanita muda yang ceria, suka aroma manis, dan ingin merasakan sedikit fantasi dalam hidupnya. Ideal untuk penggunaan sehari-hari dan acara kasual.";
+                            break;
+                        case "Bvlgari Omnia Crystalline":
+                            description = "Bvlgari Omnia Crystalline adalah parfum floral-woody-musk yang ringan, bersih, dan elegan, terinspirasi dari kristal bening. Aroma ini halus, segar, dan feminin.";
+                            notes = { top: ["Bamboo", "Nashi Pear"], middle: ["Lotus", "Cassia", "Tea"], base: ["Musk", "Guaiac Wood", "Oakmoss"] };
+                            characteristics = ["Floral", "Aquatic", "Woody", "Fresh", "Green"];
+                            idealFor = "Wanita yang elegan, tenang, dan menyukai aroma yang bersih serta tidak berlebihan. Cocok untuk penggunaan sehari-hari, kantor, dan musim panas.";
+                            break;
+                        case "Calvin Klein Euphoria":
+                            description = "Calvin Klein Euphoria adalah parfum oriental-floral yang misterius dan sensual, terinspirasi dari bunga anggrek yang eksotis di malam hari. Aroma ini kaya, hangat, dan memikat.";
+                            notes = { top: ["Delima", "Kaki Persimmon", "Green Accord"], middle: ["Black Orchid", "Lotus", "Champaca"], base: ["Mahogany", "Amber", "Black Violet", "Creamy Accord"] };
+                            characteristics = ["Floral", "Woody", "Amber", "Sweet", "Fruity"];
+                            idealFor = "Wanita yang percaya diri, sensual, dan ingin menonjolkan sisi misteriusnya. Ideal untuk malam hari, kencan, atau acara khusus.";
+                            break;
+                        case "Carolina Herrera Good Girl":
+                            description = "Good Girl adalah parfum wanita yang berani dan sekaligus elegan, mewakili dualitas wanita modern. Botolnya yang ikonik berbentuk sepatu stiletto melambangkan kombinasi kekuatan dan feminitas yang memikat.";
+                            notes = { top: ["Almond", "Kopi", "Bergamot", "Lemon"], middle: ["Tuberose", "Melati Sambac", "Orange Blossom", "Iris", "Mawar Bulgaria"], base: ["Tonka Bean", "Cokelat", "Vanila", "Praline", "Cendana", "Musk", "Amber", "Kasmir"] };
+                            characteristics = ["Warm Spicy", "Sweet", "White Floral", "Vanilla", "Cacao", "Amber"];
+                            idealFor = "Wanita yang percaya diri, sensual, dan berani mengekspresikan dirinya. Ideal untuk penggunaan malam hari dan acara-acara spesial.";
+                            break;
+                        case "Chanel Chance Eau Tendre":
+                            description = "Chanel Chance Eau Tendre adalah parfum floral-fruity yang lembut, cerah, dan sangat feminin. Aroma ini memancarkan kelembutan, keceriaan, dan sedikit romansa.";
+                            notes = { top: ["Quince", "Grapefruit"], middle: ["Hyacinth", "Jasmine"], base: ["Amber", "Cedar", "Musk"] };
+                            characteristics = ["Floral", "Fruity", "Fresh", "Musky", "Sweet"];
+                            idealFor = "Wanita muda yang romantis, ceria, dan menyukai aroma yang ringan dan menyenangkan. Sempurna untuk penggunaan sehari-hari, musim semi dan panas.";
+                            break;
+                        case "Chanel Coco Mademoiselle":
+                            description = "Coco Mademoiselle adalah wewangian chypre amber yang segar, sensual, dan modern untuk wanita. Sebuah interpretasi modern dari gaya Coco Chanel yang tak lekang oleh waktu, memancarkan elegansi dan keceriaan.";
+                            notes = { top: ["Jeruk", "Jeruk Mandarin", "Bergamot", "Orange Blossom"], middle: ["Mawar Turki", "Melati", "Mimosa", "Ylang-Ylang"], base: ["Patchouli", "Musk Putih", "Vanila", "Vetiver", "Tonka Bean"] };
+                            characteristics = ["Citrus", "Patchouli", "Sweet", "White Floral", "Rose", "Musky"];
+                            idealFor = "Wanita elegan dan ceria yang memancarkan aura feminin namun kuat. Ideal untuk penggunaan sehari-hari maupun malam hari, cocok untuk segala kesempatan.";
+                            break;
+                        case "Chloe Eau de Parfum":
+                            description = "Chloe Eau de Parfum adalah parfum floral yang feminin dan elegan, dengan fokus pada aroma mawar yang segar dan modern. Aroma ini bersih, klasik, dan romantis.";
+                            notes = { top: ["Peony", "Litchi", "Freesia"], middle: ["Rose", "Lily-of-the-Valley", "Magnolia"], base: ["Virginia Cedar", "Amber"] };
+                            characteristics = ["Floral", "Rose", "Fresh", "Powdery", "Sweet"];
+                            idealFor = "Wanita yang romantis, feminin, dan menghargai keindahan klasik. Ideal untuk penggunaan sehari-hari, kantor, dan musim semi/panas.";
+                            break;
+                        case "Christian Dior J'adore":
+                            description = "J'adore adalah parfum floral klasik yang memuja kecantikan bunga putih yang paling mulia. Aroma ini feminin, mewah, dan bercahaya, melambangkan keanggunan dan sensualitas.";
+                            notes = { top: ["Pear", "Melon", "Magnolia", "Peach", "Mandarin Orange", "Bergamot"], middle: ["Jasmine", "Lily-of-the-Valley", "Tuberose", "Freesia", "Rose", "Orchid", "Plum", "Violet"], base: ["Musk", "Vanila", "Blackberry", "Cedar"] };
+                            characteristics = ["Floral", "White Floral", "Fruity", "Sweet", "Aquatic"];
+                            idealFor = "Wanita yang elegan, mewah, dan berkelas. Cocok untuk acara formal, kencan, atau saat ingin tampil memukau.";
+                            break;
+                        case "Dior Miss Dior":
+                            description = "Miss Dior adalah parfum chypre-floral yang romantis dan modern, merayakan cinta dan kebahagiaan. Aroma ini elegan, ceria, dan sangat feminin.";
+                            notes = { top: ["Italian Mandarin"], middle: ["Grase Rose", "Jasmine Sambac"], base: ["Patchouli", "Musk"] };
+                            characteristics = ["Floral", "Citrus", "Patchouli", "Fresh", "Rose"];
+                            idealFor = "Wanita muda yang romantis, ceria, dan penuh cinta. Ideal untuk penggunaan sehari-hari, kencan, atau acara semi-formal.";
+                            break;
+                        case "Dolce & Gabbana Light Blue":
+                            description = "Light Blue adalah parfum floral-fruity yang sangat segar dan cerah, menangkap esensi musim panas di Mediterania. Aroma ini energik, hidup, dan sangat populer.";
+                            notes = { top: ["Sicilian Lemon", "Apel", "Cedar", "Bellflower"], middle: ["Bambu", "Melati", "White Rose"], base: ["Cedar", "Musk", "Amber"] };
+                            characteristics = ["Citrus", "Fruity", "Woody", "Fresh", "Musky"];
+                            idealFor = "Wanita yang menyukai aroma segar, bersih, dan ringan. Sangat cocok untuk penggunaan sehari-hari, musim panas, dan aktivitas outdoor.";
+                            break;
+                        case "Elizabeth Arden 5th Avenue":
+                            description = "Elizabeth Arden 5th Avenue adalah parfum floral yang klasik dan elegan, terinspirasi oleh kemewahan jalanan ikonik di New York. Aroma ini kaya, mewah, dan sangat feminin.";
+                            notes = { top: ["Magnolia", "Lily-of-the-Valley", "Lilac", "Linden Blossom", "Bergamot", "Mandarin Orange"], middle: ["Nutmeg", "Carnation", "Tuberose", "Violet", "Peach", "Jasmine", "Ylang-Ylang", "Bulgarian Rose"], base: ["Musk", "Iris", "Sandalwood", "Amber", "Vanilla"] };
+                            characteristics = ["Floral", "White Floral", "Powdery", "Sweet", "Woody"];
+                            idealFor = "Wanita yang klasik, elegan, dan profesional. Cocok untuk penggunaan sehari-hari di kantor atau acara formal.";
+                            break;
+                        case "Estee Lauder Beautiful":
+                            description = "Estee Lauder Beautiful adalah parfum floral yang romantis dan kaya, melambangkan kebahagiaan seorang pengantin wanita. Aroma ini adalah perayaan bunga, klasik, dan timeless.";
+                            notes = { top: ["Rose", "Galbanum", "Lily", "Blackcurrant", "Fruity Notes", "Bergamot", "Lemon"], middle: ["Carnation", "Tuberose", "Mimosa", "Jasmine", "Narcissus", "Geranium", "Orange Blossom", "Chamomile", "Ylang-Ylang", "Lily-of-the-Valley", "Freesia", "Lilac", "Marigold"], base: ["Sandalwood", "Vetiver", "Musk", "Amber", "Cedar", "Vanilla"] };
+                            characteristics = ["Floral", "Green", "White Floral", "Woody", "Tuberose"];
+                            idealFor = "Wanita yang romantis, klasik, dan menghargai keindahan. Ideal untuk pernikahan, acara formal, atau saat ingin tampil feminin dan memukau.";
+                            break;
+                        case "Givenchy L'Interdit":
+                            description = "Givenchy L'Interdit adalah parfum woody-floral yang berani dan elegan, sebuah ode untuk feminitas yang bebas dan tak terkendali. Aroma ini memadukan bunga putih yang intens dengan sentuhan gelap yang misterius.";
+                            notes = { top: ["Pir", "Bergamot"], middle: ["Tuberose", "Orange Blossom", "Jasmine Sambac"], base: ["Patchouli", "Vetiver", "Ambroxan", "Vanila"] };
+                            characteristics = ["White Floral", "Woody", "Earthy", "Sweet", "Patchouli"];
+                            idealFor = "Wanita yang berani, percaya diri, dan suka menantang konvensi. Ideal untuk malam hari, acara khusus, atau saat ingin tampil misterius dan kuat.";
+                            break;
+                        case "Gucci Bloom":
+                            description = "Gucci Bloom adalah parfum floral putih murni yang merayakan keaslian, vitalitas, dan keragaman wanita. Aroma ini didominasi oleh tuberose dan melati, menciptakan kesan taman bunga yang subur.";
+                            notes = { top: ["Rangoon Creeper"], middle: ["Tuberose", "Melati Sambac"], base: ["Sandalwood", "Orris Root"] };
+                            characteristics = ["White Floral", "Floral", "Tuberose", "Green"];
+                            idealFor = "Wanita yang otentik, natural, dan menyukai aroma bunga putih yang kaya. Ideal untuk penggunaan sehari-hari dan musim semi/panas.";
+                            break;
+                        case "Guerlain Mon Guerlain":
+                            description = "Mon Guerlain adalah parfum amber-woody-aromatic yang sensual dan modern, sebuah ode untuk feminitas modern yang kuat, bebas, dan sensual. Aroma ini memadukan lavender dengan vanila, menciptakan kesan yang unik dan adiktif.";
+                            notes = { top: ["Lavender", "Bergamot"], middle: ["Iris", "Jasmine Sambac", "Rose"], base: ["Vanila", "Coumarin", "Sandalwood", "Benzoin", "Licorice", "Patchouli"] };
+                            characteristics = ["Vanilla", "Aromatic", "Warm Spicy", "Powdery", "Sweet"];
+                            idealFor = "Wanita modern yang percaya diri, sensual, dan menghargai aroma yang hangat dan kompleks. Ideal untuk penggunaan sehari-hari, kantor, dan malam hari.";
+                            break;
+                        case "Jean Paul Gaultier La Belle":
+                            description = "La Belle adalah parfum oriental-vanilla yang memikat dan sensual, terinspirasi oleh taman Eden. Aroma ini memadukan vanila yang menggoda dengan buah pir yang segar, menciptakan daya tarik yang tak tertahankan.";
+                            notes = { top: ["Pir"], middle: ["Vetiver"], base: ["Vanila"] };
+                            characteristics = ["Sweet", "Vanilla", "Fruity", "Warm Spicy", "Woody"];
+                            idealFor = "Wanita yang sensual, percaya diri, dan suka tampil menggoda. Ideal untuk malam hari, kencan, atau acara khusus.";
+                            break;
+                        case "Jo Malone Peony & Blush Suede":
+                            description = "Peony & Blush Suede adalah parfum floral-fruity yang mewah dan romantis, menangkap aroma bunga peony yang mekar dengan sentuhan apel dan suede yang lembut. Aroma ini anggun dan memikat.";
+                            notes = { top: ["Apel Merah"], middle: ["Peony", "Rose", "Carnation", "Jasmine"], base: ["Suede"] };
+                            characteristics = ["Floral", "Fruity", "Soft Spicy", "Rose", "Leather"];
+                            idealFor = "Wanita yang romantis, elegan, dan menyukai aroma bunga yang lembut. Ideal untuk penggunaan sehari-hari, kencan, atau acara semi-formal.";
+                            break;
+                        case "Jimmy Choo Blossom":
+                            description = "Jimmy Choo Blossom adalah parfum floral-fruity yang cerah dan ceria, merayakan kegembiraan musim semi. Aroma ini manis, segar, dan sangat menyenangkan.";
+                            notes = { top: ["Red Berries", "Citrus"], middle: ["Sweet Pea", "Rose"], base: ["White Musk", "Sandalwood"] };
+                            characteristics = ["Fruity", "Sweet", "Floral", "Musky", "Fresh"];
+                            idealFor = "Wanita muda yang ceria, energik, dan suka aroma yang manis dan menyenangkan. Ideal untuk penggunaan sehari-hari dan musim semi/panas.";
+                            break;
+                        case "Lancôme La Vie Est Belle":
+                            description = "La Vie Est Belle adalah filosofi hidup yang terinspirasi oleh kebahagiaan dan keindahan sederhana. Aroma gourmand bunga yang lembut dan memikat, membawa keceriaan dan optimisme.";
+                            notes = { top: ["Blackcurrant", "Pear"], middle: ["Iris", "Melati", "Orange Blossom"], base: ["Patchouli", "Tonka Bean", "Vanila", "Praline"] };
+                            characteristics = ["Sweet", "Vanilla", "Fruity", "Patchouli", "Powdery", "Gourmand"];
+                            idealFor = "Wanita yang menikmati keindahan hidup, memancarkan aura positif dan kebahagiaan. Sempurna untuk acara kasual maupun formal, dan sangat disukai untuk musim gugur/dingin.";
+                            break;
+                        case "Marc Jacobs Daisy":
+                            description = "Marc Jacobs Daisy adalah parfum floral-woody-musk yang cerah dan mempesona, terinspirasi oleh kesederhanaan dan keindahan bunga daisy. Aroma ini segar, youthful, dan optimis.";
+                            notes = { top: ["Strawberry", "Violet Leaf", "Blood Grapefruit"], middle: ["Gardenia", "Violet", "Jasmine"], base: ["Musk", "White Woods", "Vanila"] };
+                            characteristics = ["Floral", "Fruity", "Sweet", "Green", "Musky"];
+                            idealFor = "Wanita muda yang ceria, optimis, dan menyukai aroma yang segar dan ringan. Ideal untuk penggunaan sehari-hari dan musim semi/panas.";
+                            break;
+                        case "Mugler Alien":
+                            description = "Mugler Alien adalah parfum woody-amber-floral yang misterius dan kuat, dengan fokus pada aroma melati Sambac yang intens dan amber putih. Aroma ini unik, memikat, dan sangat berkarakter.";
+                            notes = { top: ["Melati Sambac"], middle: ["Kayu Kasmir"], base: ["Amber Putih"] };
+                            characteristics = ["White Floral", "Amber", "Woody", "Sweet", "Animalic"];
+                            idealFor = "Wanita yang berani, percaya diri, dan suka tampil misterius serta berani. Ideal untuk malam hari, musim dingin, atau acara khusus.";
+                            break;
+                        case "Narciso Rodriguez For Her":
+                            description = "Narciso Rodriguez For Her adalah parfum floral-woody-musk yang sensual dan elegan, dengan fokus pada aroma musk yang bersih dan adiktif. Aroma ini intim, modern, dan sangat feminin.";
+                            notes = { top: ["Osmanthus", "Orange Blossom", "Bergamot"], middle: ["Musk", "Amber"], base: ["Vetiver", "Vanila", "Patchouli"] };
+                            characteristics = ["Musky", "Floral", "Powdery", "Woody", "Amber"];
+                            idealFor = "Wanita yang sensual, elegan, dan menghargai aroma yang intim dan memikat. Ideal untuk penggunaan sehari-hari, kantor, dan kencan.";
+                            break;
+                        case "Paco Rabanne Lady Million":
+                            description = "Lady Million adalah parfum floral-fruity yang glamor dan memikat, pasangan dari 1 Million. Aroma ini cerah, manis, dan menggoda, melambangkan kemewahan dan kesuksesan.";
+                            notes = { top: ["Neroli", "Bitter Orange", "Raspberry"], middle: ["Melati", "Orange Blossom", "Gardenia"], base: ["Madu", "Patchouli", "Amber"] };
+                            characteristics = ["White Floral", "Sweet", "Honey", "Citrus", "Fruity"];
+                            idealFor = "Wanita yang suka tampil menonjol, glamor, dan percaya diri. Ideal untuk pesta, malam hari, atau acara khusus.";
+                            break;
+                        case "Prada Candy":
+                            description = "Prada Candy adalah parfum oriental-vanilla-gourmand yang manis, playful, dan sedikit provokatif. Aroma ini memadukan musk putih, benzoin, dan karamel, menciptakan kesan yang adiktif.";
+                            notes = { top: ["Caramel"], middle: ["Powdery Notes", "Musk"], base: ["Benzoin", "Vanila"] };
+                            characteristics = ["Sweet", "Caramel", "Vanilla", "Musky", "Balsamic", "Powdery"];
+                            idealFor = "Wanita yang playful, berjiwa bebas, dan menyukai aroma manis yang adiktif. Ideal untuk penggunaan sehari-hari, kencan, atau acara kasual.";
+                            break;
+                        case "Thierry Mugler Angel":
+                            description = "Thierry Mugler Angel adalah parfum oriental-vanilla-gourmand yang ikonik dan revolusioner, dikenal dengan aroma manis, cokelat, dan patchouli yang kuat. Aroma ini berani, unik, dan sangat memikat.";
+                            notes = { top: ["Cotton Candy", "Coconut", "Cassis", "Melon", "Jasmine", "Bergamot", "Pineapple", "Mandarin Orange"], middle: ["Madu", "Red Berries", "Blackberry", "Plum", "Apriot", "Peach", "Jasmine", "Orchid", "Nutmeg", "Caraway", "Rose", "Lily-of-the-Valley"], base: ["Patchouli", "Cokelat", "Caramel", "Vanila", "Tonka Bean", "Amber", "Musk", "Sandalwood"] };
+                            characteristics = ["Sweet", "Patchouli", "Warm Spicy", "Fruity", "Caramel", "Gourmand"];
+                            idealFor = "Wanita yang berani, percaya diri, dan suka tampil unik serta berkesan. Ideal untuk malam hari, musim dingin, atau acara khusus.";
+                            break;
+                        case "Tom Ford Black Orchid":
+                            description = "Tom Ford Black Orchid adalah parfum oriental-chypre yang mewah, gelap, dan sangat sensual, berpusat pada aroma anggrek hitam yang misterius. Aroma ini kaya, kompleks, dan memikat.";
+                            notes = { top: ["Truffle", "Gardenia", "Blackcurrant", "Ylang-Ylang", "Jasmine", "Bergamot", "Mandarin Orange", "Lemon"], middle: ["Orchid", "Spicy Notes", "Fruity Notes", "Lotus", "Jasmine", "Gardenia", "Ylang-Ylang"], base: ["Patchouli", "Sandalwood", "Incense", "Amber", "Vetiver", "Vanila", "Cokelat"] };
+                            characteristics = ["Earthy", "Warm Spicy", "Sweet", "Woody", "Cacao", "Floral"];
+                            idealFor = "Wanita yang sensual, misterius, dan suka tampil berani dan mewah. Sangat cocok untuk malam hari, musim dingin, dan acara-acara eksklusif.";
+                            break;
+                        case "Versace Bright Crystal":
+                            description = "Bright Crystal adalah parfum bunga-fruity yang segar dan bercahaya, merefleksikan keindahan dan keanggunan wanita. Aromanya ringan, menyenangkan, dan sangat feminin.";
+                            notes = { top: ["Yuzu", "Delima", "Notes Air"], middle: ["Lotus", "Magnolia", "Peony"], base: ["Musk", "Amber", "Kayu Mahoni"] };
+                            characteristics = ["Floral", "Fruity", "Fresh", "Aquatic", "Musky"];
+                            idealFor = "Wanita yang ceria, anggun, dan menyukai aroma yang ringan dan menyegarkan. Sangat cocok untuk penggunaan sehari-hari, musim semi dan panas.";
+                            break;
+                        case "Viktor & Rolf Flowerbomb":
+                            description = "Flowerbomb adalah parfum floral-oriental-gourmand yang eksplosif dan adiktif, memadukan ledakan bunga dengan sentuhan manis vanila dan patchouli. Aroma ini feminin, manis, dan memikat.";
+                            notes = { top: ["Bergamot", "Teh", "Osmanthus"], middle: ["Jasmine", "African Orange Flower", "Freesia", "Rose", "Orchid"], base: ["Musk", "Patchouli", "Vanila"] };
+                            characteristics = ["Floral", "Sweet", "Patchouli", "Warm Spicy", "Powdery"];
+                            idealFor = "Wanita yang romantis, feminin, dan suka aroma manis yang kuat. Ideal untuk malam hari, musim dingin, atau acara khusus.";
+                            break;
+                        case "Yves Saint Laurent Libre":
+                            description = "YSL Libre adalah parfum floral-lavender yang berani dan modern, melambangkan kebebasan dan keberanian wanita yang kuat. Aroma ini memadukan maskulinitas lavender dengan feminitas bunga jeruk.";
+                            notes = { top: ["Mandarin Orange", "Lavender", "Blackcurrant", "Petitgrain"], middle: ["Jasmine", "Lavender", "Orange Blossom"], base: ["Madagascar Vanilla", "Musk", "Cedar", "Ambergris"] };
+                            characteristics = ["Aromatic", "Citrus", "Vanilla", "Floral", "Sweet"];
+                            idealFor = "Wanita yang kuat, mandiri, dan berani mengambil risiko. Cocok untuk penggunaan sehari-hari, kantor, dan acara semi-formal.";
+                            break;
+                        // Placeholder untuk sisa parfum wanita
+                        default:
+                            description = `Detail aroma dan karakteristik untuk parfum wanita **${brandName}** akan segera ditambahkan di sini. Parfum ini memiliki profil aroma yang indah.`;
+                            notes = { top: ["(Aroma Buah/Bunga Segar)"], middle: ["(Aroma Bunga Dominan)"], base: ["(Aroma Manis/Musky/Woody)"] };
+                            characteristics = ["(Feminin)", "(Elegan)", "(Memikat)", "(Modern)"];
+                            idealFor = `Ideal untuk wanita yang mencari aroma **${brandName}** untuk (aktivitas/musim/kesan) tertentu.`;
+                            break;
+                    }
+                }
+                // --- DETAIL LENGKAP UNTUK PARFUM UNISEX ---
+                else if (category === "unisex") {
+                    switch (brandName) {
+                        case "Byredo Gypsy Water":
+                            description = "Gypsy Water adalah parfum yang terinspirasi dari gaya hidup bohemian dan kebebasan. Aromanya memadukan unsur kayu pinus, dupa, dan vanila, menciptakan kesan hangat, mistis, dan menenangkan.";
+                            notes = { top: ["Bergamot", "Lemon", "Pepper", "Juniper Berries"], middle: ["Dupa", "Pine Needle", "Iris"], base: ["Vanila", "Sandalwood", "Amber"] };
+                            characteristics = ["Woody", "Vanilla", "Aromatic", "Fresh Spicy", "Conifer", "Earthy"];
+                            idealFor = "Individu yang berjiwa bebas, artistik, dan menyukai aroma yang memberikan kesan nyaman dan sedikit melankolis. Ideal untuk penggunaan sehari-hari dan musim gugur/dingin.";
+                            break;
+                        case "Byredo Bal d'Afrique":
+                            description = "Bal d'Afrique adalah parfum amber-woody yang merayakan budaya dan seni Afrika, terinspirasi oleh Paris pada akhir tahun 20-an. Aroma ini memadukan kesegaran citrus dengan kehangatan vetiver dan cedar, menciptakan kesan yang mewah dan eksotis.";
+                            notes = { top: ["Bergamot", "Lemon", "African Orange Flower", "Tagetes", "Blackcurrant"], middle: ["Violet", "Cyclamen", "Jasmine"], base: ["Vetiver", "Amber", "Musk", "Virginia Cedar"] };
+                            characteristics = ["Woody", "Citrus", "Amber", "Aromatic", "Floral"];
+                            idealFor = "Individu yang mencari aroma yang unik, mewah, dan memiliki karakter yang kuat namun tetap nyaman. Cocok untuk segala musim dan acara.";
+                            break;
+                        case "Calvin Klein CK One":
+                            description = "CK One adalah parfum ikonik unisex yang merevolusi dunia parfum dengan kesegarannya yang universal dan inklusif. Aroma citrus-aromatic yang bersih dan ringan, cocok untuk semua.";
+                            notes = { top: ["Pineapple", "Green Notes", "Mandarin Orange", "Papaya", "Bergamot", "Cardamom", "Lemon"], middle: ["Nutmeg", "Violet", "Orris Root", "Jasmine", "Lily-of-the-Valley", "Rose"], base: ["Sandalwood", "Amber", "Musk", "Cedar", "Oakmoss"] };
+                            characteristics = ["Citrus", "Aromatic", "Fresh", "Green", "Musky", "Clean"];
+                            idealFor = "Individu yang menyukai aroma segar, bersih, dan kasual. Sempurna untuk penggunaan sehari-hari di iklim hangat atau untuk *layering*.";
+                            break;
+                        case "Clean Reserve Rain":
+                            description = "Clean Reserve Rain adalah parfum akuatik-floral yang menangkap aroma segar dan bersih setelah hujan. Aroma ini ringan, menenangkan, dan alami, memberikan kesan kesegaran alami.";
+                            notes = { top: ["Dewy Melon", "Yellow Daffodil", "Waterlily"], middle: ["Spring Rain Accord", "Watermint", "Violet Leaves"], base: ["Musk", "Vetiver", "Dry Woods"] };
+                            characteristics = ["Aquatic", "Fresh", "Floral", "Green", "Clean"];
+                            idealFor = "Individu yang menyukai aroma bersih, alami, dan menenangkan. Ideal untuk penggunaan sehari-hari dan di cuaca hangat.";
+                            break;
+                        case "Diptyque Philosykos":
+                            description = "Philosykos adalah parfum woody-green yang menangkap seluruh esensi pohon ara: daun, buah, dan kayu. Aroma ini segar, creamy, dan alami, membawa Anda ke kebun ara di musim panas.";
+                            notes = { top: ["Fig Leaf", "Fig", "Coconut"], middle: ["Green Notes", "Fig Tree"], base: ["Woody Notes", "Fig Tree", "Cedar"] };
+                            characteristics = ["Green", "Woody", "Fruity", "Coconut", "Creamy"];
+                            idealFor = "Individu yang menyukai aroma alami, segar, dan unik dari buah ara. Cocok untuk penggunaan sehari-hari dan musim semi/panas.";
+                            break;
+                        case "Escentric Molecules Molecule 01":
+                            description = "Molecule 01 adalah parfum minimalis yang hanya terdiri dari satu aroma: Iso E Super, sebuah molekul aroma sintetis. Aromanya halus, woody, dan velvet-like, bekerja unik dengan kimia kulit setiap individu.";
+                            notes = { top: ["Iso E Super"], middle: ["Iso E Super"], base: ["Iso E Super"] }; // Hanya satu molekul
+                            characteristics = ["Woody", "Minimalist", "Ambroxan", "Unique", "Subtle"];
+                            idealFor = "Individu yang menyukai aroma unik, halus, dan ingin parfum yang berbaur secara personal dengan aroma tubuh mereka. Ideal untuk penggunaan sehari-hari dan layering.";
+                            break;
+                        case "Maison Francis Kurkdjian Baccarat Rouge 540":
+                            description = "Baccarat Rouge 540 adalah perpaduan aroma bunga, amber, dan kayu yang sangat mewah dan kompleks. Sebuah wewangian yang memancarkan keanggunan, daya pikat, dan kecanggihan, dengan proyeksi dan daya tahan luar biasa.";
+                            notes = { top: ["Melati", "Saffron"], middle: ["Amberwood", "Ambergris"], base: ["Fir Resin", "Cedar"] };
+                            characteristics = ["Amber", "Woody", "Warm Spicy", "Sweet", "Floral", "Mineral"];
+                            idealFor = "Mereka yang mencari kemewahan, keunikan, dan ingin meninggalkan kesan yang tak terlupakan. Sangat cocok untuk acara-acara istimewa, malam hari, atau saat ingin menonjolkan aura eksklusif.";
+                            break;
+                        case "Le Labo Santal 33":
+                            description = "Santal 33 adalah aroma ikonik yang terinspirasi oleh roh Amerika yang agung, memadukan sensualitas kulit dengan kehangatan kayu. Aroma yang khas, adiktif, dan mudah dikenali dengan karakter creamy woody yang unik.";
+                            notes = { top: ["Cardamom", "Violet Accord"], middle: ["Cendana", "Cedarwood"], base: ["Kulit", "Amber", "Iris"] };
+                            characteristics = ["Woody", "Leather", "Powdery", "Spicy", "Amber", "Creamy"];
+                            idealFor = "Individu yang menghargai keunikan, ingin tampil berbeda, dan menyukai aroma yang bold namun nyaman. Cocok untuk segala musim dan suasana, terutama di cuaca sejuk.";
+                            break;
+                        case "Tom Ford Tobacco Vanille":
+                            description = "Tobacco Vanille adalah parfum mewah dan kaya dengan aroma tembakau dan vanila yang hangat, pedas, dan manis. Memberikan kesan berkelas, nyaman, dan sangat memikat.";
+                            notes = { top: ["Daun Tembakau", "Rempah-rempah"], middle: ["Vanila", "Kakao", "Tonka Bean", "Bunga Tembakau"], base: ["Buah Kering", "Note Kayu"] };
+                            characteristics = ["Warm Spicy", "Vanilla", "Sweet", "Tobacco", "Fruity", "Woody"];
+                            idealFor = "Individu yang menyukai aroma gourmand yang mewah, hangat, dan kompleks. Sempurna untuk musim gugur/dingin dan acara malam hari, memberikan kesan nyaman dan menggoda.";
+                            break;
+                        // Placeholder untuk sisa parfum unisex
+                        default:
+                            description = `Detail aroma dan karakteristik untuk parfum unisex **${brandName}** akan segera ditambahkan di sini. Parfum ini memiliki profil aroma yang fleksibel.`;
+                            notes = { top: ["(Aroma Segar/Citrus/Rempah)"], middle: ["(Aromatik/Floral/Woody)"], base: ["(Musky/Amber/Green)"] };
+                            characteristics = ["(Serbaguna)", "(Modern)", "(Unik)", "(Seimbang)"];
+                            idealFor = `Ideal untuk individu yang mencari aroma **${brandName}** untuk (aktivitas/musim/kesan) tertentu.`;
+                            break;
+                    }
+                }
+                // --- DETAIL LENGKAP UNTUK PARFUM PASANGAN ---
+                else if (category === "pasangan") {
+                    switch (brandName) {
+                        case "Calvin Klein Obsessed For Men & Women":
+                            description = "Obsessed For Men & Women adalah pasangan parfum yang merayakan memori dan emosi dari cinta. For Men adalah oriental woody-amber yang modern dan For Women adalah floral-musky yang hangat.";
+                            notes = {
+                                pria: { top: ["Grapefruit", "Sichuan Pepper", "Cardamom"], middle: ["Cedar", "Labdanum", "Kulit"], base: ["Black Vanilla Husk", "Patchouli", "Ambroxan"] },
+                                wanita: { top: ["Citrus", "Neroli", "Elemi"], middle: ["Lavender", "Violet Leaf", "White Musk"], base: ["Musk", "Ambrette (Musk Mallow)"] }
+                            };
+                            characteristics = "Kombinasi modern oriental woody untuk pria dan floral musky untuk wanita, menciptakan aroma yang intim dan sensual.";
+                            idealFor = "Pasangan yang menghargai keintiman, memori, dan ingin aroma yang saling melengkapi namun tetap mempertahankan individualitas.";
+                            break;
+                        case "Jo Malone English Pear & Freesia (Unisex/Pairing)":
+                            description = "English Pear & Freesia adalah wewangian fruity-chypre yang segar dan lembut, menangkap esensi kebun buah Inggris di musim gugur. Meskipun sering disebut unisex, banyak pasangan menggunakannya secara terpisah atau bersamaan karena kesegarannya.";
+                            notes = { top: ["Pear", "King William Pear"], middle: ["Freesia", "Rose"], base: ["Patchouli", "Woody Notes", "Amber"] }; // Notes sama untuk keduanya
+                            characteristics = "Fruity, Floral, Sweet, Fresh, Musky, Earthy";
+                            idealFor = "Individu atau pasangan yang menyukai aroma segar, elegan, dan sedikit manis. Sempurna untuk penggunaan sehari-hari, musim semi dan gugur.";
+                            break;
+                        case "Tom Ford Ombre Leather (Often Paired)":
+                            description = "Ombre Leather adalah parfum kulit yang kaya dan sensual, membangkitkan citra padang pasir yang luas dan kebebasan. Aroma ini sering digunakan oleh pria dan wanita yang menyukai aroma kulit yang kuat dan mewah.";
+                            notes = { top: ["Cardamom"], middle: ["Kulit", "Jasmine Sambac"], base: ["Amber", "Moss", "Patchouli"] }; // Notes sama untuk pairing
+                            characteristics = "Leather, Amber, Warm Spicy, Woody";
+                            idealFor = "Individu atau pasangan yang berani, sensual, dan menyukai aroma kulit yang mewah dan dominan. Ideal untuk malam hari, musim dingin, atau acara khusus.";
+                            break;
+                        case "Creed Aventus & Aventus for Her (Pairing)":
+                            description = "Pasangan ikonik ini menawarkan aroma pelengkap untuk pria dan wanita, merayakan kesuksesan dan keanggunan. Aventus (pria) adalah simbol kekuatan dan kepemimpinan, sementara Aventus for Her (wanita) memancarkan keanggunan dan kekuatan feminin yang percaya diri.";
+                            notes = {
+                                pria: { top: ["Nanas", "Bergamot", "Blackcurrant", "Apel"], middle: ["Birch", "Patchouli", "Melati Mesir", "Mawar"], base: ["Musk", "Oakmoss", "Ambergris", "Vanila"] },
+                                wanita: { top: ["Apel Hijau", "Bergamot", "Lemon", "Patchouli", "Pink Pepper", "Violet"], middle: ["Musk", "Mawar", "Cendana", "Styrax"], base: ["Blackcurrant", "Peach", "Amber", "Ylang-Ylang"] }
+                            };
+                            characteristics = "Kombinasi aroma fruity, smoky, dan woody untuk pria; serta fruity, floral, dan musky untuk wanita, menciptakan harmoni yang mewah dan berkelas.";
+                            idealFor = "Pasangan yang ingin tampil serasi dengan aroma mewah dan berkelas, cocok untuk acara formal, pertemuan penting, maupun momen romantis.";
+                            break;
+                        case "YSL Y & Libre (Pairing)":
+                            description = "Pasangan modern dari YSL yang merepresentasikan keberanian dan kebebasan. Y (pria) dengan kesegaran aromatik yang kuat, dan Libre (wanita) dengan perpaduan lavender dan bunga jeruk yang berani. Mereka saling menginspirasi dan melengkapi.";
+                            notes = {
+                                pria: { top: ["Apel", "Ginger", "Bergamot"], middle: ["Sage", "Juniper Berries", "Geranium"], base: ["Amberwood", "Tonka Bean", "Cedar", "Vetiver", "Olibanum"] },
+                                wanita: { top: ["Mandarin Orange", "Lavender", "Blackcurrant", "Petitgrain"], middle: ["Jasmine", "Lavender", "Orange Blossom"], base: ["Madagascar Vanilla", "Musk", "Cedar", "Ambergris"] }
+                            };
+                            characteristics = "Kombinasi fresh aromatic untuk pria dan floral aromatic untuk wanita, menciptakan aura modern dan berani.";
+                            idealFor = "Pasangan yang dinamis, modern, dan saling mendukung dalam mencapai impian. Cocok untuk penggunaan sehari-hari maupun acara semi-formal.";
+                            break;
+                        // Placeholder untuk sisa parfum pasangan
+                        default:
+                            description = `Detail aroma dan karakteristik untuk pasangan parfum **${brandName}** akan segera ditambahkan di sini. Pasangan ini dirancang untuk saling melengkapi.`;
+                            notes = {
+                                pria: { top: ["(Aroma Segar Pria)"], middle: ["(Aromatik Pria)"], base: ["(Woody Pria)"] },
+                                wanita: { top: ["(Aroma Bunga Wanita)"], middle: ["(Buah/Manis Wanita)"], base: ["(Musky/Amber Wanita)"] }
+                            };
+                            characteristics = ["(Harmonis)", "(Berpasangan)", "(Eksklusif)", "(Modern)"];
+                            idealFor = `Ideal untuk pasangan yang mencari aroma **${brandName}** untuk (aktivitas/momen/kesan) tertentu.`;
+                            break;
+                    }
+                }
+
+                parfumCatalogData.push({
+                    name: brandName,
+                    category: category,
+                    description: description,
+                    notes: notes,
+                    characteristics: characteristics,
+                    idealFor: idealFor
+                });
+            });
         }
+    }
+    console.log("Parfum Catalog Data Populated:", parfumCatalogData.length, "items");
+}
 
 
         // Global variables to store generated HTML content for "current order"
